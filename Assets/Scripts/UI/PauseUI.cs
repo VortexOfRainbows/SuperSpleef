@@ -17,7 +17,6 @@ public class PauseUI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-
             if (!GameIsPaused)
             {
                 Pause();
@@ -27,8 +26,6 @@ public class PauseUI : MonoBehaviour
                 Resume();
             }
         }
-
-        Debug.Log("ESCAPE");
     }
 
     public void Pause()
