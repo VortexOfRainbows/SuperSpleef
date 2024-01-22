@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class BlockType
+public static class BlockID
 {
     public static int Air = 0;
     public static int Dirt = 1;
@@ -15,8 +15,8 @@ public class Block
     }
     private static Dictionary<int, Block> tiles = new Dictionary<int, Block>()
     {
-        {BlockType.Grass, new Block(BlockType.Dirt)},
-        {BlockType.Dirt, new Block(BlockType.Grass)},
+        {BlockID.Grass, new Block(BlockID.Dirt)},
+        {BlockID.Dirt, new Block(BlockID.Grass)},
     };
     public int Type;
     public BlockFace top, left, right, front, back, bottom;
@@ -27,12 +27,12 @@ public class Block
     }
     private void SetSprites()
     {
-        if(Type == BlockType.Dirt)
+        if(Type == BlockID.Dirt)
         {
             top = BlockFace.FaceSprite(Tile.Dirt);
             SetSpritesToTop();
         }
-        if (Type == BlockType.Grass)
+        if (Type == BlockID.Grass)
         {
             top = BlockFace.FaceSprite(Tile.Grass);
             SetSpritesToTop();

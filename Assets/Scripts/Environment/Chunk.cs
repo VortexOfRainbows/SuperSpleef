@@ -24,13 +24,22 @@ public class Chunk : MonoBehaviour
         {
             for (int z = 0; z < Width; z++)
             {
-                float noise = Mathf.Sqrt(Mathf.PerlinNoise((transform.position.x + x) / Width, (transform.position.z + z) / Width));
-                for (int y = 0; y < Height; y++)
+                float noise = Mathf.Sqrt(Mathf.PerlinNoise((transform.position.x + x) / Width / 2f, (transform.position.z + z) / Width / 2f)) * 0.5f + 0.2f;
+                for (int y = Height - 1; y >= 0; y--)
                 {
                     if (y < Height * noise)
-                        blocks[x, y, z] = 2;
+                    {
+                        if (blocks[x, y + 1, z] == BlockID.Air)
+                        {
+                            blocks[x, y, z] = BlockID.Grass;
+                        }
+                        else
+                        {
+                            blocks[x, y, z] = BlockID.Dirt;
+                        }
+                    }
                     else
-                        blocks[x, y, z] = 0;
+                        blocks[x, y, z] = BlockID.Air;
                 }
             }
         }
