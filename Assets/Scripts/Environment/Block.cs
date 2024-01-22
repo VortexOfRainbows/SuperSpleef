@@ -15,8 +15,8 @@ public class Block
     }
     private static Dictionary<int, Block> tiles = new Dictionary<int, Block>()
     {
-        {BlockID.Grass, new Block(BlockID.Dirt)},
-        {BlockID.Dirt, new Block(BlockID.Grass)},
+        {BlockID.Grass, new Block(BlockID.Grass)},
+        {BlockID.Dirt, new Block(BlockID.Dirt)},
     };
     public int Type;
     public BlockFace top, left, right, front, back, bottom;
@@ -27,7 +27,7 @@ public class Block
     }
     private void SetSprites()
     {
-        if(Type == BlockID.Dirt)
+        if (Type == BlockID.Dirt)
         {
             top = BlockFace.FaceSprite(Tile.Dirt);
             SetSpritesToTop();
@@ -35,7 +35,8 @@ public class Block
         if (Type == BlockID.Grass)
         {
             top = BlockFace.FaceSprite(Tile.Grass);
-            SetSpritesToTop();
+            right = front = back = left = BlockFace.FaceSprite(Tile.GrassSide);
+            bottom = BlockFace.FaceSprite(Tile.Dirt);
         }
     }
     private void SetSpritesToTop()
@@ -50,24 +51,35 @@ public class Block
 
 public class BlockFace
 {
+    public const float SpriteSize = 16;
+    public const float TotalSpritesX = 16;
+    public const float TotalSpritesY = 16;
+    public const float Padding = 0;
     public static BlockFace FaceSprite(Tile tile)
     {
         return tiles[tile];
     }
     private static Dictionary<Tile, BlockFace> tiles = new Dictionary<Tile, BlockFace>()
     {
-        {Tile.Grass, new BlockFace(0,1)},
-        {Tile.Dirt, new BlockFace(0,0)},
+        {Tile.Grass, new BlockFace(0,0)},
+        {Tile.GrassSide, new BlockFace(0,1)},
+        {Tile.Dirt, new BlockFace(0,2)},
     };
-    private Vector2[] uvs;
-    private BlockFace(int xPos, int yPos)
+    private readonly Vector2[] uvs;
+    private BlockFace(int xPos, int yPos) //yPos is how many tiles up it is from bottom. x is how many tiles to the right
     {
+        float smallStepX = 1f / 4 / TotalSpritesX / SpriteSize;
+        float smallStepY = 1f / 4 / TotalSpritesY / SpriteSize;
+        float xLeft = xPos / TotalSpritesX + smallStepX;
+        float xRight = (xPos + 1) / TotalSpritesX - smallStepX;
+        float yBottom = yPos / TotalSpritesY + smallStepY;
+        float yTop = (yPos + 1) / TotalSpritesY - smallStepY;
         uvs = new Vector2[]
         {
-            new Vector2(xPos/16f + .001f, yPos/16f + .001f),
-            new Vector2(xPos/16f+ .001f, (yPos+1)/16f - .001f),
-            new Vector2((xPos+1)/16f - .001f, (yPos+1)/16f - .001f),
-            new Vector2((xPos+1)/16f - .001f, yPos/16f+ .001f),
+            new Vector2(xLeft, yBottom),
+            new Vector2(xLeft, yTop),
+            new Vector2(xRight, yTop),
+            new Vector2(xRight, yBottom),
         };
     }
     public Vector2[] GetUVs()
@@ -75,4 +87,4 @@ public class BlockFace
         return uvs;
     }
 }
-public enum Tile { Dirt, Grass }
+public enum Tile { Dirt, Grass, GrassSide }

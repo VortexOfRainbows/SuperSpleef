@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
         {
             InBlockColliderTop.SetActive(false);
         }
-        if (insideBot)
+        /*if (insideBot)
         {
             InBlockColliderBottom.SetActive(true);
             InBlockColliderBottom.transform.position = new Vector3((int)transform.position.x + 0.5f, (int)transform.position.y - 1, (int)transform.position.z + 0.5f);
@@ -173,6 +173,6 @@ public class Player : MonoBehaviour
         else
         {
             InBlockColliderBottom.SetActive(false);
-        }
+        }*/
     }
 }
