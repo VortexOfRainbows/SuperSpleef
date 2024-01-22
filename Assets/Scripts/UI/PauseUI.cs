@@ -12,13 +12,11 @@ public class PauseUI : MonoBehaviour
     private void Start()
     {
         PauseUI_gobj.SetActive(false);
-        Debug.Log("NO ESCAPE");
     }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("ESCAPE");
 
             if (!GameIsPaused)
             {
