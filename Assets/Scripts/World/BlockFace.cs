@@ -1,54 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class BlockID
-{
-    public static int Air = 0;
-    public static int Dirt = 1;
-    public static int Grass = 2;
-}
-public class Block
-{
-    public static Block GetBlock(int blockType)
-    {
-        return tiles[blockType];
-    }
-    private static Dictionary<int, Block> tiles = new Dictionary<int, Block>()
-    {
-        {BlockID.Grass, new Block(BlockID.Grass)},
-        {BlockID.Dirt, new Block(BlockID.Dirt)},
-    };
-    public int Type;
-    public BlockFace top, left, right, front, back, bottom;
-    private Block(int type)
-    {
-        Type = type;
-        SetSprites();
-    }
-    private void SetSprites()
-    {
-        if (Type == BlockID.Dirt)
-        {
-            top = BlockFace.FaceSprite(Tile.Dirt);
-            SetSpritesToTop();
-        }
-        if (Type == BlockID.Grass)
-        {
-            top = BlockFace.FaceSprite(Tile.Grass);
-            right = front = back = left = BlockFace.FaceSprite(Tile.GrassSide);
-            bottom = BlockFace.FaceSprite(Tile.Dirt);
-        }
-    }
-    private void SetSpritesToTop()
-    {
-        left = top;
-        right = top;
-        front = top;
-        back = top;
-        bottom = top;
-    }
-}
-
 public class BlockFace
 {
     public const float SpriteSize = 16;

@@ -108,37 +108,37 @@ public class Chunk : MonoBehaviour
                         if (!SolidTile(x, y + 1, z))
                         {
                             AddVerticies(MeshSide.Top, blockPos, ref vertices);
-                            uvs.AddRange(Block.GetBlock(blocks[x, y, z]).top.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).top.GetUVs());
                             numFaces++;
                         }
                         if (!SolidTile(x, y - 1, z))
                         {
                             AddVerticies(MeshSide.Bottom, blockPos, ref vertices);
-                            uvs.AddRange(Block.GetBlock(blocks[x, y, z]).bottom.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).bottom.GetUVs());
                             numFaces++;
                         }
                         if (!SolidTile(x, y, z - 1))
                         {
                             AddVerticies(MeshSide.Front, blockPos, ref vertices);
-                            uvs.AddRange(Block.GetBlock(blocks[x, y, z]).front.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).front.GetUVs());
                             numFaces++;
                         }
                         if (!SolidTile(x + 1, y, z))
                         {
                             AddVerticies(MeshSide.Right, blockPos, ref vertices);
-                            uvs.AddRange(Block.GetBlock(blocks[x, y, z]).right.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).right.GetUVs());
                             numFaces++;
                         }
                         if (!SolidTile(x, y, z + 1))
                         {
                             AddVerticies(MeshSide.Back, blockPos, ref vertices);
-                            uvs.AddRange(Block.GetBlock(blocks[x, y, z]).back.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).back.GetUVs());
                             numFaces++;
                         }
                         if (!SolidTile(x - 1, y, z))
                         {
                             AddVerticies(MeshSide.Left, blockPos, ref vertices);
-                            uvs.AddRange(Block.GetBlock(blocks[x, y, z]).left.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).left.GetUVs());
                             numFaces++;
                         }
                     }

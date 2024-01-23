@@ -72,10 +72,15 @@ public class Player : MonoBehaviour
         {
             //Debug.Log("attemptRaycast");
             RaycastHit hitInfo;
-            if(Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, 128f))
+            Vector3 pointOfTargetBlock = transform.position + new Vector3(0, 0.5f, 0);
+            bool activate = false;
+            if(World.Block(pointOfTargetBlock) != BlockID.Air)
             {
-                Vector3 pointOfTargetBlock;
-                if(left && hitInfo.collider.gameObject.tag != "InverseCube")
+                activate = true;
+            }
+            else if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, 128f))
+            {
+                if (left && hitInfo.collider.gameObject.tag != "InverseCube")
                 {
                     pointOfTargetBlock = hitInfo.point + CameraTransform.forward * 0.01f;
                 }
@@ -83,46 +88,14 @@ public class Player : MonoBehaviour
                 {
                     pointOfTargetBlock = hitInfo.point - CameraTransform.forward * 0.01f;
                 }
-                GameObject chunkObj = World.Instance.BoundingChunk(pointOfTargetBlock.x, pointOfTargetBlock.z);
-                if(chunkObj != null)
-                {
-                    int blockX = Mathf.FloorToInt(pointOfTargetBlock.x) - (int)chunkObj.transform.position.x;
-                    int blockY = Mathf.FloorToInt(pointOfTargetBlock.y);
-                    int blockZ = Mathf.FloorToInt(pointOfTargetBlock.z) - (int)chunkObj.transform.position.z;
-                    Chunk chunk = chunkObj.GetComponent<Chunk>();
-                    if(blockY < Chunk.Height && blockY >= 0)
-                    {
-                        if (left)
-                            chunk.blocks[blockX, blockY, blockZ] = 0;
-                        else
-                            chunk.blocks[blockX, blockY, blockZ] = 1;
-                        if (blockX <= 0)
-                        {
-                            GameObject adjacentChunk = World.Instance.GetChunk(chunk.Index.x - 1, chunk.Index.y);
-                            if(adjacentChunk != null)
-                                adjacentChunk.GetComponent<Chunk>().BuildMesh();
-                        }
-                        if (blockZ <= 0)
-                        {
-                            GameObject adjacentChunk = World.Instance.GetChunk(chunk.Index.x, chunk.Index.y - 1);
-                            if (adjacentChunk != null)
-                                adjacentChunk.GetComponent<Chunk>().BuildMesh();
-                        }
-                        if (blockX >= Chunk.Width - 1)
-                        {
-                            GameObject adjacentChunk = World.Instance.GetChunk(chunk.Index.x + 1, chunk.Index.y);
-                            if (adjacentChunk != null)
-                                adjacentChunk.GetComponent<Chunk>().BuildMesh();
-                        }
-                        if (blockZ >= Chunk.Width - 1)
-                        {
-                            GameObject adjacentChunk = World.Instance.GetChunk(chunk.Index.x, chunk.Index.y + 1);
-                            if (adjacentChunk != null)
-                                adjacentChunk.GetComponent<Chunk>().BuildMesh();
-                        }
-                        chunk.BuildMesh();
-                    }
-                }
+                activate = true;
+            }
+            if (activate)
+            {
+                if (left)
+                    World.SetBlock(pointOfTargetBlock, 0);
+                else if(World.Block(pointOfTargetBlock) == BlockID.Air)
+                    World.SetBlock(pointOfTargetBlock, 1);
             }
         }
     }
@@ -130,49 +103,9 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject InBlockColliderBottom;
     private void InsideBlockCheck()
     {
-        Vector3 pointOfTargetBlock = transform.position;
-        pointOfTargetBlock.y -= 0.5f;
-        bool insideTop = false;
-        bool insideBot = false;
-        for (int j = 0; j < 2; j++)
-        {
-            if(pointOfTargetBlock.y >= 0 || pointOfTargetBlock.y < Chunk.Height)
-            {
-                GameObject chunkObj = World.Instance.BoundingChunk(pointOfTargetBlock.x, pointOfTargetBlock.z);
-                if (chunkObj != null)
-                {
-                    int blockX = Mathf.FloorToInt(pointOfTargetBlock.x) - (int)chunkObj.transform.position.x;
-                    int blockY = Mathf.FloorToInt(pointOfTargetBlock.y);
-                    int blockZ = Mathf.FloorToInt(pointOfTargetBlock.z) - (int)chunkObj.transform.position.z;
-                    Chunk chunk = chunkObj.GetComponent<Chunk>();
-                    if (chunk.blocks[blockX, blockY, blockZ] != 0)
-                    {
-                        if (j == 0)
-                            insideBot = true;
-                        else
-                            insideTop = true;
-                    }
-                }
-            }
-            pointOfTargetBlock.y += 1;
-        }
-        if(insideTop)
-        {
-            InBlockColliderTop.SetActive(true);
-            InBlockColliderTop.transform.position = new Vector3((int)transform.position.x + 0.5f, (int)transform.position.y, (int)transform.position.z + 0.5f);
-        }
-        else
-        {
-            InBlockColliderTop.SetActive(false);
-        }
-        /*if (insideBot)
-        {
-            InBlockColliderBottom.SetActive(true);
-            InBlockColliderBottom.transform.position = new Vector3((int)transform.position.x + 0.5f, (int)transform.position.y - 1, (int)transform.position.z + 0.5f);
-        }
-        else
-        {
-            InBlockColliderBottom.SetActive(false);
-        }*/
+        InBlockColliderTop.transform.position = new Vector3((int)transform.position.x + 0.5f, (int)(transform.position.y + 0.5f), (int)transform.position.z + 0.5f);
+        InBlockColliderBottom.transform.position = new Vector3((int)transform.position.x + 0.5f, (int)(transform.position.y + 0.5f) - 1, (int)transform.position.z + 0.5f);
+        InBlockColliderTop.GetComponent<BarrierBlock>().UpdateCollision();
+        InBlockColliderBottom.GetComponent<BarrierBlock>().UpdateCollision();
     }
 }
