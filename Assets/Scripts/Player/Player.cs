@@ -7,16 +7,14 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float Sensitivity = 1;
-    public Rigidbody RB;
-    public Transform CameraTransform;
-    public ScreenBlocker ScreenBlocker;
-    // Start is called before the first frame update
+    [SerializeField] private Rigidbody RB;
+    [SerializeField] private Transform CameraTransform;
+    [SerializeField] private ScreenBlocker ScreenBlocker;
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-    // Update is called once per frame
     private void Update()
     {
         Vector2 moveDir = Vector2.zero;
@@ -50,7 +48,10 @@ public class Player : MonoBehaviour
         MouseControls();
         BlockCollisionCheck();
     }
-    Vector2 Direction = Vector2.zero;
+    private Vector2 Direction = Vector2.zero;
+    /// <summary>
+    /// Updates the rotation of the camera to match with the movement of the mouse
+    /// </summary>
     private void CameraControls()
     {
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * Sensitivity;
@@ -65,47 +66,60 @@ public class Player : MonoBehaviour
 
         CameraTransform.position = transform.position + new Vector3(0, 0.5f, 0);
     }
+    [SerializeField] GameObject BlockOutline;
     private void MouseControls()
     {
         bool left = Input.GetMouseButtonDown(0);
         bool right = Input.GetMouseButtonDown(1);
-        if(left || right)
+        RaycastHit hitInfo;
+        Vector3 TargetPosition = transform.position + new Vector3(0, 0.5f, 0);
+        bool activate = false;
+        int blockType = World.Block(TargetPosition);
+        if (blockType != BlockID.Air) //Checks if the player is inside a block
         {
-            //Debug.Log("attemptRaycast");
-            RaycastHit hitInfo;
-            Vector3 pointOfTargetBlock = transform.position + new Vector3(0, 0.5f, 0);
-            bool activate = false;
-            int blockType = World.Block(pointOfTargetBlock);
-            if (blockType != BlockID.Air) //Checks if the player is inside a block
+            activate = true;
+        }
+        else
+        {
+            if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, 128f))
             {
+                if (!right && hitInfo.collider.gameObject.tag != "InverseCube")
+                {
+                    TargetPosition = hitInfo.point - hitInfo.normal * 0.1f;
+                }
+                else
+                {
+                    TargetPosition = hitInfo.point + hitInfo.normal * 0.1f;
+                }
                 activate = true;
+            }
+        }
+        if (activate)
+        { 
+            if (left)
+                World.SetBlock(TargetPosition, 0);
+            else if (right && World.Block(TargetPosition) == BlockID.Air)
+                World.SetBlock(TargetPosition, 1);
+            if(World.Block(TargetPosition) == BlockID.Air)
+            {
+                BlockOutline.SetActive(false);
             }
             else
             {
-                if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, 128f))
-                {
-                    if (left && hitInfo.collider.gameObject.tag != "InverseCube")
-                    {
-                        pointOfTargetBlock = hitInfo.point + CameraTransform.forward * 0.01f;
-                    }
-                    else
-                    {
-                        pointOfTargetBlock = hitInfo.point - CameraTransform.forward * 0.01f;
-                    }
-                    activate = true;
-                }
+                BlockOutline.transform.position = new Vector3(Mathf.FloorToInt(TargetPosition.x) + 0.5f, Mathf.FloorToInt(TargetPosition.y) + 0.5f, Mathf.FloorToInt(TargetPosition.z) + 0.5f);
+                BlockOutline.SetActive(true);
             }
-            if (activate)
-            {
-                if (left)
-                    World.SetBlock(pointOfTargetBlock, 0);
-                else if(World.Block(pointOfTargetBlock) == BlockID.Air)
-                    World.SetBlock(pointOfTargetBlock, 1);
-            }
+        }
+        else
+        {
+            BlockOutline.SetActive(false);
         }
     }
     [SerializeField] private GameObject InBlockColliderTop;
     [SerializeField] private GameObject InBlockColliderBottom;
+    /// <summary>
+    /// Updates the colliders that surround the player to make sure they can't fall out of the world if they clip out of the chunk's mesh
+    /// </summary>
     private void BlockCollisionCheck()
     {
         Vector3 topAsInt = new Vector3(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y + 0.5f), Mathf.FloorToInt(transform.position.z));
