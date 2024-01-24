@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float Sensitivity = 1;
     public Rigidbody RB;
     public Transform CameraTransform;
+    public ScreenBlocker ScreenBlocker;
     // Start is called before the first frame update
     private void Start()
     {
@@ -47,7 +48,7 @@ public class Player : MonoBehaviour
 
         CameraControls();
         MouseControls();
-        InsideBlockCheck();
+        BlockCollisionCheck();
     }
     Vector2 Direction = Vector2.zero;
     private void CameraControls()
@@ -74,21 +75,25 @@ public class Player : MonoBehaviour
             RaycastHit hitInfo;
             Vector3 pointOfTargetBlock = transform.position + new Vector3(0, 0.5f, 0);
             bool activate = false;
-            if(World.Block(pointOfTargetBlock) != BlockID.Air)
+            int blockType = World.Block(pointOfTargetBlock);
+            if (blockType != BlockID.Air) //Checks if the player is inside a block
             {
                 activate = true;
             }
-            else if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, 128f))
+            else
             {
-                if (left && hitInfo.collider.gameObject.tag != "InverseCube")
+                if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, 128f))
                 {
-                    pointOfTargetBlock = hitInfo.point + CameraTransform.forward * 0.01f;
+                    if (left && hitInfo.collider.gameObject.tag != "InverseCube")
+                    {
+                        pointOfTargetBlock = hitInfo.point + CameraTransform.forward * 0.01f;
+                    }
+                    else
+                    {
+                        pointOfTargetBlock = hitInfo.point - CameraTransform.forward * 0.01f;
+                    }
+                    activate = true;
                 }
-                else
-                {
-                    pointOfTargetBlock = hitInfo.point - CameraTransform.forward * 0.01f;
-                }
-                activate = true;
             }
             if (activate)
             {
@@ -101,11 +106,13 @@ public class Player : MonoBehaviour
     }
     [SerializeField] private GameObject InBlockColliderTop;
     [SerializeField] private GameObject InBlockColliderBottom;
-    private void InsideBlockCheck()
+    private void BlockCollisionCheck()
     {
-        InBlockColliderTop.transform.position = new Vector3((int)transform.position.x + 0.5f, (int)(transform.position.y + 0.5f), (int)transform.position.z + 0.5f);
+        Vector3 topAsInt = new Vector3((int)transform.position.x + 0.5f, (int)(transform.position.y + 0.5f), (int)transform.position.z + 0.5f);
+        InBlockColliderTop.transform.position = topAsInt;
         InBlockColliderBottom.transform.position = new Vector3((int)transform.position.x + 0.5f, (int)(transform.position.y + 0.5f) - 1, (int)transform.position.z + 0.5f);
         InBlockColliderTop.GetComponent<BarrierBlock>().UpdateCollision();
         InBlockColliderBottom.GetComponent<BarrierBlock>().UpdateCollision();
+        ScreenBlocker.UpdateUVS(World.Block(topAsInt));
     }
 }

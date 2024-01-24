@@ -11,6 +11,7 @@ public class BlockMesh
     {
         {BlockID.Grass, new BlockMesh(BlockID.Grass)},
         {BlockID.Dirt, new BlockMesh(BlockID.Dirt)},
+        {BlockID.Air, new BlockMesh(BlockID.Dirt)},
     };
     private int Type;
     public BlockFace top, left, right, front, back, bottom;
