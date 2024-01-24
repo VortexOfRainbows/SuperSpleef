@@ -108,9 +108,9 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject InBlockColliderBottom;
     private void BlockCollisionCheck()
     {
-        Vector3 topAsInt = new Vector3((int)transform.position.x + 0.5f, (int)(transform.position.y + 0.5f), (int)transform.position.z + 0.5f);
-        InBlockColliderTop.transform.position = topAsInt;
-        InBlockColliderBottom.transform.position = new Vector3((int)transform.position.x + 0.5f, (int)(transform.position.y + 0.5f) - 1, (int)transform.position.z + 0.5f);
+        Vector3 topAsInt = new Vector3(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y + 0.5f), Mathf.FloorToInt(transform.position.z));
+        InBlockColliderTop.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f), Mathf.FloorToInt(transform.position.z) + 0.5f);
+        InBlockColliderBottom.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f) - 1, Mathf.FloorToInt(transform.position.z) + 0.5f);
         InBlockColliderTop.GetComponent<BarrierBlock>().UpdateCollision();
         InBlockColliderBottom.GetComponent<BarrierBlock>().UpdateCollision();
         ScreenBlocker.UpdateUVS(World.Block(topAsInt));

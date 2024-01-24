@@ -61,11 +61,11 @@ public class World : MonoBehaviour
     public static int Block(float x, float y, float z)
     {
         GameObject chunkObj = Instance.BoundingChunk(x, z);
-        if (chunkObj != null)
+        if (chunkObj != null && y >= 0 && y < Chunk.Height)
         {
-            int blockX = Mathf.FloorToInt(x) - (int)chunkObj.transform.position.x;
+            int blockX = Mathf.FloorToInt(x) - Mathf.FloorToInt(chunkObj.transform.position.x);
             int blockY = Mathf.FloorToInt(y);
-            int blockZ = Mathf.FloorToInt(z) - (int)chunkObj.transform.position.z;
+            int blockZ = Mathf.FloorToInt(z) - Mathf.FloorToInt(chunkObj.transform.position.z);
             Chunk chunk = chunkObj.GetComponent<Chunk>();
             return chunk.blocks[blockX, blockY, blockZ];
         }
@@ -76,9 +76,9 @@ public class World : MonoBehaviour
         GameObject chunkObj =   Instance.BoundingChunk(x, z);
         if (chunkObj != null)
         {
-            int blockX = Mathf.FloorToInt(x) - (int)chunkObj.transform.position.x;
+            int blockX = Mathf.FloorToInt(x) - Mathf.FloorToInt(chunkObj.transform.position.x);
             int blockY = Mathf.FloorToInt(y);
-            int blockZ = Mathf.FloorToInt(z) - (int)chunkObj.transform.position.z;
+            int blockZ = Mathf.FloorToInt(z) - Mathf.FloorToInt(chunkObj.transform.position.z);
             Chunk chunk = chunkObj.GetComponent<Chunk>();
             if (blockY < Chunk.Height && blockY >= 0)
             {
