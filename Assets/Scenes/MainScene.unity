@@ -781,6 +781,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2823746378629484748, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
+      propertyPath: m_ImplicitCom
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823746378629484748, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5992814542612128231, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
       propertyPath: BlockOutline
       value: 

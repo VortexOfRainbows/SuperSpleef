@@ -14,7 +14,9 @@ public class Player : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        RB.maxDepenetrationVelocity = 0;
     }
+    private float PreviousYVelocity = 0;
     private void Update()
     {
         Vector2 moveDir = Vector2.zero;
@@ -42,8 +44,15 @@ public class Player : MonoBehaviour
         }
         RB.velocity = new Vector3(RB.velocity.x * 0.9f, RB.velocity.y, RB.velocity.z * 0.9f);
         if(RB.velocity.y > 0)
+        {
             RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y * 0.95f, RB.velocity.z);
-
+            RB.maxDepenetrationVelocity = 0;
+        }
+        else if(RB.velocity.y < 0 || (RB.velocity.y == 0 && PreviousYVelocity > 0))
+        {
+            RB.maxDepenetrationVelocity = 10;
+        }
+        PreviousYVelocity = RB.velocity.y;
         CameraControls();
         MouseControls();
         BlockCollisionCheck();
@@ -61,7 +70,7 @@ public class Player : MonoBehaviour
 
         Direction.x = Mathf.Clamp(Direction.x, -90f, 90f);
 
-        transform.rotation = Quaternion.Euler(0, Direction.y, 0f);
+        //transform.rotation = Quaternion.Euler(0, Direction.y, 0f);
         CameraTransform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
 
         CameraTransform.position = transform.position + new Vector3(0, 0.5f, 0);
