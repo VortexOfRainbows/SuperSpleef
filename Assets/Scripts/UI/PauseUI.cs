@@ -26,6 +26,12 @@ public class PauseUI : MonoBehaviour
                 Resume();
             }
         }
+
+        if (GameIsPaused == true) {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
     }
 
     public void Pause()
