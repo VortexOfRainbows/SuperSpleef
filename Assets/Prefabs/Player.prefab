@@ -152,7 +152,6 @@ MonoBehaviour:
   Sensitivity: 400
   RB: {fileID: 1326384001663812332}
   CameraTransform: {fileID: 0}
-<<<<<<< Updated upstream
   ScreenBlocker: {fileID: 0}
   BlockOutline: {fileID: 0}
   InBlockColliderTop: {fileID: 0}
@@ -178,7 +177,5 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.75, y: 1.75, z: 0.75}
   m_Center: {x: 0, y: -0.125, z: 0}
-=======
   InBlockColliderTop: {fileID: 0}
   InBlockColliderBottom: {fileID: 0}
->>>>>>> Stashed changes
