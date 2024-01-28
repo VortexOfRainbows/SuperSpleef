@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField] private Rigidbody RB;
     [SerializeField] private Transform CameraTransform;
     [SerializeField] private ScreenBlocker ScreenBlocker;
+    public const int EntityLayer = 6;
+    [SerializeField] private float BlockRange = 4;
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -90,33 +93,54 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, 128f))
+            if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, BlockRange * 2)) //Twice the block range so we can hit all blocks within the range
             {
-                if (!right && hitInfo.collider.gameObject.tag != "InverseCube")
+                Vector3 hitPoint = hitInfo.point;
+                Vector3 InsideBlock = hitPoint - hitInfo.normal * 0.1f;
+                Vector3 ToHitPoint = new Vector3(Mathf.FloorToInt(InsideBlock.x) + 0.5f, Mathf.FloorToInt(InsideBlock.y) + 0.5f, Mathf.FloorToInt(InsideBlock.z) + 0.5f) - transform.position;
+                if (ToHitPoint.magnitude <= BlockRange)
                 {
-                    TargetPosition = hitInfo.point - hitInfo.normal * 0.1f;
+                    if (!right && hitInfo.collider.gameObject.tag != "InverseCube")
+                    {
+                        TargetPosition = InsideBlock;
+                    }
+                    else
+                    {
+                        TargetPosition = hitPoint + hitInfo.normal * 0.1f;
+                    }
+                    activate = true;
                 }
-                else
-                {
-                    TargetPosition = hitInfo.point + hitInfo.normal * 0.1f;
-                }
-                activate = true;
             }
         }
         if (activate)
-        { 
+        {
+            Vector3 centerOfBlock = new Vector3(Mathf.FloorToInt(TargetPosition.x) + 0.5f, Mathf.FloorToInt(TargetPosition.y) + 0.5f, Mathf.FloorToInt(TargetPosition.z) + 0.5f);
+            bool ShouldUpdateBlockOutline = true;
             if (left)
-                World.SetBlock(TargetPosition, 0);
-            else if (right && World.Block(TargetPosition) == BlockID.Air)
-                World.SetBlock(TargetPosition, 1);
-            if(World.Block(TargetPosition) == BlockID.Air)
             {
-                BlockOutline.SetActive(false);
+                ShouldUpdateBlockOutline = World.SetBlock(TargetPosition, 0);
             }
-            else
+            else if (right && World.Block(TargetPosition) == BlockID.Air)
             {
-                BlockOutline.transform.position = new Vector3(Mathf.FloorToInt(TargetPosition.x) + 0.5f, Mathf.FloorToInt(TargetPosition.y) + 0.5f, Mathf.FloorToInt(TargetPosition.z) + 0.5f);
-                BlockOutline.SetActive(true);
+                Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
+                if (inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0)
+                {
+                    ShouldUpdateBlockOutline = World.SetBlock(TargetPosition, 1);
+                }
+                else
+                    ShouldUpdateBlockOutline = false;
+            }
+            if(ShouldUpdateBlockOutline)
+            {
+                if (World.Block(TargetPosition) == BlockID.Air)
+                {
+                    BlockOutline.SetActive(false);
+                }
+                else
+                {
+                    BlockOutline.transform.position = centerOfBlock;
+                    BlockOutline.SetActive(true);
+                }
             }
         }
         else

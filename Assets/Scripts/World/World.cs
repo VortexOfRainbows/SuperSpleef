@@ -9,6 +9,7 @@ public class World : MonoBehaviour
     public GameObject chunkObj;
     private GameObject[,] chunk;
     public const int ChunkRadius = 15;
+    public const int WorldLayer = 3;
     private void Start()
     {
         Instance = this;
@@ -20,7 +21,7 @@ public class World : MonoBehaviour
                 Vector2Int chunkPos = new Vector2Int(i, j);
                 chunk[i, j] = Instantiate(chunkObj, new Vector3(chunkPos.x * Chunk.Width, 0, chunkPos.y * Chunk.Width), Quaternion.identity);
                 chunk[i, j].GetComponent<Chunk>().Index = chunkPos;
-                chunk[i, j].layer = 3; //set to world layer
+                chunk[i, j].layer = WorldLayer; //set to world layer
             }
         }
         for (int i = 0; i < chunk.GetLength(1); i++)
