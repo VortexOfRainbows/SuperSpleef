@@ -30,6 +30,7 @@ public class PlayerFiring : MonoBehaviour
         Debug.Log(player.velocity);
     }
 
+
     private void Fire() 
     { 
         fired = true;

@@ -10,13 +10,13 @@ public class FiringPointTransform : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        transform.position += offset;
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.rotation = Camera.main.transform.rotation;
-        //transform.position = Camera.main.transform.position + offset;
+        Camera.main.transform.position = transform.position;
     }
 }
