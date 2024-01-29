@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
-    public ControlDown Control; //Stores player input for the current frame
-    public ControlDown LastControl; //Record player input from the previous frame
+    public ControlDown Control = new ControlDown(); //Stores player input for the current frame
+    public ControlDown LastControl = new ControlDown(); //Record player input from the previous frame
     public struct ControlDown
     {
         public bool LeftClick;
@@ -29,12 +29,13 @@ public class PlayerControls : MonoBehaviour
         public bool Hotkey0;
         public float XAxis;
         public float YAxis;
+        public float ScrollDelta;
         public ControlDown(bool defaultState = false)
         {
             LeftClick = Left = Right = Forward = Back = Jump = defaultState;
             RightClick = defaultState;
             Hotkey1 = Hotkey2 = Hotkey3 = Hotkey4 = Hotkey5 = Hotkey6 = Hotkey7 = Hotkey8 = Hotkey9 = Hotkey0 = defaultState;
-            XAxis = YAxis = 0f;
+            XAxis = YAxis = ScrollDelta = 0f;
         }
     }
     public void UpdateKey(bool AssociatedInput, bool LastControl, ref bool ControlToUpdate)
@@ -51,6 +52,7 @@ public class PlayerControls : MonoBehaviour
     }
     public void OnUpdate()
     {
+        Control.ScrollDelta = Input.mouseScrollDelta.y;
         Control.XAxis = Input.GetAxisRaw("Mouse X");
         Control.YAxis = Input.GetAxisRaw("Mouse Y");
         UpdateKey(Input.GetKey(KeyCode.A), LastControl.Left, ref Control.Left);
