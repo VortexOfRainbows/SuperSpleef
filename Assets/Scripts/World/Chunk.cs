@@ -6,7 +6,12 @@ using UnityEngine.UI;
 
 public class Chunk : MonoBehaviour
 {
+    public static int Seed = -1;
     public Vector2Int Index { get; set; }
+    public const float StoneLayer = 0.5f;
+    public const float TerrainHeightMultiplier = 0.5f;
+    public const float TerrainMinimum = 0.2f;
+    public const float NoisePosMult = 0.5f;
     //chunk size
     public const int Width = 8;
     public const int Height = 64;
@@ -15,27 +20,36 @@ public class Chunk : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+        if(Seed == -1)
+            Seed = Random.Range(0, 25555); //25555 is just an arbitrarily picked number.
         meshFilter = this.GetComponent<MeshFilter>();
         GenerateChunk();
     }
     public void GenerateChunk()
-    {        
+    {
         for (int x = 0; x < Width; x++)
         {
             for (int z = 0; z < Width; z++)
             {
-                float noise = Mathf.Sqrt(Mathf.PerlinNoise((transform.position.x + x) / Width / 2f, (transform.position.z + z) / Width / 2f)) * 0.5f + 0.2f;
+                Vector2 posInNoise = new Vector2(transform.position.x + x, transform.position.z + z) / Width * NoisePosMult;
+                float noise = Mathf.Sqrt(Mathf.PerlinNoise(Seed + posInNoise.x, posInNoise.y)) * TerrainHeightMultiplier + TerrainMinimum;
+                float stoneLayerNoise = Mathf.Sqrt(Mathf.PerlinNoise(posInNoise.y, Seed + posInNoise.x)) * TerrainHeightMultiplier * StoneLayer + TerrainMinimum;
                 for (int y = Height - 1; y >= 0; y--)
                 {
                     if (y < Height * noise)
                     {
-                        if (blocks[x, y + 1, z] == BlockID.Air)
-                        {
-                            blocks[x, y, z] = BlockID.Grass;
-                        }
+                        if (y < Height * stoneLayerNoise)
+                            blocks[x, y, z] = BlockID.Stone;
                         else
                         {
-                            blocks[x, y, z] = BlockID.Dirt;
+                            if (blocks[x, y + 1, z] == BlockID.Air)
+                            {
+                                blocks[x, y, z] = BlockID.Grass;
+                            }
+                            else
+                            {
+                                blocks[x, y, z] = BlockID.Dirt;
+                            }
                         }
                     }
                     else
@@ -44,7 +58,7 @@ public class Chunk : MonoBehaviour
             }
         }
     }
-    public bool SolidTile(int x, int y, int z)
+    public bool SolidTile(int x, int y, int z, int myType)
     {
         if (y >= Height || y < 0)
             return false;
@@ -77,13 +91,27 @@ public class Chunk : MonoBehaviour
             if (ChunkObj == null)
                 return false;
             Chunk chunk = ChunkObj.GetComponent<Chunk>();
-            return chunk.SolidTile(x, y, z);
+            return chunk.SolidTile(x, y, z, myType);
         }
         else
         {
             int blockType = blocks[x, y, z];
-            if (blockType != 0)
+            if (blockType != BlockID.Air)
+            {
+                if(blockType == BlockID.Glass && myType != BlockID.Glass)
+                {
+                    return false;
+                }
+                if(blockType != BlockID.Glass && myType == BlockID.Glass)
+                {
+                    return false;
+                }
+                if (blockType == BlockID.Leaves)
+                {
+                    return false;
+                }
                 return true;
+            }
         }
         return false;
     }
@@ -102,43 +130,44 @@ public class Chunk : MonoBehaviour
             {
                 for (int y = 0; y < Height; y++)
                 {
-                    if (blocks[x,y,z] != 0)
+                    int myType = blocks[x, y, z];
+                    if (myType != BlockID.Air)
                     {
                         Vector3 blockPos = new Vector3(x, y, z);
-                        if (!SolidTile(x, y + 1, z))
+                        if (!SolidTile(x, y + 1, z, myType))
                         {
                             AddVerticies(MeshSide.Top, blockPos, ref vertices);
-                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).top.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(myType).top.GetUVs());
                             numFaces++;
                         }
-                        if (!SolidTile(x, y - 1, z))
+                        if (!SolidTile(x, y - 1, z, myType))
                         {
                             AddVerticies(MeshSide.Bottom, blockPos, ref vertices);
-                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).bottom.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(myType).bottom.GetUVs());
                             numFaces++;
                         }
-                        if (!SolidTile(x, y, z - 1))
+                        if (!SolidTile(x, y, z - 1, myType))
                         {
                             AddVerticies(MeshSide.Front, blockPos, ref vertices);
-                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).front.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(myType).front.GetUVs());
                             numFaces++;
                         }
-                        if (!SolidTile(x + 1, y, z))
+                        if (!SolidTile(x + 1, y, z, myType))
                         {
                             AddVerticies(MeshSide.Right, blockPos, ref vertices);
-                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).right.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(myType).right.GetUVs());
                             numFaces++;
                         }
-                        if (!SolidTile(x, y, z + 1))
+                        if (!SolidTile(x, y, z + 1, myType))
                         {
                             AddVerticies(MeshSide.Back, blockPos, ref vertices);
-                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).back.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(myType).back.GetUVs());
                             numFaces++;
                         }
-                        if (!SolidTile(x - 1, y, z))
+                        if (!SolidTile(x - 1, y, z, myType))
                         {
                             AddVerticies(MeshSide.Left, blockPos, ref vertices);
-                            uvs.AddRange(BlockMesh.Get(blocks[x, y, z]).left.GetUVs());
+                            uvs.AddRange(BlockMesh.Get(myType).left.GetUVs());
                             numFaces++;
                         }
                     }
@@ -165,7 +194,7 @@ public class Chunk : MonoBehaviour
         meshFilter.mesh = mesh;
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
-    private enum MeshSide
+    public enum MeshSide
     {
         Front,
         Back,
@@ -174,7 +203,7 @@ public class Chunk : MonoBehaviour
         Left,
         Right
     }
-    private void AddVerticies(MeshSide side, Vector3 blockPos, ref List<Vector3> vertices)
+    public static void AddVerticies(MeshSide side, Vector3 blockPos, ref List<Vector3> vertices)
     {
         if(side == MeshSide.Front)
         {

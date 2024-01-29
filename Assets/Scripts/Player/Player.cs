@@ -33,8 +33,8 @@ public class Player : Entity
         {
             if(i == 0)
                 Inventory.Set(i, new BasicBlaster());
-            else if(i == 1)
-                Inventory.Set(i, new PlaceableBlock(BlockID.Grass, 20));
+            else if(i <= BlockID.Max)
+                Inventory.Set(i, new PlaceableBlock(i, 20));
             else
                 Inventory.Set(i, new PlaceableBlock(BlockID.Dirt));
         }
@@ -93,6 +93,9 @@ public class Player : Entity
         }
         PreviousYVelocity = RB.velocity.y;
         HeldItemUpdate(); //Item updates should be considered on fixed updated so they update in time with physics
+
+        //RB.MovePosition(RB.velocity * Time.fixedDeltaTime);
+
         ControlManager.OnFixedUpdate();
     }
     private Vector2 Direction = Vector2.zero;

@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour
 {
+    public int ItemIndex => Index;
+    [SerializeField] private InventoryModel Model;
     [SerializeField] private Entity Owner;
     [SerializeField] private int Index;
     [SerializeField] private Text TextElement;
@@ -27,18 +29,41 @@ public class ItemSlot : MonoBehaviour
                 IsSelected = true;
             }
         }
-        ImageElement.fillCenter = IsSelected;
-        System.Type itemType = Item.GetType(); //Using System.Type is a temporary solution until we use localization or other means of naming items
-        if (lastCount != Item.Count || lastType != itemType)
+        ImageElement.fillCenter = IsSelected; //Using System.Type is a temporary solution until we use localization or other means of naming items
+        if (lastCount != Item.Count || lastType != Item.GetType())
         {
-            string str = itemType.ToString().AddSpaceBetweenCaps();
-            if (Item.Count > 1)
+            ReloadVisuals();
+        }
+    }
+    /// <summary>
+    /// Reloads the display text and 3d block model associated with the inventory item
+    /// </summary>
+    private void ReloadVisuals()
+    {
+        bool isNotItem = Item is NoItem;
+        if (!isNotItem)
+            Model.gameObject.SetActive(true);
+        System.Type itemType = Item.GetType();
+        string str = itemType.ToString().AddSpaceBetweenCaps();
+        if (Item.Count > 0 && !isNotItem)
+        {
+            str += "\n" + Item.Count;
+        }
+        TextElement.text = str;
+        lastCount = Item.Count;
+        lastType = itemType;
+        if(Item is PlaceableBlock pb)
+        {
+            Model.SetModelToBlock(pb.PlaceID);
+        }
+        else
+        {
+            if(isNotItem)
             {
-                str += "\n" + Item.Count;
+                Model.gameObject.SetActive(false);
             }
-            TextElement.text = str;
-            lastCount = Item.Count;
-            lastType = itemType;
+            else
+                Model.SetModelToBlock(BlockID.Air);
         }
     }
 }

@@ -152,6 +152,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7840104445045619779, guid: 0419566e7de6cbd41bc5eeb4fee2bb51, type: 3}
+      propertyPath: IgnoreBot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840104445045619779, guid: 0419566e7de6cbd41bc5eeb4fee2bb51, type: 3}
+      propertyPath: IgnoreTop
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8847359203406491454, guid: 0419566e7de6cbd41bc5eeb4fee2bb51, type: 3}
       propertyPath: m_Name
       value: TopWallCube
