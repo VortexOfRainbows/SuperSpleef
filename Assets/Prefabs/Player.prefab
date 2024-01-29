@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f42067016d567741ab87c8c1f39ce52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BasicProjectileTest: {fileID: 2850273201132221861, guid: 5807d350cd0d6694591c612bbf37de5f, type: 3}
   RB: {fileID: 1326384001663812332}
   FacingVector: {fileID: 2285934479319385815}
   ControlManager: {fileID: 5101752403716287785}

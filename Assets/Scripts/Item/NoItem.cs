@@ -9,11 +9,11 @@ public class NoItem : Item
         Count = 1;
         MaxCount = 1;
     }
-    public override bool OnPrimaryUse()
+    public override bool OnPrimaryUse(Player player)
     {
         return false;
     }
-    public override bool OnSecondaryUse()
+    public override bool OnSecondaryUse(Player player)
     {
         return false;
     }

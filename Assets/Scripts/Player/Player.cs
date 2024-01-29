@@ -7,8 +7,13 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    public Rigidbody RB; //These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
-    public GameObject FacingVector; //These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
+    #region public
+    ///These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
+    public GameObject BasicProjectileTest;
+    public Rigidbody RB;
+    public GameObject FacingVector;
+    #endregion
+
     /// <summary>
     /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls
     /// </summary>
@@ -26,7 +31,12 @@ public class Player : Entity
         Inventory = new Inventory(30);
         for(int i = 0; i < Inventory.Count; i++)
         {
-            Inventory.Set(i, new PlaceableBlock(BlockID.Grass));
+            if(i == 0)
+                Inventory.Set(i, new BasicBlaster());
+            else if(i == 1)
+                Inventory.Set(i, new PlaceableBlock(BlockID.Grass, 20));
+            else
+                Inventory.Set(i, new PlaceableBlock(BlockID.Dirt));
         }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -139,6 +149,7 @@ public class Player : Entity
         bool itemUsed = false;
         RaycastHit hitInfo;
         Vector3 TargetPosition = transform.position + new Vector3(0, 0.5f, 0);
+        bool blocksWereModified = false;
         bool DoBlockCheck = false;
         bool holdingPlaceableBlock = false;
         int blockToPlace = BlockID.Air;
@@ -179,18 +190,20 @@ public class Player : Entity
             bool updateBlockOutline = true;
             if (left)
             {
-                updateBlockOutline = World.SetBlock(TargetPosition, 0);
-            }
-            else if (holdingPlaceableBlock && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air)
+                blocksWereModified = World.SetBlock(TargetPosition, 0);
+                updateBlockOutline = blocksWereModified;
+            } 
+            else if (holdingPlaceableBlock && heldItem.OnSecondaryUse(this) && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air)
             {
                 Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
                 if (inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0)
                 {
-                    bool successfullyPlacedBlock = World.SetBlock(TargetPosition, blockToPlace);
-                    updateBlockOutline = successfullyPlacedBlock;
-                    if (successfullyPlacedBlock)
+                    bool placedBlocks = World.SetBlock(TargetPosition, blockToPlace);
+                    updateBlockOutline = placedBlocks;
+                    if (placedBlocks)
                     {
                         itemUsed = true;
+                        blocksWereModified = true;
                     }
                 }
                 else
@@ -213,9 +226,26 @@ public class Player : Entity
         {
             BlockOutline.SetActive(false);
         }
+        if(!blocksWereModified)
+        {
+            if(left)
+            {
+                if(heldItem.OnPrimaryUse(this))
+                {
+                    itemUsed = true;
+                }
+            }
+            if(right && !holdingPlaceableBlock)
+            {
+                if (heldItem.OnSecondaryUse(this))
+                {
+                    itemUsed = true;
+                }
+            }
+        }
         if(itemUsed)
         {
-            if(heldItem.IsConsumedOnUse())
+            if(heldItem.IsConsumedOnUse(this))
             {
                 heldItem.ModifyCount(-1);
                 if(heldItem.Count <= 0)

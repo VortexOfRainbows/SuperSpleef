@@ -15,6 +15,7 @@ public abstract class Item : MonoBehaviour
         Count = count;
         MaxCount = DefaultMaxCount;
         SetDefaults();
+        ModifyCount(0);
     }
     /// <summary>
     /// Run once when an item is initialized
@@ -25,28 +26,28 @@ public abstract class Item : MonoBehaviour
     }
     /// <summary>
     /// Run when a held item is left clicked.
-    /// Return true on a successful use
-    /// Defaults to true
+    /// Return true on a successful use. 
+    /// Defaults to false. 
     /// </summary>
-    public virtual bool OnPrimaryUse()
+    public virtual bool OnPrimaryUse(Player player)
     {
-        return true;
+        return false;
     }
     /// <summary>
     /// Run when a held item is right clicked.
-    /// Return true on a successful use
-    /// Defaults to true
+    /// Return true on a successful use. 
+    /// Defaults to false,
     /// </summary>
-    public virtual bool OnSecondaryUse()
+    public virtual bool OnSecondaryUse(Player player)
     {
-        return true;
+        return false;
     }
     /// <summary>
     /// Whether or not an item should be consumed upon successfully being used.
     /// Defaults to false
     /// </summary>
     /// <returns></returns>
-    public virtual bool IsConsumedOnUse()
+    public virtual bool IsConsumedOnUse(Player player)
     {
         return false;
     }
