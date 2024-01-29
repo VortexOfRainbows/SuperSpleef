@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class Player : Entity
 {
+    public Rigidbody RB; //These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
+    public GameObject FacingVector; //These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
     /// <summary>
     /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls
     /// </summary>
@@ -15,7 +17,6 @@ public class Player : Entity
     public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
 
     [SerializeField] private float Sensitivity = 1;
-    [SerializeField] private Rigidbody RB;
     [SerializeField] private Transform CameraTransform;
     [SerializeField] private ScreenBlocker ScreenBlocker;
     public const int EntityLayer = 6;
@@ -97,11 +98,9 @@ public class Player : Entity
 
         Direction.x = Mathf.Clamp(Direction.x, -90f, 90f);
 
+        CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
+        CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
         //transform.rotation = Quaternion.Euler(0, Direction.y, 0f);
-        CameraTransform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
-
-        CameraTransform.position = transform.position + new Vector3(0, 0.5f, 0);
-
     }
     public void HotbarControls()
     {
@@ -178,29 +177,26 @@ public class Player : Entity
         {
             Vector3 centerOfBlock = new Vector3(Mathf.FloorToInt(TargetPosition.x) + 0.5f, Mathf.FloorToInt(TargetPosition.y) + 0.5f, Mathf.FloorToInt(TargetPosition.z) + 0.5f);
             bool updateBlockOutline = true;
-            if(holdingPlaceableBlock)
+            if (left)
             {
-                if (left)
-                {
-                    updateBlockOutline = World.SetBlock(TargetPosition, 0);
-                }
-                else if (right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air)
-                {
-                    Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
-                    if (inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0)
-                    {
-                        bool successfullyPlacedBlock = World.SetBlock(TargetPosition, blockToPlace);
-                        updateBlockOutline = successfullyPlacedBlock;
-                        if(successfullyPlacedBlock)
-                        {
-                            itemUsed = true;
-                        }
-                    }
-                    else
-                        updateBlockOutline = false;
-                }
+                updateBlockOutline = World.SetBlock(TargetPosition, 0);
             }
-            if(updateBlockOutline)
+            else if (holdingPlaceableBlock && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air)
+            {
+                Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
+                if (inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0)
+                {
+                    bool successfullyPlacedBlock = World.SetBlock(TargetPosition, blockToPlace);
+                    updateBlockOutline = successfullyPlacedBlock;
+                    if (successfullyPlacedBlock)
+                    {
+                        itemUsed = true;
+                    }
+                }
+                else
+                    updateBlockOutline = false;
+            }
+            if (updateBlockOutline)
             {
                 if (World.Block(TargetPosition) == BlockID.Air)
                 {

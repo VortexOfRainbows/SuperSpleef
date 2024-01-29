@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2285934479319385815
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8010838436936143650}
+  m_Layer: 6
+  m_Name: DirectionVector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8010838436936143650
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2285934479319385815}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3836383346058665725}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5377142725127841264
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,7 +67,8 @@ Transform:
   m_LocalPosition: {x: 145.08195, y: 50, z: 61.289864}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8010838436936143650}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8445926433736143780
@@ -151,9 +183,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f42067016d567741ab87c8c1f39ce52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RB: {fileID: 1326384001663812332}
+  FacingVector: {fileID: 2285934479319385815}
   ControlManager: {fileID: 5101752403716287785}
   Sensitivity: 400
-  RB: {fileID: 1326384001663812332}
   CameraTransform: {fileID: 0}
   ScreenBlocker: {fileID: 0}
   BlockRange: 4.6
@@ -194,8 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shot: {fileID: 3056192145238397018, guid: 5807d350cd0d6694591c612bbf37de5f, type: 3}
-  player: {fileID: 1326384001663812332}
-  shotTransform: {fileID: 3836383346058665725}
+  player: {fileID: 7380683411496612807}
   minLaunchForce: 30
   maxLaunchForce: 60
 --- !u!114 &5101752403716287785

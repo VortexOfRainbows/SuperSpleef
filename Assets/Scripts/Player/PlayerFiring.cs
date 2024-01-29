@@ -5,8 +5,7 @@ using UnityEngine;
 public class PlayerFiring : MonoBehaviour
 {
     public Rigidbody shot;
-    public Rigidbody player;
-    public Transform shotTransform;
+    public Player player;
     
     public float minLaunchForce;
     public float maxLaunchForce;
@@ -34,10 +33,10 @@ public class PlayerFiring : MonoBehaviour
     private void Fire() 
     { 
         fired = true;
-
+        Transform shotTransform = player.FacingVector.transform;
         Rigidbody shotInstance =
             Instantiate(shot, shotTransform.position, shotTransform.rotation) as Rigidbody;
 
-        shotInstance.velocity = currentLaunchForce * shotTransform.forward + player.velocity;
+        shotInstance.velocity = currentLaunchForce * shotTransform.forward + player.RB.velocity;
     }
 }
