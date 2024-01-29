@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4094640359957741627}
   - component: {fileID: 3730053849586991069}
   - component: {fileID: 4386465452748083271}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: TopWall
   m_TagString: InverseCube
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 297029296222248891}
   - component: {fileID: 854054292177126406}
   - component: {fileID: 4432882538826259756}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: BackWall
   m_TagString: InverseCube
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 918973965093267845}
   - component: {fileID: 5861312105251736776}
   - component: {fileID: 579909878531703155}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: LeftWall
   m_TagString: InverseCube
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 5736131300286639723}
   - component: {fileID: 1800961486520504663}
   - component: {fileID: 9124207372293601454}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: BottomWall
   m_TagString: InverseCube
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 4869863564192658047}
   - component: {fileID: 2025579433879650133}
   - component: {fileID: 8207837849209819510}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: FrontWall
   m_TagString: InverseCube
   m_Icon: {fileID: 0}
@@ -326,7 +326,7 @@ GameObject:
   - component: {fileID: 1092866261159343393}
   - component: {fileID: 450708310449235455}
   - component: {fileID: 1753074910231521791}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: RightWall
   m_TagString: InverseCube
   m_Icon: {fileID: 0}
@@ -388,7 +388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3210910185250469569}
   - component: {fileID: 7840104445045619779}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: InverseCube
   m_TagString: InverseCube
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
@@ -434,5 +434,5 @@ MonoBehaviour:
   Right: {fileID: 8362679258654359306}
   Front: {fileID: 7888952182241959571}
   Back: {fileID: 2901254619378136139}
-  IgnoreTop: 0
-  IgnoreBot: 1
+  IgnoreTop: 1
+  IgnoreBot: 0

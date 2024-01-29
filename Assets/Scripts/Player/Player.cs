@@ -7,58 +7,81 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    /// <summary>
+    /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls
+    /// </summary>
+    [SerializeField] private PlayerControls ControlManager;
+    public PlayerControls.ControlDown Control => ControlManager.Control;
+    public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
+
     [SerializeField] private float Sensitivity = 1;
     [SerializeField] private Rigidbody RB;
     [SerializeField] private Transform CameraTransform;
     [SerializeField] private ScreenBlocker ScreenBlocker;
     public const int EntityLayer = 6;
     [SerializeField] private float BlockRange = 4;
+    public Item[] Inventory;
     private void Start()
     {
+        Inventory = new Item[30];
+        for(int i = 0; i < Inventory.Length; i++)
+        {
+            Inventory[i] = new PlaceableBlock(BlockID.Grass);
+        }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         RB.maxDepenetrationVelocity = 0;
     }
+    public Item HeldItem()
+    {
+        return Inventory[0];
+    }
     private float PreviousYVelocity = 0;
     private void Update()
     {
+        ControlManager.OnUpdate();
+        CameraControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
+        BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
+    }
+    public void FixedUpdate()
+    {
+        //Movement should be updated in fixed update so it works probably on all systems
         Vector2 moveDir = Vector2.zero;
-        if(Input.GetKey(KeyCode.W))
+        if (Control.Forward) 
         {
             moveDir.y += 1;
         }
-        if (Input.GetKey(KeyCode.A))
+        if (Control.Left)
         {
             moveDir.x -= 1;
         }
-        if (Input.GetKey(KeyCode.S))
+        if (Control.Back)
         {
             moveDir.y -= 1;
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Control.Right)
         {
             moveDir.x += 1;
         }
         moveDir = moveDir.RotatedBy(Direction.y * -Mathf.Deg2Rad);
         RB.velocity = new Vector3(RB.velocity.x + moveDir.x, RB.velocity.y, RB.velocity.z + moveDir.y);
-        if (Input.GetKey(KeyCode.Space))
+        if (Control.Jump)
         {
             RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y + 1, RB.velocity.z);
         }
         RB.velocity = new Vector3(RB.velocity.x * 0.9f, RB.velocity.y, RB.velocity.z * 0.9f);
-        if(RB.velocity.y > 0)
+        if (RB.velocity.y > 0)
         {
             RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y * 0.95f, RB.velocity.z);
             RB.maxDepenetrationVelocity = 0;
         }
-        else if(RB.velocity.y < 0 || (RB.velocity.y == 0 && PreviousYVelocity > 0))
+        else if (RB.velocity.y < 0 || (RB.velocity.y == 0 && PreviousYVelocity > 0))
         {
             RB.maxDepenetrationVelocity = 10;
         }
         PreviousYVelocity = RB.velocity.y;
-        CameraControls();
-        MouseControls();
-        BlockCollisionCheck();
+        HeldItemUpdate(); //Item updates should be considered on fixed updated so they update in time with physics
+        ControlManager.OnFixedUpdate();
     }
     private Vector2 Direction = Vector2.zero;
     /// <summary>
@@ -66,8 +89,8 @@ public class Player : MonoBehaviour
     /// </summary>
     private void CameraControls()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * Sensitivity;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * Sensitivity;
+        float mouseX = Control.XAxis * Time.deltaTime * Sensitivity;
+        float mouseY = Control.YAxis * Time.deltaTime * Sensitivity;
         Direction.y += mouseX;
         Direction.x -= mouseY;
 
@@ -79,17 +102,24 @@ public class Player : MonoBehaviour
         CameraTransform.position = transform.position + new Vector3(0, 0.5f, 0);
     }
     [SerializeField] GameObject BlockOutline;
-    private void MouseControls()
+    private void HeldItemUpdate()
     {
-        bool left = Input.GetMouseButtonDown(0);
-        bool right = Input.GetMouseButtonDown(1);
+        bool left = Control.LeftClick && !LastControl.LeftClick;
+        bool right = Control.RightClick && !LastControl.RightClick;
         RaycastHit hitInfo;
         Vector3 TargetPosition = transform.position + new Vector3(0, 0.5f, 0);
-        bool activate = false;
+        bool DoBlockCheck = false;
+        bool holdingPlaceableBlock = false;
+        int blockToPlace = BlockID.Air;
+        if (HeldItem() is PlaceableBlock block)
+        {
+            blockToPlace = block.PlaceID;
+            holdingPlaceableBlock = true;
+        }
         int blockType = World.Block(TargetPosition);
         if (blockType != BlockID.Air) //Checks if the player is inside a block
         {
-            activate = true;
+            DoBlockCheck = true;
         }
         else
         {
@@ -108,29 +138,32 @@ public class Player : MonoBehaviour
                     {
                         TargetPosition = hitPoint + hitInfo.normal * 0.1f;
                     }
-                    activate = true;
+                    DoBlockCheck = true;
                 }
             }
         }
-        if (activate)
+        if (DoBlockCheck)
         {
             Vector3 centerOfBlock = new Vector3(Mathf.FloorToInt(TargetPosition.x) + 0.5f, Mathf.FloorToInt(TargetPosition.y) + 0.5f, Mathf.FloorToInt(TargetPosition.z) + 0.5f);
-            bool ShouldUpdateBlockOutline = true;
-            if (left)
+            bool updateBlockOutline = true;
+            if(holdingPlaceableBlock)
             {
-                ShouldUpdateBlockOutline = World.SetBlock(TargetPosition, 0);
-            }
-            else if (right && World.Block(TargetPosition) == BlockID.Air)
-            {
-                Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
-                if (inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0)
+                if (left)
                 {
-                    ShouldUpdateBlockOutline = World.SetBlock(TargetPosition, 1);
+                    updateBlockOutline = World.SetBlock(TargetPosition, 0);
                 }
-                else
-                    ShouldUpdateBlockOutline = false;
+                else if (right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air)
+                {
+                    Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
+                    if (inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0)
+                    {
+                        updateBlockOutline = World.SetBlock(TargetPosition, blockToPlace);
+                    }
+                    else
+                        updateBlockOutline = false;
+                }
             }
-            if(ShouldUpdateBlockOutline)
+            if(updateBlockOutline)
             {
                 if (World.Block(TargetPosition) == BlockID.Air)
                 {
