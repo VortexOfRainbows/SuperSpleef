@@ -54,7 +54,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5377142725127841264}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -157,7 +157,6 @@ MonoBehaviour:
   CameraTransform: {fileID: 0}
   ScreenBlocker: {fileID: 0}
   BlockRange: 4.6
-  Inventory: []
   BlockOutline: {fileID: 0}
   InBlockColliderTop: {fileID: 0}
   InBlockColliderBottom: {fileID: 0}
