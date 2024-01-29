@@ -6,6 +6,7 @@ public class ItemBehavior : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    public float acceleration;
     public float speed;
     public Transform target;
 
@@ -17,7 +18,21 @@ public class ItemBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var step = speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position,target.position, step);
+
+    }
+
+    private void OnTriggerStay(Collider col)
+    {
+        if (col.gameObject.tag == "Item") 
+        {
+            speed += acceleration * Time.deltaTime;
+            target.position = Vector3.MoveTowards(target.position, transform.position, speed);
+        }
+        
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        speed = 0;
     }
 }
