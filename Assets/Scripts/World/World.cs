@@ -10,6 +10,15 @@ public class World : MonoBehaviour
     private GameObject[,] chunk;
     public const int ChunkRadius = 15;
     public const int WorldLayer = 3;
+    [SerializeField]
+    private ParticleSystem BlockParticles;
+    public static ParticleSystem BlockParticleRef;
+
+    private void Awake()
+    {
+        BlockParticleRef = BlockParticles;
+    }
+
     private void Start()
     {
         Instance = this;
@@ -112,6 +121,9 @@ public class World : MonoBehaviour
                 return true;
             }
         }
+        BlockParticleRef.transform.parent = null;
+        BlockParticleRef.Play();
+        Destroy(BlockParticleRef.gameObject, BlockParticleRef.duration);
         return false;
     }
 }
