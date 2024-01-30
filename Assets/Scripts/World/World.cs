@@ -93,6 +93,14 @@ public class World : MonoBehaviour
             if (blockY < Chunk.Height && blockY >= 0)
             {
                 chunk.blocks[blockX, blockY, blockZ] = blockID;
+
+                if(blockID == BlockID.Air) //If we are breaking the block
+                {
+                    ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(x, y, z), Quaternion.identity, Instance.transform);
+                    p.Play();
+                    Destroy(p.gameObject, p.main.duration);
+                }
+
                 if (blockX <= 0)
                 {
                     GameObject adjacentChunk = Instance.GetChunk(chunk.Index.x - 1, chunk.Index.y);
@@ -121,9 +129,6 @@ public class World : MonoBehaviour
                 return true;
             }
         }
-        BlockParticleRef.transform.parent = null;
-        BlockParticleRef.Play();
-        Destroy(BlockParticleRef.gameObject, BlockParticleRef.duration);
         return false;
     }
 }
