@@ -26,8 +26,6 @@ public class PlayerFiring : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
             Fire();
-
-        Debug.Log(player.velocity);
     }
 
 
