@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public class ItemDestruction : MonoBehaviour
 {
     void OnTriggerEnter(Collider col) 
     {
