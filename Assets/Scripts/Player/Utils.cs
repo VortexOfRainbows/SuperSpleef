@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Purchasing;
 using UnityEngine;
 
 public static class Utils
@@ -43,5 +44,21 @@ public static class Utils
     {
         Vector2 mPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         return mPos;
+    }
+    public static string AddSpaceBetweenCaps(this string str)
+    {
+        string construct = string.Empty;
+        for (int i = 0; i < str.Length - 1; i++)
+        {
+            char first = str[i];
+            char second = str[i + 1];
+            construct += first;
+            if (Char.IsLower(first) && Char.IsUpper(second))
+            {
+                construct += " ";
+            }
+        }
+        construct += str[str.Length - 1];
+        return construct;
     }
 }

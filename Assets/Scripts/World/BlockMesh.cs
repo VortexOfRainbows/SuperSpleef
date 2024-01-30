@@ -9,9 +9,13 @@ public class BlockMesh
     }
     private static Dictionary<int, BlockMesh> tiles = new Dictionary<int, BlockMesh>()
     {
+        {BlockID.Wood, new BlockMesh(BlockID.Wood)},
+        {BlockID.Leaves, new BlockMesh(BlockID.Leaves)},
+        {BlockID.Glass, new BlockMesh(BlockID.Glass)},
+        {BlockID.Stone, new BlockMesh(BlockID.Stone)},
         {BlockID.Grass, new BlockMesh(BlockID.Grass)},
         {BlockID.Dirt, new BlockMesh(BlockID.Dirt)},
-        {BlockID.Air, new BlockMesh(BlockID.Dirt)},
+        {BlockID.Air, new BlockMesh(BlockID.Air)},
     };
     private int Type;
     public BlockFace top, left, right, front, back, bottom;
@@ -22,6 +26,10 @@ public class BlockMesh
     }
     private void SetSprites()
     {
+        if (Type == BlockID.Air)
+        {
+            SetAllFaces(Tile.Air);
+        }
         if (Type == BlockID.Dirt)
         {
             SetAllFaces(Tile.Dirt);
@@ -31,6 +39,23 @@ public class BlockMesh
             top = BlockFace.FaceSprite(Tile.Grass);
             right = front = back = left = BlockFace.FaceSprite(Tile.GrassSide);
             bottom = BlockFace.FaceSprite(Tile.Dirt);
+        }
+        if (Type == BlockID.Glass)
+        {
+            SetAllFaces(Tile.Glass);
+        }
+        if (Type == BlockID.Stone)
+        {
+            SetAllFaces(Tile.Stone);
+        }
+        if (Type == BlockID.Wood)
+        {
+            top = bottom = BlockFace.FaceSprite(Tile.Log);
+            right = front = back = left = BlockFace.FaceSprite(Tile.LogSide);
+        }
+        if (Type == BlockID.Leaves)
+        {
+            SetAllFaces(Tile.Leaves);
         }
     }
     private void SetAllFaces(Tile tile)

@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7160581930188047377
 Transform:
@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkObj: {fileID: 851272441892067424, guid: 3128472b9eb4a3a44af78ae0373fca5c, type: 3}
+  BlockParticles: {fileID: 5148993926940872743, guid: 36dc4c90d22100b47a6ee4f3f157fbf5, type: 3}

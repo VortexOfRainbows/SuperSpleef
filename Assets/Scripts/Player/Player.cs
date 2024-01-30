@@ -5,91 +5,229 @@ using System.Xml.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
+    #region public
+    ///These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
+    public GameObject BasicProjectileTest;
+    public Rigidbody RB;
+    public GameObject FacingVector;
+    #endregion
+
+    /// <summary>
+    /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls
+    /// </summary>
+    [SerializeField] private PlayerControls ControlManager;
+    public PlayerControls.ControlDown Control => ControlManager.Control;
+    public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
+
     [SerializeField] private float Sensitivity = 1;
-    [SerializeField] private Rigidbody RB;
     [SerializeField] private Transform CameraTransform;
     [SerializeField] private ScreenBlocker ScreenBlocker;
     public const int EntityLayer = 6;
     [SerializeField] private float BlockRange = 4;
+    [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float WalkSpeed = 2f;
+    [SerializeField] private float WalkSpeedMax = 5;
+    [SerializeField] private float SprintMult = 2;
+    [SerializeField] private float MoveDeacceleration = 0.5f;
+    [SerializeField] private float MoveAcceleration = 0.1f;
+    [SerializeField] private float JumpDrag = 0.95f;
+    private bool OnTheFloor = false;
+
     private void Start()
     {
+        Inventory = new Inventory(30);
+        for(int i = 0; i < Inventory.Count; i++)
+        {
+            if(i == 0)
+                Inventory.Set(i, new BasicBlaster());
+            else if(i <= BlockID.Max)
+                Inventory.Set(i, new PlaceableBlock(i, 20));
+            else
+                Inventory.Set(i, new PlaceableBlock(BlockID.Dirt));
+        }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         RB.maxDepenetrationVelocity = 0;
     }
+    public int SelectedItem { get; private set; }
+    public Item HeldItem()
+    {
+        return Inventory.Get(SelectedItem);
+    }
     private float PreviousYVelocity = 0;
     private void Update()
     {
-        Vector2 moveDir = Vector2.zero;
-        if(Input.GetKey(KeyCode.W))
+        ControlManager.OnUpdate();
+        HotbarControls();
+        MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
+        BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
+    }
+    /// <summary>
+    /// This field is only serialized so it can display in the editor. It is not actually meant to be modified
+    /// </summary>
+    [SerializeField] private Vector2 perpendicularVelocity;
+    public void FixedUpdate()
+    {
+        //Movement should be updated in fixed update so it works probably on all systems
+        perpendicularVelocity = new Vector2(RB.velocity.x, RB.velocity.z).RotatedBy(Direction.y * Mathf.Deg2Rad);
+        float speed = WalkSpeed * MoveAcceleration;
+        float maxSpeed = WalkSpeedMax;
+        if (Control.Shift)
         {
-            moveDir.y += 1;
+            maxSpeed *= SprintMult;
         }
-        if (Input.GetKey(KeyCode.A))
+        if (Control.Forward) 
         {
-            moveDir.x -= 1;
+            perpendicularVelocity.y += speed;
         }
-        if (Input.GetKey(KeyCode.S))
+        else
         {
-            moveDir.y -= 1;
+            if (perpendicularVelocity.y > 0)
+                perpendicularVelocity.y *= MoveDeacceleration;
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Control.Left)
         {
-            moveDir.x += 1;
+            perpendicularVelocity.x -= speed;
         }
-        moveDir = moveDir.RotatedBy(Direction.y * -Mathf.Deg2Rad);
-        RB.velocity = new Vector3(RB.velocity.x + moveDir.x, RB.velocity.y, RB.velocity.z + moveDir.y);
-        if (Input.GetKey(KeyCode.Space))
+        else
         {
-            RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y + 1, RB.velocity.z);
+            if (perpendicularVelocity.x < 0)
+                perpendicularVelocity.x *= MoveDeacceleration;
         }
-        RB.velocity = new Vector3(RB.velocity.x * 0.9f, RB.velocity.y, RB.velocity.z * 0.9f);
-        if(RB.velocity.y > 0)
+        if (Control.Back)
         {
-            RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y * 0.95f, RB.velocity.z);
-            RB.maxDepenetrationVelocity = 0;
+            perpendicularVelocity.y -= speed;
         }
-        else if(RB.velocity.y < 0 || (RB.velocity.y == 0 && PreviousYVelocity > 0))
+        else
+        {
+            if (perpendicularVelocity.y < 0)
+                perpendicularVelocity.y *= MoveDeacceleration;
+        }
+        if (Control.Right)
+        {
+            perpendicularVelocity.x += speed;
+        }
+        else
+        {
+            if (perpendicularVelocity.x > 0)
+                perpendicularVelocity.x *= MoveDeacceleration;
+        }
+        perpendicularVelocity = perpendicularVelocity.RotatedBy(Direction.y * -Mathf.Deg2Rad);
+        
+        Vector3 velo = new Vector3(perpendicularVelocity.x, RB.velocity.y, perpendicularVelocity.y);
+        Vector2 velocityXZ = new Vector2(velo.x, velo.z);
+
+        if(velocityXZ.magnitude > maxSpeed)
+        {
+            velocityXZ = velocityXZ.normalized * maxSpeed;
+        }
+        if (Control.Jump && OnTheFloor)
+        {
+            //RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y + 1, RB.velocity.z);
+            velo.y *= 0.0f;
+            velo.y += jumpForce;
+            OnTheFloor = false;
+        }
+        velo.x = velocityXZ.x;
+        velo.z = velocityXZ.y;
+        perpendicularVelocity = velocityXZ;
+        RB.velocity = velo;
+
+        if (RB.velocity.y > 0)
+        {
+            RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y * JumpDrag, RB.velocity.z);
+            RB.maxDepenetrationVelocity = 10;
+        }
+        else if (RB.velocity.y < 0 || (RB.velocity.y == 0 && PreviousYVelocity > 0))
         {
             RB.maxDepenetrationVelocity = 10;
         }
         PreviousYVelocity = RB.velocity.y;
-        CameraControls();
-        MouseControls();
-        BlockCollisionCheck();
+        HeldItemUpdate(); //Item updates should be considered on fixed updated so they update in time with physics
+
+        //RB.MovePosition(RB.velocity * Time.fixedDeltaTime);
+
+        ControlManager.OnFixedUpdate();
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            if(collision.impulse.y > 0)
+                OnTheFloor = true;
+        }
+    }
+
     private Vector2 Direction = Vector2.zero;
     /// <summary>
     /// Updates the rotation of the camera to match with the movement of the mouse
     /// </summary>
-    private void CameraControls()
+    private void MouseControls()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * Sensitivity;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * Sensitivity;
+        float mouseX = Control.XAxis * Time.deltaTime * Sensitivity;
+        float mouseY = Control.YAxis * Time.deltaTime * Sensitivity;
         Direction.y += mouseX;
         Direction.x -= mouseY;
 
         Direction.x = Mathf.Clamp(Direction.x, -90f, 90f);
 
+        CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
+        CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
         //transform.rotation = Quaternion.Euler(0, Direction.y, 0f);
-        CameraTransform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
-
-        CameraTransform.position = transform.position + new Vector3(0, 0.5f, 0);
     }
-    [SerializeField] GameObject BlockOutline;
-    private void MouseControls()
+    public void HotbarControls()
     {
-        bool left = Input.GetMouseButtonDown(0);
-        bool right = Input.GetMouseButtonDown(1);
+        if(Control.Hotkey1 && !LastControl.Hotkey1)
+            SelectedItem = 0;
+        if (Control.Hotkey2 && !LastControl.Hotkey2)
+            SelectedItem = 1;
+        if (Control.Hotkey3 && !LastControl.Hotkey3)
+            SelectedItem = 2;
+        if (Control.Hotkey4 && !LastControl.Hotkey4)
+            SelectedItem = 3;
+        if (Control.Hotkey5 && !LastControl.Hotkey5)
+            SelectedItem = 4;
+        if (Control.Hotkey6 && !LastControl.Hotkey6)
+            SelectedItem = 5;
+        if (Control.Hotkey7 && !LastControl.Hotkey7)
+            SelectedItem = 6;
+        if (Control.Hotkey8 && !LastControl.Hotkey8)
+            SelectedItem = 7;
+        if (Control.Hotkey9 && !LastControl.Hotkey9)
+            SelectedItem = 8;
+        if (Control.Hotkey0 && !LastControl.Hotkey0)
+            SelectedItem = 9;
+        int newSelectedItem = SelectedItem - Mathf.RoundToInt(Control.ScrollDelta);
+        newSelectedItem = newSelectedItem % 10;
+        if (newSelectedItem < 0)
+            newSelectedItem = 10 + newSelectedItem;
+        SelectedItem = newSelectedItem;
+    }
+    [SerializeField] private GameObject BlockOutline;
+    private void HeldItemUpdate() 
+    {
+        Item heldItem = HeldItem();
+        bool left = Control.LeftClick && !LastControl.LeftClick;
+        bool right = Control.RightClick && !LastControl.RightClick;
+        bool itemUsed = false;
         RaycastHit hitInfo;
         Vector3 TargetPosition = transform.position + new Vector3(0, 0.5f, 0);
-        bool activate = false;
+        bool blocksWereModified = false;
+        bool DoBlockCheck = false;
+        bool holdingPlaceableBlock = false;
+        int blockToPlace = BlockID.Air;
+        if (heldItem is PlaceableBlock block)
+        {
+            blockToPlace = block.PlaceID;
+            holdingPlaceableBlock = true;
+        }
         int blockType = World.Block(TargetPosition);
         if (blockType != BlockID.Air) //Checks if the player is inside a block
         {
-            activate = true;
+            DoBlockCheck = true;
         }
         else
         {
@@ -108,29 +246,36 @@ public class Player : MonoBehaviour
                     {
                         TargetPosition = hitPoint + hitInfo.normal * 0.1f;
                     }
-                    activate = true;
+                    DoBlockCheck = true;
                 }
             }
         }
-        if (activate)
+        if (DoBlockCheck)
         {
             Vector3 centerOfBlock = new Vector3(Mathf.FloorToInt(TargetPosition.x) + 0.5f, Mathf.FloorToInt(TargetPosition.y) + 0.5f, Mathf.FloorToInt(TargetPosition.z) + 0.5f);
-            bool ShouldUpdateBlockOutline = true;
+            bool updateBlockOutline = true;
             if (left)
             {
-                ShouldUpdateBlockOutline = World.SetBlock(TargetPosition, 0);
-            }
-            else if (right && World.Block(TargetPosition) == BlockID.Air)
+                blocksWereModified = World.SetBlock(TargetPosition, 0);
+                updateBlockOutline = blocksWereModified;
+            } 
+            else if (holdingPlaceableBlock && heldItem.OnSecondaryUse(this) && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air)
             {
                 Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
                 if (inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0)
                 {
-                    ShouldUpdateBlockOutline = World.SetBlock(TargetPosition, 1);
+                    bool placedBlocks = World.SetBlock(TargetPosition, blockToPlace);
+                    updateBlockOutline = placedBlocks;
+                    if (placedBlocks)
+                    {
+                        itemUsed = true;
+                        blocksWereModified = true;
+                    }
                 }
                 else
-                    ShouldUpdateBlockOutline = false;
+                    updateBlockOutline = false;
             }
-            if(ShouldUpdateBlockOutline)
+            if (updateBlockOutline)
             {
                 if (World.Block(TargetPosition) == BlockID.Air)
                 {
@@ -146,6 +291,34 @@ public class Player : MonoBehaviour
         else
         {
             BlockOutline.SetActive(false);
+        }
+        if(!blocksWereModified)
+        {
+            if(left)
+            {
+                if(heldItem.OnPrimaryUse(this))
+                {
+                    itemUsed = true;
+                }
+            }
+            if(right && !holdingPlaceableBlock)
+            {
+                if (heldItem.OnSecondaryUse(this))
+                {
+                    itemUsed = true;
+                }
+            }
+        }
+        if(itemUsed)
+        {
+            if(heldItem.IsConsumedOnUse(this))
+            {
+                heldItem.ModifyCount(-1);
+                if(heldItem.Count <= 0)
+                {
+                    Inventory.Set(SelectedItem, Item.Empty);
+                }
+            }
         }
     }
     [SerializeField] private GameObject InBlockColliderTop;

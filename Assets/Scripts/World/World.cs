@@ -10,6 +10,15 @@ public class World : MonoBehaviour
     private GameObject[,] chunk;
     public const int ChunkRadius = 15;
     public const int WorldLayer = 3;
+    [SerializeField]
+    private ParticleSystem BlockParticles;
+    public static ParticleSystem BlockParticleRef;
+
+    private void Awake()
+    {
+        BlockParticleRef = BlockParticles;
+    }
+
     private void Start()
     {
         Instance = this;
@@ -19,7 +28,7 @@ public class World : MonoBehaviour
             for(int j = 0; j < chunk.GetLength(0); j++)
             {
                 Vector2Int chunkPos = new Vector2Int(i, j);
-                chunk[i, j] = Instantiate(chunkObj, new Vector3(chunkPos.x * Chunk.Width, 0, chunkPos.y * Chunk.Width), Quaternion.identity);
+                chunk[i, j] = Instantiate(chunkObj, new Vector3(chunkPos.x * Chunk.Width, 0, chunkPos.y * Chunk.Width), Quaternion.identity, transform);
                 chunk[i, j].GetComponent<Chunk>().Index = chunkPos;
                 chunk[i, j].layer = WorldLayer; //set to world layer
             }
@@ -74,7 +83,7 @@ public class World : MonoBehaviour
     }
     public static bool SetBlock(float x, float y, float z, int blockID)
     {
-        GameObject chunkObj =   Instance.BoundingChunk(x, z);
+        GameObject chunkObj = Instance.BoundingChunk(x, z);
         if (chunkObj != null)
         {
             int blockX = Mathf.FloorToInt(x) - Mathf.FloorToInt(chunkObj.transform.position.x);
@@ -84,6 +93,14 @@ public class World : MonoBehaviour
             if (blockY < Chunk.Height && blockY >= 0)
             {
                 chunk.blocks[blockX, blockY, blockZ] = blockID;
+
+                if(blockID == BlockID.Air) //If we are breaking the block
+                {
+                    ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(x, y, z), Quaternion.identity, Instance.transform);
+                    p.Play();
+                    Destroy(p.gameObject, p.main.duration);
+                }
+
                 if (blockX <= 0)
                 {
                     GameObject adjacentChunk = Instance.GetChunk(chunk.Index.x - 1, chunk.Index.y);
