@@ -518,6 +518,18 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5992814542612128231, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
+      propertyPath: jumpForce
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992814542612128231, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
+      propertyPath: walkSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992814542612128231, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
+      propertyPath: sprintSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992814542612128231, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
       propertyPath: BlockOutline
       value: 
       objectReference: {fileID: 140336974}

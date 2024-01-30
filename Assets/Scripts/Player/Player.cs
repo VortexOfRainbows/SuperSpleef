@@ -10,7 +10,9 @@ public class Player : MonoBehaviour
     [SerializeField] private Rigidbody RB;
     [SerializeField] private Transform CameraTransform;
     [SerializeField] private ScreenBlocker ScreenBlocker;
-    [SerializeField] private float jumpForce = 50f;
+    [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float walkSpeed = 0.001f;
+    [SerializeField] private float sprintSpeed = 0.002f;
     private bool jumpActive = false;
 
     private void Start()
@@ -47,6 +49,9 @@ public class Player : MonoBehaviour
             RB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             jumpActive = true;
         }
+        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
+        
+        RB.velocity = new Vector3(RB.velocity.x + moveDir.x * currentSpeed * 0.5f, RB.velocity.y, RB.velocity.z + moveDir.y * currentSpeed * 0.5f);
         RB.velocity = new Vector3(RB.velocity.x * 0.9f, RB.velocity.y, RB.velocity.z * 0.9f);
         if(RB.velocity.y > 0)
         {
