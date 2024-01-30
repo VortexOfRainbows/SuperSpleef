@@ -30,9 +30,10 @@ public class PlayerControls : MonoBehaviour
         public float XAxis;
         public float YAxis;
         public float ScrollDelta;
+        public bool Shift;
         public ControlDown(bool defaultState = false)
         {
-            LeftClick = Left = Right = Forward = Back = Jump = defaultState;
+            LeftClick = Left = Right = Forward = Back = Jump  = Shift = defaultState;
             RightClick = defaultState;
             Hotkey1 = Hotkey2 = Hotkey3 = Hotkey4 = Hotkey5 = Hotkey6 = Hotkey7 = Hotkey8 = Hotkey9 = Hotkey0 = defaultState;
             XAxis = YAxis = ScrollDelta = 0f;
@@ -59,6 +60,7 @@ public class PlayerControls : MonoBehaviour
         UpdateKey(Input.GetKey(KeyCode.D), LastControl.Right, ref Control.Right);
         UpdateKey(Input.GetKey(KeyCode.W), LastControl.Forward, ref Control.Forward);
         UpdateKey(Input.GetKey(KeyCode.S), LastControl.Back, ref Control.Back);
+        UpdateKey(Input.GetKey(KeyCode.LeftShift), LastControl.Shift, ref Control.Shift);
 
         UpdateKey(Input.GetKey(KeyCode.Space), LastControl.Jump, ref Control.Jump);
         //UpdateKey(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift), LastControl.Shift, ref Control.Shift);

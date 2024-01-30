@@ -27,9 +27,13 @@ public class Player : Entity
     public const int EntityLayer = 6;
     [SerializeField] private float BlockRange = 4;
     [SerializeField] private float jumpForce = 10f;
-    [SerializeField] private float walkSpeed = 0.001f;
-    [SerializeField] private float sprintSpeed = 0.002f;
-    private bool jumpActive = false;
+    [SerializeField] private float WalkSpeed = 2f;
+    [SerializeField] private float WalkSpeedMax = 5;
+    [SerializeField] private float SprintMult = 2;
+    [SerializeField] private float MoveDeacceleration = 0.5f;
+    [SerializeField] private float MoveAcceleration = 0.1f;
+    [SerializeField] private float JumpDrag = 0.95f;
+    private bool OnTheFloor = false;
 
     private void Start()
     {
@@ -60,42 +64,81 @@ public class Player : Entity
         MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
         BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
     }
+    /// <summary>
+    /// This field is only serialized so it can display in the editor. It is not actually meant to be modified
+    /// </summary>
+    [SerializeField] private Vector2 perpendicularVelocity;
     public void FixedUpdate()
     {
         //Movement should be updated in fixed update so it works probably on all systems
-        Vector2 moveDir = Vector2.zero;
+        perpendicularVelocity = new Vector2(RB.velocity.x, RB.velocity.z).RotatedBy(Direction.y * Mathf.Deg2Rad);
+        float speed = WalkSpeed * MoveAcceleration;
+        float maxSpeed = WalkSpeedMax;
+        if (Control.Shift)
+        {
+            maxSpeed *= SprintMult;
+        }
         if (Control.Forward) 
         {
-            moveDir.y += 1;
+            perpendicularVelocity.y += speed;
+        }
+        else
+        {
+            if (perpendicularVelocity.y > 0)
+                perpendicularVelocity.y *= MoveDeacceleration;
         }
         if (Control.Left)
         {
-            moveDir.x -= 1;
+            perpendicularVelocity.x -= speed;
+        }
+        else
+        {
+            if (perpendicularVelocity.x < 0)
+                perpendicularVelocity.x *= MoveDeacceleration;
         }
         if (Control.Back)
         {
-            moveDir.y -= 1;
+            perpendicularVelocity.y -= speed;
+        }
+        else
+        {
+            if (perpendicularVelocity.y < 0)
+                perpendicularVelocity.y *= MoveDeacceleration;
         }
         if (Control.Right)
         {
-            moveDir.x += 1;
+            perpendicularVelocity.x += speed;
         }
-        moveDir = moveDir.RotatedBy(Direction.y * -Mathf.Deg2Rad);
-        RB.velocity = new Vector3(RB.velocity.x + moveDir.x, RB.velocity.y, RB.velocity.z + moveDir.y);
-        if (Control.Jump && !jumpActive)
+        else
+        {
+            if (perpendicularVelocity.x > 0)
+                perpendicularVelocity.x *= MoveDeacceleration;
+        }
+        perpendicularVelocity = perpendicularVelocity.RotatedBy(Direction.y * -Mathf.Deg2Rad);
+        
+        Vector3 velo = new Vector3(perpendicularVelocity.x, RB.velocity.y, perpendicularVelocity.y);
+        Vector2 velocityXZ = new Vector2(velo.x, velo.z);
+
+        if(velocityXZ.magnitude > maxSpeed)
+        {
+            velocityXZ = velocityXZ.normalized * maxSpeed;
+        }
+        if (Control.Jump && !LastControl.Jump && OnTheFloor)
         {
             //RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y + 1, RB.velocity.z);
-            RB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            jumpActive = true;
+            velo.y *= 0.0f;
+            velo.y += jumpForce;
+            OnTheFloor = false;
         }
-        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
-        
-        RB.velocity = new Vector3(RB.velocity.x + moveDir.x * currentSpeed * 0.5f, RB.velocity.y, RB.velocity.z + moveDir.y * currentSpeed * 0.5f);
-        RB.velocity = new Vector3(RB.velocity.x * 0.9f, RB.velocity.y, RB.velocity.z * 0.9f);
+        velo.x = velocityXZ.x;
+        velo.z = velocityXZ.y;
+        perpendicularVelocity = velocityXZ;
+        RB.velocity = velo;
+
         if (RB.velocity.y > 0)
         {
-            RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y * 0.95f, RB.velocity.z);
-            RB.maxDepenetrationVelocity = 0;
+            RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y * JumpDrag, RB.velocity.z);
+            RB.maxDepenetrationVelocity = 10;
         }
         else if (RB.velocity.y < 0 || (RB.velocity.y == 0 && PreviousYVelocity > 0))
         {
@@ -113,7 +156,8 @@ public class Player : Entity
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            jumpActive = false;
+            if(collision.impulse.y > 0)
+                OnTheFloor = true;
         }
     }
 
