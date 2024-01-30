@@ -26,7 +26,12 @@ public class Player : Entity
     [SerializeField] private ScreenBlocker ScreenBlocker;
     public const int EntityLayer = 6;
     [SerializeField] private float BlockRange = 4;
-    private void Awake()
+    [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float walkSpeed = 0.001f;
+    [SerializeField] private float sprintSpeed = 0.002f;
+    private bool jumpActive = false;
+
+    private void Start()
     {
         Inventory = new Inventory(30);
         for(int i = 0; i < Inventory.Count; i++)
@@ -77,10 +82,15 @@ public class Player : Entity
         }
         moveDir = moveDir.RotatedBy(Direction.y * -Mathf.Deg2Rad);
         RB.velocity = new Vector3(RB.velocity.x + moveDir.x, RB.velocity.y, RB.velocity.z + moveDir.y);
-        if (Control.Jump)
+        if (Control.Jump && !jumpActive)
         {
-            RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y + 1, RB.velocity.z);
+            //RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y + 1, RB.velocity.z);
+            RB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            jumpActive = true;
         }
+        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
+        
+        RB.velocity = new Vector3(RB.velocity.x + moveDir.x * currentSpeed * 0.5f, RB.velocity.y, RB.velocity.z + moveDir.y * currentSpeed * 0.5f);
         RB.velocity = new Vector3(RB.velocity.x * 0.9f, RB.velocity.y, RB.velocity.z * 0.9f);
         if (RB.velocity.y > 0)
         {
@@ -98,6 +108,15 @@ public class Player : Entity
 
         ControlManager.OnFixedUpdate();
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            jumpActive = false;
+        }
+    }
+
     private Vector2 Direction = Vector2.zero;
     /// <summary>
     /// Updates the rotation of the camera to match with the movement of the mouse
