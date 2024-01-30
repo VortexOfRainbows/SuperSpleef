@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
-using UnityEditor.UI;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
@@ -10,7 +10,10 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int maxPlayerHP;
     [SerializeField] private int currentPlayerHP;
 
+    public Text GameOver;
+
     public GameObject GameOverUI;
+    public GameObject GameplayUI;
 
     private float timeCount = 0.0f;
 
@@ -32,7 +35,7 @@ public class PlayerStats : MonoBehaviour
         {
             currentPlayerHP -= maxPlayerHP;
             rb.AddForce(transform.up * 150f);
-            Debug.Log(currentPlayerHP);
+            //Debug.Log(currentPlayerHP);
         }
 
         if (currentPlayerHP <= 0f) 
@@ -46,13 +49,13 @@ public class PlayerStats : MonoBehaviour
     {
         transform.rotation = Quaternion.Slerp(Quaternion.Euler(0,0,0), Quaternion.Euler(0, 0, 90), timeCount * timeCount * 9);
         GameOverUI.SetActive(true);
+        GameplayUI.SetActive(false);
 
         // This would also be the play to disable controls
         gameObject.GetComponent<Player>().enabled = false;
         
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
     }
 
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class PauseUI : MonoBehaviour
 {
     public GameObject PauseUI_gobj;
+    public GameObject Player;
 
     public bool GameIsPaused = false;
 
@@ -39,6 +40,7 @@ public class PauseUI : MonoBehaviour
         GameIsPaused = true;
         Time.timeScale = 0f;
         PauseUI_gobj.SetActive(true);
+        Player.GetComponent<Player>().enabled = false;
     }
 
     public void Resume()
@@ -46,6 +48,7 @@ public class PauseUI : MonoBehaviour
         GameIsPaused = false;
         Time.timeScale = 1f;
         PauseUI_gobj.SetActive(false);
+        Player.GetComponent<Player>().enabled = true;
     }
 }
 
