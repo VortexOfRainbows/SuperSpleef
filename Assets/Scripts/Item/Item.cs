@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+public abstract class Item : MonoBehaviour //This might not need to be a monobehavior
 {
     public static Item Empty { get; private set; } = new NoItem();
     public const int DefaultMaxCount = 9999; //The default max count will be 9999.

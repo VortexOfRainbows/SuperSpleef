@@ -123,7 +123,7 @@ public class Player : Entity
         {
             velocityXZ = velocityXZ.normalized * maxSpeed;
         }
-        if (Control.Jump && !LastControl.Jump && OnTheFloor)
+        if (Control.Jump && OnTheFloor)
         {
             //RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y + 1, RB.velocity.z);
             velo.y *= 0.0f;
