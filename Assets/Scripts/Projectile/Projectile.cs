@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public abstract class Projectile : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public abstract class Projectile : MonoBehaviour
         mRenderer = GetComponent<MeshRenderer>();
         OnSpawn();
     }
+    /// <summary>
+    /// Called when the projectile spawns into the world.
+    /// </summary>
     public virtual void OnSpawn()
     {
 
@@ -49,6 +53,14 @@ public abstract class Projectile : MonoBehaviour
             return;
         }
         ModifyColors();
+        OnFixedUpdate();
+    }
+    /// <summary>
+    /// Called after the normal fixed update actions of the parent projectile.
+    /// </summary>
+    public virtual void OnFixedUpdate()
+    {
+
     }
     public void OnCollisionEnter(Collision collision)
     {
@@ -82,7 +94,7 @@ public abstract class Projectile : MonoBehaviour
     /// OutBoundDeath is whether or not the projectile died due to being out of bounds.
     /// If the OutBoundDeath is true, it died from being out of bounds. False otherwise.
     /// </summary>
-    public virtual void OnKill(bool OutBoundDeath)
+    public virtual void OnDeath(bool OutBoundDeath)
     {
 
     }
@@ -92,7 +104,7 @@ public abstract class Projectile : MonoBehaviour
     /// <param name="OutBoundDeath"></param>
     public void Kill(bool OutBoundDeath = false)
     {
-        OnKill(OutBoundDeath);
+        OnDeath(OutBoundDeath);
         Destroy(gameObject);
     }
 }

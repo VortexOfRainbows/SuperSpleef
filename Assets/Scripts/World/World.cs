@@ -78,6 +78,12 @@ public class World : MonoBehaviour
     {
         return Block(pos.x, pos.y, pos.z);
     }
+    /// <summary>
+    /// Sets a block at position xyz to the blockID. Returns true if the block is successfully converted.
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="blockID"></param>
+    /// <returns></returns>
     public static bool SetBlock(Vector3 pos, int blockID)
     {
         return SetBlock(pos.x, pos.y, pos.z, blockID);
@@ -95,6 +101,14 @@ public class World : MonoBehaviour
         }
         return BlockID.Air;
     }
+    /// <summary>
+    /// Sets a block at position xyz to the blockID. Returns true if the block is successfully converted.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="z"></param>
+    /// <param name="blockID"></param>
+    /// <returns></returns>
     public static bool SetBlock(float x, float y, float z, int blockID)
     {
         GameObject chunkObj = Instance.BoundingChunk(x, z);
@@ -148,12 +162,45 @@ public class World : MonoBehaviour
         }
         return false;
     }
-    /*public static bool FillBlock(Vector2 start, Vector2 end, int blockID)
+    public static bool FillBlock(Vector3 start, Vector3 end, int blockID)
     {
-
+        return FillBlock(start.x, start.y, start.z, end.x, end.y, end.z, blockID);
     }
     public static bool FillBlock(float x, float y, float z, float x2, float y2, float z2, int blockID)
     {
-
-    }*/
+        int X = Mathf.FloorToInt(x);
+        int Y = Mathf.FloorToInt(y);
+        int Z = Mathf.FloorToInt(z);
+        int X2 = Mathf.FloorToInt(x2);
+        int Y2 = Mathf.FloorToInt(y2);
+        int Z2 = Mathf.FloorToInt(z2);
+        return FillBlock(X, Y, Z, X2, Y2, Z2, blockID);
+    }
+    /// <summary>
+    /// Fills the area from xyz to x2y2z2 with blockID. Returns true if any blocks are converted. Returns false if no blocks are converted.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="z"></param>
+    /// <param name="x2"></param>
+    /// <param name="y2"></param>
+    /// <param name="z2"></param>
+    /// <param name="blockID"></param>
+    /// <returns></returns>
+    public static bool FillBlock(int x, int y, int z, int x2, int y2, int z2, int blockID)
+    {
+        bool hasFilledOneBlock = false;
+        for (; x <= x2; x++)
+        {
+            for (; y <= y2; y++)
+            {
+                for (; z <= z2; z++)
+                {
+                    if(SetBlock(x, y, z, blockID))
+                        hasFilledOneBlock = true;
+                }
+            }
+        }
+        return hasFilledOneBlock;
+    }
 }
