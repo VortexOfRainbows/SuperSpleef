@@ -1,10 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class World : MonoBehaviour
 {
+    private static HashSet<Chunk> ReloadRequired = new HashSet<Chunk>();
     public const float OutOfBounds = -40f;
     public static World Instance;
     public GameObject chunkObj;
@@ -14,12 +18,10 @@ public class World : MonoBehaviour
     [SerializeField]
     private ParticleSystem BlockParticles;
     public static ParticleSystem BlockParticleRef;
-
     private void Awake()
     {
         BlockParticleRef = BlockParticles;
     }
-
     private void Start()
     {
         Instance = this;
@@ -57,8 +59,19 @@ public class World : MonoBehaviour
         int j = Index.y;
         return GetChunk(i, j);
     }
+    private static void QueueChunkReload(Chunk chunk)
+    {
+        if(!ReloadRequired.Contains(chunk))
+            ReloadRequired.Add(chunk);
+    }
     private void Update()
     {
+        while (ReloadRequired.Count > 0)
+        {
+            Chunk first = ReloadRequired.First();
+            first.BuildMesh();
+            ReloadRequired.Remove(first);
+        }
         Instance = this;
     }
     public static int Block(Vector3 pos)
@@ -109,30 +122,38 @@ public class World : MonoBehaviour
                 {
                     GameObject adjacentChunk = Instance.GetChunk(chunk.Index.x - 1, chunk.Index.y);
                     if (adjacentChunk != null)
-                        adjacentChunk.GetComponent<Chunk>().BuildMesh();
+                        QueueChunkReload(adjacentChunk.GetComponent<Chunk>());
                 }
                 if (blockZ <= 0)
                 {
                     GameObject adjacentChunk = Instance.GetChunk(chunk.Index.x, chunk.Index.y - 1);
                     if (adjacentChunk != null)
-                        adjacentChunk.GetComponent<Chunk>().BuildMesh();
+                        QueueChunkReload(adjacentChunk.GetComponent<Chunk>());
                 }
                 if (blockX >= Chunk.Width - 1)
                 {
                     GameObject adjacentChunk = Instance.GetChunk(chunk.Index.x + 1, chunk.Index.y);
                     if (adjacentChunk != null)
-                        adjacentChunk.GetComponent<Chunk>().BuildMesh();
+                        QueueChunkReload(adjacentChunk.GetComponent<Chunk>());
                 }
                 if (blockZ >= Chunk.Width - 1)
                 {
                     GameObject adjacentChunk = Instance.GetChunk(chunk.Index.x, chunk.Index.y + 1);
                     if (adjacentChunk != null)
-                        adjacentChunk.GetComponent<Chunk>().BuildMesh();
+                        QueueChunkReload(adjacentChunk.GetComponent<Chunk>());
                 }
-                chunk.BuildMesh();
+                QueueChunkReload(chunk);
                 return true;
             }
         }
         return false;
     }
+    /*public static bool FillBlock(Vector2 start, Vector2 end, int blockID)
+    {
+
+    }
+    public static bool FillBlock(float x, float y, float z, float x2, float y2, float z2, int blockID)
+    {
+
+    }*/
 }
