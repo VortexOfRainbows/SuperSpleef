@@ -293,6 +293,26 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1463825790314162191, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
   m_PrefabInstance: {fileID: 2012985373781109746}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1683629362 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1503927825360984527, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+  m_PrefabInstance: {fileID: 2012985373781109746}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1683629367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683629362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!114 &1775760960 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5992814542612128231, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
@@ -304,6 +324,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f42067016d567741ab87c8c1f39ce52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1872529573 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3559342602421588402, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+  m_PrefabInstance: {fileID: 2012985373781109746}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1872529577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872529573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1001 &2012985373781109746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -556,6 +596,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6377010060274477753, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_EffectDistance.x
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6982155519244028270, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -671,7 +715,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1503927825360984527, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1683629367}
+    - targetCorrespondingSourceObject: {fileID: 3559342602421588402, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1872529577}
   m_SourcePrefab: {fileID: 100100000, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
 --- !u!1001 &2162378570314346047
 PrefabInstance:

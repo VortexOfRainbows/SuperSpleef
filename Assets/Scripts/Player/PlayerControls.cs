@@ -53,6 +53,10 @@ public class PlayerControls : MonoBehaviour
     }
     public void OnUpdate()
     {
+        if(PauseUI.GameIsPaused)
+        {
+            return;
+        }
         Control.ScrollDelta = Input.mouseScrollDelta.y;
         Control.XAxis = Input.GetAxisRaw("Mouse X");
         Control.YAxis = Input.GetAxisRaw("Mouse Y");

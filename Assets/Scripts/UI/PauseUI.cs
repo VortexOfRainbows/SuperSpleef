@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class PauseUI : MonoBehaviour
 {
-    public GameObject PauseUI_gobj;
-    public GameObject Player;
+    [SerializeField] private GameObject PauseUI_gobj;
+    [SerializeField] private GameObject Player;
 
-    public bool GameIsPaused = false;
+    public static bool GameIsPaused { get; private set; }
 
     private void Start()
     {
@@ -36,7 +36,7 @@ public class PauseUI : MonoBehaviour
         PauseUI_gobj.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        Player.GetComponent<Player>().enabled = false;
+        //Player.GetComponent<Player>().enabled = false;
         Time.timeScale = 0f;
     }
     
@@ -46,7 +46,7 @@ public class PauseUI : MonoBehaviour
         PauseUI_gobj.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Player.GetComponent<Player>().enabled = true;
+        //Player.GetComponent<Player>().enabled = true;
         Time.timeScale = 1f;
     }
 }
