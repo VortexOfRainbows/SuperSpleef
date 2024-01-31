@@ -13,6 +13,7 @@ public class PauseUI : MonoBehaviour
     private void Start()
     {
         PauseUI_gobj.SetActive(false);
+        Time.timeScale = 1.0f;
     }
     void Update()
     {
@@ -27,28 +28,26 @@ public class PauseUI : MonoBehaviour
                 Resume();
             }
         }
-
-        if (GameIsPaused == true) {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-
     }
 
     public void Pause()
     {
         GameIsPaused = true;
-        Time.timeScale = 0f;
         PauseUI_gobj.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         Player.GetComponent<Player>().enabled = false;
+        Time.timeScale = 0f;
     }
-
+    
     public void Resume()
     {
         GameIsPaused = false;
-        Time.timeScale = 1f;
         PauseUI_gobj.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         Player.GetComponent<Player>().enabled = true;
+        Time.timeScale = 1f;
     }
 }
 
