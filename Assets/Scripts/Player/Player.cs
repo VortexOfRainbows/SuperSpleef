@@ -126,7 +126,7 @@ public class Player : Entity
         {
             velocityXZ = velocityXZ.normalized * maxSpeed;
         }
-        if (Control.Jump && (OnTheFloor || velo.y == 0))
+        if (Control.Jump && OnTheFloor)
         {
             //RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y + 1, RB.velocity.z);
             velo.y *= 0.0f;
@@ -154,16 +154,22 @@ public class Player : Entity
 
         ControlManager.OnFixedUpdate();
     }
-
+    private void OnCollisionEnter(Collision collision)
+    {
+        OnCollision(collision);
+    }
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        OnCollision(collision);
+    }
+    private void OnCollision(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("InverseCube"))
         {
-            if(collision.impulse.y > 0)
+            if (collision.impulse.y > 0)
                 OnTheFloor = true;
         }
     }
-
     private Vector2 Direction = Vector2.zero;
     /// <summary>
     /// Updates the rotation of the camera to match with the movement of the mouse
