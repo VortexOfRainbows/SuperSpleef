@@ -12,6 +12,7 @@ public class PlayerStats : MonoBehaviour
 
     public Text GameOver;
 
+    public World World;
     public GameObject GameOverUI;
     public GameObject GameplayUI;
     public GameObject ClientPackage;
@@ -40,7 +41,7 @@ public class PlayerStats : MonoBehaviour
             //Debug.Log(currentPlayerHP);
         }
 
-        if (currentPlayerHP <= 0f || transform.position.y < deathPlane.position.y) 
+        if (currentPlayerHP <= 0f || transform.position.y < World.OutOfBounds) 
         {
             OnDeath();
             timeCount = timeCount + Time.deltaTime;
