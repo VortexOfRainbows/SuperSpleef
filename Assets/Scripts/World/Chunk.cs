@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,12 +18,14 @@ public class Chunk : MonoBehaviour
     public const int Height = 64;
     public int[,,] blocks = new int[Width, Height, Width];
     private MeshFilter meshFilter;
+    private MeshCollider meshCollider;
     // Start is called before the first frame update
     private void Awake()
     {
         if(Seed == -1)
             Seed = Random.Range(0, 25555); //25555 is just an arbitrarily picked number.
         meshFilter = this.GetComponent<MeshFilter>();
+        meshCollider = GetComponent<MeshCollider>();
         GenerateChunk();
     }
     public void GenerateChunk()
@@ -186,13 +189,21 @@ public class Chunk : MonoBehaviour
                 tl + i * 4 + 2, 
                 tl + i * 4 + 3});
         }
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.uv = uvs.ToArray();
-        mesh.RecalculateNormals();
 
-        meshFilter.mesh = mesh;
-        GetComponent<MeshCollider>().sharedMesh = mesh;
+        if (numFaces <= 0 || vertices.Count <= 0)
+        {
+            meshFilter.mesh = null;
+            meshCollider.sharedMesh = null;
+        }
+        else
+        {
+            mesh.vertices = vertices.ToArray();
+            mesh.triangles = triangles.ToArray();
+            mesh.uv = uvs.ToArray();
+            mesh.RecalculateNormals();
+            meshFilter.mesh = mesh;
+            meshCollider.sharedMesh = mesh;
+        }
     }
     public enum MeshSide
     {

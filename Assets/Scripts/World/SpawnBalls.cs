@@ -14,6 +14,7 @@ public class SpawnBalls : MonoBehaviour
     [SerializeField] private float FragChance = 0.125f;
     [SerializeField] private float SuperFragChance = 0.025f;
     [SerializeField] private float TunnelBoreChance = 0.025f;
+    [SerializeField] private float FragFragChance = 0.025f;
     [SerializeField] private float MaxDifficultyMultiplier = 2f;
     private float timer;
     private float TotalTimePassed;
@@ -42,6 +43,10 @@ public class SpawnBalls : MonoBehaviour
                 else if (Random.value < TunnelBoreChance * ballChanceMult)
                 {
                     ballType = ProjectileManager.GetProjectile(ProjectileID.TunnelBore);
+                }
+                else if (Random.value < FragFragChance * ballChanceMult)
+                {
+                    ballType = ProjectileManager.GetProjectile(ProjectileID.FragFragBall);
                 }
                 else
                 {

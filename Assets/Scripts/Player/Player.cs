@@ -39,14 +39,16 @@ public class Player : Entity
         Inventory = new Inventory(30);
         for(int i = 0; i < Inventory.Count; i++)
         {
-            if(i == 0)
+            if (i == 0)
                 Inventory.Set(i, new BasicBlaster());
-            else if(i == 1)
+            else if (i == 1)
                 Inventory.Set(i, new BlockGun());
-            else if(i <= BlockID.Max + 1)
+            else if (i <= BlockID.Max + 1)
                 Inventory.Set(i, new PlaceableBlock(i - 1, 20));
+            else if (i == 9)
+                Inventory.Set(i, new WorldDestroyer());
             else
-                Inventory.Set(i, new PlaceableBlock(BlockID.Dirt));
+                Inventory.Set(i, new NoItem());
         }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
