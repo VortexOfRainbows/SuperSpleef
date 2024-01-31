@@ -96,7 +96,7 @@ public class World : MonoBehaviour
 
                 if(blockID == BlockID.Air) //If we are breaking the block
                 {
-                    ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(x, y, z), Quaternion.identity, Instance.transform);
+                    ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(Mathf.FloorToInt(x) + 0.5f, Mathf.FloorToInt(y) + 0.5f, Mathf.FloorToInt(z) + 0.5f), Quaternion.identity, Instance.transform);
                     p.Play();
                     Destroy(p.gameObject, p.main.duration);
                 }
