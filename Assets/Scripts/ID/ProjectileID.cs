@@ -6,9 +6,11 @@ public static class ProjectileID
     public static int BouncyDeathBall = 0;
     public static int BlockProjectile = 1;
     public static int FragBall = 2;
+    public static int SuperFragBall = 3;
+    public static int TunnelBore = 4;
 
     /// <summary>
     /// Whenever a new projectile is added, this number should be increased to the highest one
     /// </summary>
-    public static int Max = 3;
+    public static int Max = 4;
 }

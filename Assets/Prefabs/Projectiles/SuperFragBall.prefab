@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 5154586710701469839}
   - component: {fileID: 5275421372356156425}
   - component: {fileID: 3056192145238397018}
-  - component: {fileID: -3966787840298454030}
+  - component: {fileID: -8575054800652903113}
   m_Layer: 7
-  m_Name: FragBall
+  m_Name: SuperFragBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -134,7 +134,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-3966787840298454030
+--- !u!114 &-8575054800652903113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b44396f0432d2343af57ef7d9fb1b05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalFrags: 8
-  ExplosionSpeedMult: 3
-  RandomBonusSpread: 0.5
-  color: {r: 0, g: 0.103330135, b: 1, a: 0}
+  TotalFrags: 32
+  ExplosionSpeedMult: 5
+  RandomBonusSpread: 2
+  color: {r: 0.90114546, g: 0, b: 1, a: 0}
