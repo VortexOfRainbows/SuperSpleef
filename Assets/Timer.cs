@@ -40,12 +40,12 @@ public class Timer : MonoBehaviour
     }
     private void Start()
     {
-        AccumulatedTime = 65;
+        AccumulatedTime = 0;
         timeText.text = AssembleTimeString(DefaultText, CurrentTime);
     }
     private void Update()
     {
-        AccumulatedTime -= Time.deltaTime;
+        AccumulatedTime += Time.deltaTime;
         timeText.text = AssembleTimeString(DefaultText, CurrentTime);
     }
 }
