@@ -92,9 +92,12 @@ public class World : MonoBehaviour
             Chunk chunk = chunkObj.GetComponent<Chunk>();
             if (blockY < Chunk.Height && blockY >= 0)
             {
+                if (chunk.blocks[blockX, blockY, blockZ] == blockID)
+                    return false; //Do not place the same block again
+
                 chunk.blocks[blockX, blockY, blockZ] = blockID;
 
-                if(blockID == BlockID.Air) //If we are breaking the block
+                if(blockID == BlockID.Air) //If we are breaking the block, generate particles
                 {
                     ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(Mathf.FloorToInt(x) + 0.5f, Mathf.FloorToInt(y) + 0.5f, Mathf.FloorToInt(z) + 0.5f), Quaternion.identity, Instance.transform);
                     p.Play();
