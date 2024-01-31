@@ -7,6 +7,22 @@ using UnityEngine;
 
 public static class Utils
 {
+    public static Mesh CubeMesh 
+    { 
+        get
+        {
+            if(StoredMesh == null)
+            {
+                StoredMesh = GenerateCubeMesh();
+            }
+            return StoredMesh;
+        }
+        set
+        {
+            StoredMesh = value;
+        }
+    }
+    private static Mesh StoredMesh = null;
     public const float PixelsPerUnit = 4;
     public static Vector2 RotatedBy(this Vector2 spinningpoint, float radians, Vector2 center = default(Vector2))
     {
@@ -60,5 +76,32 @@ public static class Utils
         }
         construct += str[str.Length - 1];
         return construct;
+    }
+    private static Mesh GenerateCubeMesh()
+    {
+        Mesh mesh = new Mesh();
+        List<Vector3> vertices = new List<Vector3>();
+        List<int> triangles = new List<int>();
+        Vector3 center = Vector3.one * -0.5f;
+        Chunk.AddVerticies(Chunk.MeshSide.Top, center, ref vertices);
+        Chunk.AddVerticies(Chunk.MeshSide.Bottom, center, ref vertices);
+        Chunk.AddVerticies(Chunk.MeshSide.Front, center, ref vertices);
+        Chunk.AddVerticies(Chunk.MeshSide.Right, center, ref vertices);
+        Chunk.AddVerticies(Chunk.MeshSide.Back, center, ref vertices);
+        Chunk.AddVerticies(Chunk.MeshSide.Left, center, ref vertices);
+        for (int i = 0; i < 6; i++)
+        {
+            triangles.AddRange(new int[] {
+                i * 4,
+                i * 4 + 1,
+                i * 4 + 2,
+                i * 4,
+                i * 4 + 2,
+                i * 4 + 3});
+        }
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
+        mesh.RecalculateNormals();
+        return mesh;
     }
 }

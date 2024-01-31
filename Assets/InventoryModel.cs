@@ -5,33 +5,7 @@ using UnityEngine.XR;
 
 public class InventoryModel : MonoBehaviour
 {
-    private static Mesh GenerateCubeMesh()
-    {
-        Mesh mesh = new Mesh();
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
-        Vector3 center = Vector3.one * -0.5f;
-        Chunk.AddVerticies(Chunk.MeshSide.Top, center, ref vertices);
-        Chunk.AddVerticies(Chunk.MeshSide.Bottom, center, ref vertices);
-        Chunk.AddVerticies(Chunk.MeshSide.Front, center, ref vertices);
-        Chunk.AddVerticies(Chunk.MeshSide.Right, center, ref vertices);
-        Chunk.AddVerticies(Chunk.MeshSide.Back, center, ref vertices);
-        Chunk.AddVerticies(Chunk.MeshSide.Left, center, ref vertices);
-        for (int i = 0; i < 6; i++)
-        {
-            triangles.AddRange(new int[] {
-                i * 4,
-                i * 4 + 1,
-                i * 4 + 2,
-                i * 4,
-                i * 4 + 2,
-                i * 4 + 3});
-        }
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.RecalculateNormals();
-        return mesh;
-    }
+    private bool MeshIsCurrentlyBlock = false;
     [SerializeField] private ItemSlot parentSlot;
     [SerializeField] private MeshFilter meshFilter;
     private Vector3 rotations;
@@ -45,7 +19,8 @@ public class InventoryModel : MonoBehaviour
     }
     public void SetModelToBlock(int BlockID)
     {
-        meshFilter.mesh = GenerateCubeMesh();
+        if(!MeshIsCurrentlyBlock)
+            meshFilter.mesh = Utils.CubeMesh;
         int blockId = BlockID;
         List<Vector2> uvs = new List<Vector2>();
         uvs.AddRange(BlockMesh.Get(blockId).top.GetUVs());
@@ -55,6 +30,7 @@ public class InventoryModel : MonoBehaviour
         uvs.AddRange(BlockMesh.Get(blockId).back.GetUVs());
         uvs.AddRange(BlockMesh.Get(blockId).left.GetUVs());
         meshFilter.mesh.uv = uvs.ToArray();
+        MeshIsCurrentlyBlock = true;
     }
     [SerializeField] private float MaxVariationTiltXZ = 9.5f;
     [SerializeField] private float XZRotationSpeedMult = 0.05f;

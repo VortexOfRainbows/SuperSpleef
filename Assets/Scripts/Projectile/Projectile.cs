@@ -7,12 +7,17 @@ using UnityEngine.Rendering.Universal;
 
 public abstract class Projectile : MonoBehaviour
 {
-    private MeshRenderer mRenderer;
+    protected MeshRenderer mRenderer;
     public Entity owner { get; protected set; }
     // Start is called before the first frame update
     void Start()
     {
         mRenderer = GetComponent<MeshRenderer>();
+        OnSpawn();
+    }
+    public virtual void OnSpawn()
+    {
+
     }
     private Color prevTint = Color.white;
     private void ModifyColors()
@@ -22,7 +27,7 @@ public abstract class Projectile : MonoBehaviour
         Color tint = DrawColor();
         if(tint != prevTint)
         {
-            Debug.Log("recolored!");
+            //Debug.Log("recolored!");
             mRenderer.material.SetColor("_BaseColor", tint);
             prevTint = tint;
         }

@@ -9,9 +9,10 @@ public class Player : Entity
 {
     #region public
     ///These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
-    public GameObject BasicProjectileTest;
-    public Rigidbody RB;
+    public GameObject BasicProjectileTest; //This reference is only here temporarily, until a projectile manager class is made... This strange organization is NOT final
+    public GameObject BlockProjectileTest; //This reference is only here temporarily, until a projectile manager class is made... This strange organization is NOT final
     public GameObject FacingVector;
+    [SerializeField] private Rigidbody RB;
     #endregion
 
     /// <summary>
@@ -42,8 +43,10 @@ public class Player : Entity
         {
             if(i == 0)
                 Inventory.Set(i, new BasicBlaster());
-            else if(i <= BlockID.Max)
-                Inventory.Set(i, new PlaceableBlock(i, 20));
+            else if(i == 1)
+                Inventory.Set(i, new BlockGun());
+            else if(i <= BlockID.Max + 1)
+                Inventory.Set(i, new PlaceableBlock(i - 1, 20));
             else
                 Inventory.Set(i, new PlaceableBlock(BlockID.Dirt));
         }
@@ -262,7 +265,8 @@ public class Player : Entity
             else if (holdingPlaceableBlock && heldItem.OnSecondaryUse(this) && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air)
             {
                 Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
-                if (inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0)
+                bool NoEntities = inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0;
+                if (NoEntities)
                 {
                     bool placedBlocks = World.SetBlock(TargetPosition, blockToPlace);
                     updateBlockOutline = placedBlocks;

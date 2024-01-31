@@ -10,13 +10,9 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int maxPlayerHP;
     [SerializeField] private int currentPlayerHP;
 
-    public Text GameOver;
-
-    public World World;
-    public GameObject GameOverUI;
-    public GameObject GameplayUI;
-    public GameObject ClientPackage;
-    public Transform deathPlane;
+    [SerializeField] private GameObject GameOverUI;
+    [SerializeField] private GameObject GameplayUI;
+    [SerializeField] private GameObject ClientPackage;
 
     private float timeCount = 0.0f;
 
