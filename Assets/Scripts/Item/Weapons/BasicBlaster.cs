@@ -6,6 +6,6 @@ public class BasicBlaster : Weapon
 {
     public override void SetStats()
     {
-        ShootSpeed = 8;
+        ShootSpeed = 12;
     }
 }

@@ -33,7 +33,7 @@ public class Player : Entity
     [SerializeField] private float MoveDeacceleration = 0.5f;
     [SerializeField] private float MoveAcceleration = 0.1f;
     [SerializeField] private float JumpDrag = 0.95f;
-    private bool OnTheFloor = false;
+    [SerializeField] private bool OnTheFloor = false;
 
     private void Start()
     {
@@ -123,13 +123,13 @@ public class Player : Entity
         {
             velocityXZ = velocityXZ.normalized * maxSpeed;
         }
-        if (Control.Jump && OnTheFloor)
+        if (Control.Jump && (OnTheFloor || velo.y == 0))
         {
             //RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y + 1, RB.velocity.z);
             velo.y *= 0.0f;
             velo.y += jumpForce;
-            OnTheFloor = false;
         }
+        OnTheFloor = false;
         velo.x = velocityXZ.x;
         velo.z = velocityXZ.y;
         perpendicularVelocity = velocityXZ;
