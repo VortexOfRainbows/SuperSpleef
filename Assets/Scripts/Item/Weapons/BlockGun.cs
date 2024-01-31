@@ -10,6 +10,6 @@ public class BlockGun : Weapon
     }
     public override GameObject ShootType(Player player)
     {
-        return player.BlockProjectileTest;
+        return ProjectileManager.GetProjectile<BlockProjectile>();
     }
 }

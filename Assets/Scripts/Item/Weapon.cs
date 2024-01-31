@@ -47,6 +47,6 @@ public abstract class Weapon : Item
     /// <returns></returns>
     public virtual GameObject ShootType(Player player)
     {
-        return player.BasicProjectileTest;
+        return ProjectileManager.GetProjectile<BouncyDeathBall>();
     }
 }

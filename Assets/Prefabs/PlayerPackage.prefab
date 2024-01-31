@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 893952842892355025}
   m_Layer: 6
   m_Name: PlayerPackage
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42,6 +42,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 893952842892355025}
     m_Modifications:
+    - target: {fileID: 1293776585140897611, guid: 52398b591dcfcb745862f464625d635b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285934479319385815, guid: 52398b591dcfcb745862f464625d635b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3836383346058665725, guid: 52398b591dcfcb745862f464625d635b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.300003
@@ -95,7 +103,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 958337695214633276}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1373253264996724250, guid: 52398b591dcfcb745862f464625d635b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52398b591dcfcb745862f464625d635b, type: 3}

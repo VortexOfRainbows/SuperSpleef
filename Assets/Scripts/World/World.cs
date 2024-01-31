@@ -10,7 +10,7 @@ public class World : MonoBehaviour
 {
     private static HashSet<Chunk> ReloadRequired = new HashSet<Chunk>();
     public const float OutOfBounds = -40f;
-    public static World Instance;
+    public static World Instance { get; private set; }
     public GameObject chunkObj;
     private GameObject[,] chunk;
     public const int ChunkRadius = 15;
@@ -189,15 +189,25 @@ public class World : MonoBehaviour
     /// <returns></returns>
     public static bool FillBlock(int x, int y, int z, int x2, int y2, int z2, int blockID)
     {
+        //Vector3 v = new Vector3(x, y, z);
+        //Vector3 v2 = new Vector3(x2, y2, z2);
+        //Debug.Log(v + ":" + v2);
+        int sX = Mathf.Min(x, x2);
+        int sY = Mathf.Min(y, y2);
+        int sZ = Mathf.Min(z, z2);
+        int bX = Mathf.Max(x, x2);
+        int bY = Mathf.Max(y, y2);
+        int bZ = Mathf.Max(z, z2);
         bool hasFilledOneBlock = false;
-        for (; x <= x2; x++)
+        for (int left = sX; left <= bX; left++)
         {
-            for (; y <= y2; y++)
+            for (int bot = sY; bot <= bY; bot++)
             {
-                for (; z <= z2; z++)
+                for (int back = sZ; back <= bZ; back++)
                 {
-                    if(SetBlock(x, y, z, blockID))
+                    if(SetBlock(left, bot, back, blockID))
                         hasFilledOneBlock = true;
+                    //Debug.Log(left + ":" + bot + ":" + back);
                 }
             }
         }

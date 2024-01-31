@@ -23,7 +23,6 @@ public static class Utils
         }
     }
     private static Mesh StoredMesh = null;
-    public const float PixelsPerUnit = 4;
     public static Vector2 RotatedBy(this Vector2 spinningpoint, float radians, Vector2 center = default(Vector2))
     {
         float xMult = (float)MathF.Cos(radians);

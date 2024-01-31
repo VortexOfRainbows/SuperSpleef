@@ -9,8 +9,6 @@ public class Player : Entity
 {
     #region public
     ///These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
-    public GameObject BasicProjectileTest; //This reference is only here temporarily, until a projectile manager class is made... This strange organization is NOT final
-    public GameObject BlockProjectileTest; //This reference is only here temporarily, until a projectile manager class is made... This strange organization is NOT final
     public GameObject FacingVector;
     [SerializeField] private Rigidbody RB;
     #endregion

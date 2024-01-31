@@ -294,7 +294,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1315869663704655697}
         m_TargetAssemblyTypeName: ButtonBehaviors, Assembly-CSharp
         m_MethodName: StartGame
         m_Mode: 1
@@ -396,6 +396,7 @@ GameObject:
   - component: {fileID: 6064116037263810861}
   - component: {fileID: 4520666318318090548}
   - component: {fileID: 4025056296703332927}
+  - component: {fileID: 7648246938536769505}
   m_Layer: 5
   m_Name: Objective Text
   m_TagString: Untagged
@@ -464,6 +465,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Objective: Survive'
+--- !u!114 &7648246938536769505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3559342602421588402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &3815369218243392025
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,7 +926,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1315869663704655697}
         m_TargetAssemblyTypeName: ButtonBehaviors, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
@@ -1225,7 +1241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 24.1, y: -30.2}
+  m_AnchoredPosition: {x: 24.100006, y: -30.2}
   m_SizeDelta: {x: 0, y: 33.288498}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1241354250420780667
@@ -1310,7 +1326,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1315869663704655697}
         m_TargetAssemblyTypeName: ButtonBehaviors, Assembly-CSharp
         m_MethodName: MainMenu
         m_Mode: 1
@@ -2013,6 +2029,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3548016694367724373}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7583916965672786280, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3322669803807187644}
     - targetCorrespondingSourceObject: {fileID: 7975204064996581473, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8640639868944919146}
@@ -2056,6 +2075,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d55bfbcf5e1f1e4787bca34b1a14b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1503927825360984527 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7583916965672786280, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
+  m_PrefabInstance: {fileID: 9070383992318689447}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3322669803807187644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503927825360984527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!224 &1511573488867061854 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7573447341871083769, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}

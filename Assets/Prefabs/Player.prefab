@@ -95,7 +95,7 @@ Transform:
   m_GameObject: {fileID: 1373253264996724250}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.11800003, z: 0.22000122}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.19999999, y: 0.19999999, z: 0.19999999}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -276,8 +276,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f42067016d567741ab87c8c1f39ce52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BasicProjectileTest: {fileID: 2850273201132221861, guid: 5807d350cd0d6694591c612bbf37de5f, type: 3}
-  BlockProjectileTest: {fileID: 2850273201132221861, guid: 8207062715a8eb8489a5e1cea7c7c1ff, type: 3}
   FacingVector: {fileID: 2285934479319385815}
   RB: {fileID: 1326384001663812332}
   ControlManager: {fileID: 5101752403716287785}
