@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
+    public const float OutOfBounds = -40f;
     public static World Instance;
     public GameObject chunkObj;
     private GameObject[,] chunk;
