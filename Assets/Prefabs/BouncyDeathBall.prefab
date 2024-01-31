@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 5154586710701469839}
   - component: {fileID: 5275421372356156425}
   - component: {fileID: 3056192145238397018}
-  - component: {fileID: 155247052408809271}
+  - component: {fileID: 4457637370553886488}
   m_Layer: 7
-  m_Name: Projectile
+  m_Name: BouncyDeathBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f503832ff2415ff4e8206b14d5eee414, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -134,7 +134,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &155247052408809271
+--- !u!114 &4457637370553886488
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,6 +143,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2850273201132221861}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 471949ecfc569c94a92cc71b659a0832, type: 3}
+  m_Script: {fileID: 11500000, guid: 3f200b947f1e0064288ea7782286d466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

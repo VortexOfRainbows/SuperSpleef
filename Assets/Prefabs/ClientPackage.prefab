@@ -2003,10 +2003,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 8144897650738365669}
-    - target: {fileID: 8898207121191858783, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
-      propertyPath: Model
-      value: 
-      objectReference: {fileID: 6206913476618662617}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -2070,14 +2066,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5506544996677712952, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
   m_PrefabInstance: {fileID: 9070383992318689447}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6206913476618662617 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3153391397470155390, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
-  m_PrefabInstance: {fileID: 9070383992318689447}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a70f37489c7cbe488f18c902efbffc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
