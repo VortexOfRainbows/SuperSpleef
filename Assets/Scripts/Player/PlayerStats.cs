@@ -14,6 +14,8 @@ public class PlayerStats : MonoBehaviour
 
     public GameObject GameOverUI;
     public GameObject GameplayUI;
+    public GameObject ClientPackage;
+    public Transform deathPlane;
 
     private float timeCount = 0.0f;
 
@@ -38,7 +40,7 @@ public class PlayerStats : MonoBehaviour
             //Debug.Log(currentPlayerHP);
         }
 
-        if (currentPlayerHP <= 0f) 
+        if (currentPlayerHP <= 0f || transform.position.y < deathPlane.position.y) 
         {
             OnDeath();
             timeCount = timeCount + Time.deltaTime;
