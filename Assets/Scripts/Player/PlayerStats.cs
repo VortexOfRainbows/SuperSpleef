@@ -30,7 +30,7 @@ public class PlayerStats : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) 
+        if (Input.GetKeyDown(KeyCode.P) && Time.timeScale == 1) 
         {
             currentPlayerHP -= maxPlayerHP;
             rb.AddForce(transform.up * 150f);
