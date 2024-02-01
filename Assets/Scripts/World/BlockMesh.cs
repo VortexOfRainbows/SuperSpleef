@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockMesh
+public class BlockMesh ///Team members that contributed to this script: Ian Bunnell
 {
     public static BlockMesh Get(int blockType)
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemBehavior : MonoBehaviour
+public class ItemBehavior : MonoBehaviour ///Team members that contributed to this script: Samuel Gines
 {
     [SerializeField] private float acceleration;
     [SerializeField] private float speed;

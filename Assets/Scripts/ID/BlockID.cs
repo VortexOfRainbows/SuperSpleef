@@ -1,4 +1,4 @@
-public static class BlockID
+public static class BlockID ///Team members that contributed to this script: Ian Bunnell
 {
     /// Why am I using a static class instead of ENUMS?
     /// Besides being a preference thing, there are some mathemetical advantages to this

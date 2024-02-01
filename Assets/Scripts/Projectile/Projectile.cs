@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
-public abstract class Projectile : MonoBehaviour
+public abstract class Projectile : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
     protected MeshRenderer mRenderer;
     public Entity owner { get; protected set; }

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class ItemSlot : MonoBehaviour
+public class ItemSlot : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
     public int ItemIndex => Index;
     [SerializeField] private InventoryModel Model;

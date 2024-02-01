@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TunnelBore : Projectile
+public class TunnelBore : Projectile ///Team members that contributed to this script: Ian Bunnell
 {
     [SerializeField] private float BlockBreakRadius = 3;
     [SerializeField] private float BonusDepth = 10;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BouncyDeathBall : Projectile
+public class BouncyDeathBall : Projectile ///Team members that contributed to this script: Ian Bunnell
 {
     private const int MaxCollisions = 4;
     private int TotalCollisions = 0;

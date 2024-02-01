@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockFace
+public class BlockFace ///Team members that contributed to this script: Ian Bunnell
 {
     public const float SpriteSize = 16;
     public const float TotalSpritesX = 16;

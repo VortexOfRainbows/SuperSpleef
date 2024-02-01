@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Weapon : Item
+public abstract class Weapon : Item ///Team members that contributed to this script: Ian Bunnell
 {
     public float ShootSpeed { get; protected set; }
     public sealed override void SetDefaults()

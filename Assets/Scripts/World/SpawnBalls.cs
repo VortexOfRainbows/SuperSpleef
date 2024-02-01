@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnBalls : MonoBehaviour
+public class SpawnBalls : MonoBehaviour ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
 {
     [SerializeField] private GameObject player;
     [SerializeField] private Vector2 BallCountMinMax = new Vector2(4, 20);

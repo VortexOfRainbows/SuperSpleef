@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaceableBlock : Item
+public class PlaceableBlock : Item ///Team members that contributed to this script: Ian Bunnell
 {
     public int PlaceID { get; protected set; }
     public PlaceableBlock(int blockID, int count = 1)

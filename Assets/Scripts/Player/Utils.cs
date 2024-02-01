@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.Purchasing;
 using UnityEngine;
 
-public static class Utils
+public static class Utils ///Team members that contributed to this script: Ian Bunnell
 {
     public static Mesh CubeMesh 
     { 

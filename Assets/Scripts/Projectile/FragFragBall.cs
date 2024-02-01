@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FragFragBall : Projectile
+public class FragFragBall : Projectile ///Team members that contributed to this script: Ian Bunnell
 {
     [SerializeField] private float TotalFrags = 8;
     [SerializeField] private float ExplosionSpeedMult = 3f;

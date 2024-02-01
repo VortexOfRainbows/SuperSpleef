@@ -7,7 +7,7 @@ using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScreenBlocker : MonoBehaviour
+public class ScreenBlocker : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
     [SerializeField] private float imageSize = 100f;
     [SerializeField] private Canvas canvas;

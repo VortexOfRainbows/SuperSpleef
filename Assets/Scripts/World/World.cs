@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class World : MonoBehaviour
+public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
     private static HashSet<Chunk> ReloadRequired = new HashSet<Chunk>();
     public const float OutOfBounds = -40f;

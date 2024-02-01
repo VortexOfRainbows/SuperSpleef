@@ -1,4 +1,4 @@
-public static class ProjectileID
+public static class ProjectileID ///Team members that contributed to this script: Ian Bunnell
 {
     /// Why am I using a static class instead of ENUMS?
     /// Besides being a preference thing, there are some mathemetical advantages to this (such as being able to use IDs in integer functions)

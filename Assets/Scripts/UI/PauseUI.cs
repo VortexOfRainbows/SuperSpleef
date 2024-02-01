@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PauseUI : MonoBehaviour
+public class PauseUI : MonoBehaviour ///Team members that contributed to this script: Samuel Gines
 {
     [SerializeField] private GameObject PauseUI_gobj;
     [SerializeField] private GameObject Player;

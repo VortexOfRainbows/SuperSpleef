@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class Timer : MonoBehaviour
+public class Timer : MonoBehaviour ///Team members that contributed to this script: Samuel Gines
 {
     private const string DefaultText = "Time: ";
     //[SerializeField] private UIManager Manager;

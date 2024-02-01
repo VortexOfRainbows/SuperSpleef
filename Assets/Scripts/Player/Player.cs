@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player : Entity
+public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo
 {
     #region public
     ///These are public because they need to be accessed outside the class, and they cannot be serialized as properties.

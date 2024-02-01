@@ -1,5 +1,5 @@
 using System;
-
+///Team members that contributed to this script: Ian Bunnell
 [Serializable]
 public class Inventory //This class exists so that the UI for displaying an item slot could be used in other places in the future.
 {

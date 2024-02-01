@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 
-public class InventoryModel : MonoBehaviour
+public class InventoryModel : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
     private bool MeshIsCurrentlyBlock = false;
     [SerializeField] private ItemSlot parentSlot;

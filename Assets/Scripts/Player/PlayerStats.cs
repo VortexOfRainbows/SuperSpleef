@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour ///Team members that contributed to this script: Samuel Gines
 {
     [SerializeField] private int maxPlayerHP;
     [SerializeField] private int currentPlayerHP;

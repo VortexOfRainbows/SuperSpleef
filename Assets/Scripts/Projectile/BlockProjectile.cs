@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockProjectile : Projectile
+public class BlockProjectile : Projectile ///Team members that contributed to this script: Ian Bunnell
 {
     [SerializeField] private MeshFilter meshFilter;
     [SerializeField] private float SpinSpeed = 1.5f;

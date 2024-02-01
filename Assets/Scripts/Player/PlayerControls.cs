@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
 
-public class PlayerControls : MonoBehaviour
+public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
     public ControlDown Control = new ControlDown(); //Stores player input for the current frame
     public ControlDown LastControl = new ControlDown(); //Record player input from the previous frame

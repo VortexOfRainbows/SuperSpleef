@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoItem : Item
+public class NoItem : Item ///Team members that contributed to this script: Ian Bunnell
 {
     public override void SetDefaults()
     {

@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Chunk : MonoBehaviour
+public class Chunk : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
     public static int Seed = -1;
     public Vector2Int Index { get; set; }

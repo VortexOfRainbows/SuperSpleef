@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BarrierBlock : MonoBehaviour
+public class BarrierBlock : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
     [SerializeField] private GameObject Top, Bottom, Left, Right, Front, Back;
     [SerializeField] private bool IgnoreTop, IgnoreBot;
