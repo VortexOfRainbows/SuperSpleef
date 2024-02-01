@@ -11,6 +11,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     ///These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
     public GameObject FacingVector;
     [SerializeField] private Rigidbody RB;
+    [SerializeField] private BoxCollider JumpHitbox;
     #endregion
 
     /// <summary>
@@ -162,11 +163,28 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     {
         OnCollision(collision);
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        OnTriggerCollision(other);
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        OnTriggerCollision(other);
+    }
     private void OnCollision(Collision collision)
     {
+        //This method of checking for ground collision sometimes bugs out... Making you unable to jump for some time
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("InverseCube"))
         {
             if (collision.impulse.y > 0) //This checks if the player is touching the top surface of a block (so the player can't jump off of walls)
+                OnTheFloor = true;
+        }
+    }
+    private void OnTriggerCollision(Collider other)
+    {
+        if ((other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("InverseCube"))) //There is a trigger collider on the bottom of the player to check for ground collision. This collider is smaller than the player
+        {
+            if(RB.velocity.y == 0)
                 OnTheFloor = true;
         }
     }
@@ -246,7 +264,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         else
         {
-            if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, BlockRange * 2)) //Twice the block range so we can hit all blocks within the range
+            if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, BlockRange * 2, -1, QueryTriggerInteraction.Ignore)) //Twice the block range so we can hit all blocks within the range
             {
                 Vector3 hitPoint = hitInfo.point;
                 Vector3 InsideBlock = hitPoint - hitInfo.normal * 0.1f;
