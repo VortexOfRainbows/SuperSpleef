@@ -37,7 +37,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     private void Start()
     {
         Inventory = new Inventory(30);
-        for(int i = 0; i < Inventory.Count; i++)
+        for(int i = 0; i < Inventory.Count; i++) //Initializies a basic inventory for the purpose of testing
         {
             if (i == 0)
                 Inventory.Set(i, new BasicBlaster());
@@ -74,7 +74,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     public void FixedUpdate()
     {
         //Movement should be updated in fixed update so it works probably on all systems
-        perpendicularVelocity = new Vector2(RB.velocity.x, RB.velocity.z).RotatedBy(Direction.y * Mathf.Deg2Rad);
+        perpendicularVelocity = new Vector2(RB.velocity.x, RB.velocity.z).RotatedBy(Direction.y * Mathf.Deg2Rad); //Speed is modified as a perpendicular value to make stopping and switching directions more smooth and consistent. Also allows modifying speed more easily.
         float speed = WalkSpeed * MoveAcceleration;
         float maxSpeed = WalkSpeedMax;
         if (Control.Shift)
@@ -166,7 +166,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     {
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("InverseCube"))
         {
-            if (collision.impulse.y > 0)
+            if (collision.impulse.y > 0) //This checks if the player is touching the top surface of a block (so the player can't jump off of walls)
                 OnTheFloor = true;
         }
     }
@@ -187,9 +187,12 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
         //transform.rotation = Quaternion.Euler(0, Direction.y, 0f);
     }
+    /// <summary>
+    /// Manages which item is selected by the player
+    /// </summary>
     public void HotbarControls()
     {
-        if(Control.Hotkey1 && !LastControl.Hotkey1)
+        if(Control.Hotkey1 && !LastControl.Hotkey1) //Structs can't store arrays. This means that it cannot store hotkey numbers, so the only way I can do a pattern like this is through a tone of if statements. I would use a for loop, if I could. I might refactor later in order to fix this.
             SelectedItem = 0;
         if (Control.Hotkey2 && !LastControl.Hotkey2)
             SelectedItem = 1;
@@ -216,6 +219,9 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         SelectedItem = newSelectedItem;
     }
     [SerializeField] private GameObject BlockOutline;
+    /// <summary>
+    /// Manages the players item usage
+    /// </summary>
     private void HeldItemUpdate() 
     {
         Item heldItem = HeldItem();
@@ -263,12 +269,12 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             Vector3 centerOfBlock = new Vector3(Mathf.FloorToInt(TargetPosition.x) + 0.5f, Mathf.FloorToInt(TargetPosition.y) + 0.5f, Mathf.FloorToInt(TargetPosition.z) + 0.5f);
             bool updateBlockOutline = true;
-            if (left)
+            if (left) //Destroy a block with left click
             {
-                blocksWereModified = World.SetBlock(TargetPosition, 0);
+                blocksWereModified = World.SetBlock(TargetPosition, BlockID.Air);
                 updateBlockOutline = blocksWereModified;
             } 
-            else if (holdingPlaceableBlock && heldItem.OnSecondaryUse(this) && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air)
+            else if (holdingPlaceableBlock && heldItem.OnSecondaryUse(this) && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air) //Place a block with right click
             {
                 Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
                 bool NoEntities = inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0;
@@ -302,7 +308,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             BlockOutline.SetActive(false);
         }
-        if(!blocksWereModified)
+        if(!blocksWereModified) //Moves the block outline to the block the player is facing
         {
             if(left)
             {

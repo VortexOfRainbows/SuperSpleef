@@ -16,7 +16,7 @@ public class BlockProjectile : Projectile ///Team members that contributed to th
         SetModelToBlock(MyBlockID);
         myFunnySpinModifier = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1));
     }
-    public void SetModelToBlock(int BlockID)
+    public void SetModelToBlock(int BlockID) //Sets the cube model to use the sprites from the inserted block
     {
         meshFilter.mesh = Utils.CubeMesh;
         int blockId = BlockID;
@@ -34,7 +34,7 @@ public class BlockProjectile : Projectile ///Team members that contributed to th
         if(!OutBoundDeath)
         {
             Vector3 HitPoint = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y) + 0.5f, Mathf.FloorToInt(transform.position.z) + 0.5f);
-            World.SetBlock(HitPoint, MyBlockID);
+            World.SetBlock(HitPoint, MyBlockID); //Spawn a block where I died, of the same type as my MyBlockID
         }
     }
     public override void OnFixedUpdate()

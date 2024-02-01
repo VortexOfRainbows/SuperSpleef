@@ -13,7 +13,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     public static World Instance { get; private set; }
     public GameObject chunkObj;
     private GameObject[,] chunk;
-    public const int ChunkRadius = 15;
+    public const int ChunkRadius = 15; //this is the total number of chunks in each direction xz
     public const int WorldLayer = 3;
     [SerializeField]
     private ParticleSystem BlockParticles;

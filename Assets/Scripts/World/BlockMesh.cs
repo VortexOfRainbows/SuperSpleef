@@ -24,7 +24,7 @@ public class BlockMesh ///Team members that contributed to this script: Ian Bunn
         Type = type;
         SetSprites();
     }
-    private void SetSprites()
+    private void SetSprites() //Sets the sprites for the dictionary, so other classes can easily access block uv maps (sprites)
     {
         if (Type == BlockID.Air)
         {

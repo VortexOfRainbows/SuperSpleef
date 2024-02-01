@@ -29,7 +29,7 @@ public class ItemSlot : MonoBehaviour ///Team members that contributed to this s
                 IsSelected = true;
             }
         }
-        ImageElement.fillCenter = IsSelected; //Using System.Type is a temporary solution until we use localization or other means of naming items
+        ImageElement.fillCenter = IsSelected; 
         if (lastCount != Item.Count || lastType != Item.GetType())
         {
             ReloadVisuals();
@@ -44,7 +44,7 @@ public class ItemSlot : MonoBehaviour ///Team members that contributed to this s
         if (!isNotItem)
             Model.gameObject.SetActive(true);
         System.Type itemType = Item.GetType();
-        string str = itemType.ToString().AddSpaceBetweenCaps();
+        string str = itemType.ToString().AddSpaceBetweenCaps(); //Using System.Type is a temporary solution until we use localization or other means of naming items
         if (Item.Count > 0 && !isNotItem)
         {
             str += "\n" + Item.Count;
