@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell

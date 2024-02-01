@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Purchasing;
 using UnityEngine;
 
 public static class Utils ///Team members that contributed to this script: Ian Bunnell
