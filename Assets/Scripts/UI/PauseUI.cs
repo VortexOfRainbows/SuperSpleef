@@ -12,42 +12,46 @@ public class PauseUI : MonoBehaviour ///Team members that contributed to this sc
 
     private void Start()
     {
-        PauseUI_gobj.SetActive(false);
-        Time.timeScale = 1.0f;
+        PauseUI_gobj.SetActive(false); // Disables Pause UI upon loading the scene
+        Time.timeScale = 1.0f; // Resets the time scale back to normal, in case the player leaves in the pause menu
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape)) // If the player presses the ESCAPE key...
         {
-            if (!GameIsPaused)
+            if (!GameIsPaused) //If the game is not pauseed...
             {
-                Pause();
+                Pause(); // Pauses the game.
             }
             else
             {
-                Resume();
+                Resume(); // Unpauses the game.
             }
         }
     }
 
     public void Pause()
     {
-        GameIsPaused = true;
-        PauseUI_gobj.SetActive(true);
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        GameIsPaused = true; // Sets the boolean statement GameIsPaused to true.
+        PauseUI_gobj.SetActive(true); // Enables the Pause UI so that it is visible
+        Cursor.lockState = CursorLockMode.None; // Unlocks the Mouse so buttons can be selected
+        Cursor.visible = true; // Makes the cursor visible
+        
         //Player.GetComponent<Player>().enabled = false;
-        Time.timeScale = 0f;
+        
+        Time.timeScale = 0f; // Freezes the state of the game
     }
     
     public void Resume()
     {
-        GameIsPaused = false;
-        PauseUI_gobj.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        GameIsPaused = false; // Sets the boolean statement GameIsPaused to false.
+        PauseUI_gobj.SetActive(false); // Disables the Pause UI so that it is no longer visible
+        Cursor.lockState = CursorLockMode.Locked; //Locks the cursor to the center of the screen
+        Cursor.visible = false; // Makes the cursor invisible
+
         //Player.GetComponent<Player>().enabled = true;
-        Time.timeScale = 1f;
+        
+        Time.timeScale = 1f; // Unfreezes the state of the game
     }
 }
 
