@@ -37,6 +37,11 @@ public class Player : Entity ///Team members that contributed to this script: Ia
 
     private void Start()
     {
+        int StartingItemCount = 20;
+        if(GameStateManager.Mode == GameModeID.Creative)
+        {
+            StartingItemCount = Item.DefaultMaxCount;
+        }
         Inventory = new Inventory(30);
         for(int i = 0; i < Inventory.Count; i++) //Initializies a basic inventory for the purpose of testing
         {
@@ -45,7 +50,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             else if (i == 1)
                 Inventory.Set(i, new BlockGun());
             else if (i <= BlockID.Max + 1)
-                Inventory.Set(i, new PlaceableBlock(i - 1, 20));
+                Inventory.Set(i, new PlaceableBlock(i - 1, StartingItemCount));
             else if (i == 9)
                 Inventory.Set(i, new WorldDestroyer());
             else

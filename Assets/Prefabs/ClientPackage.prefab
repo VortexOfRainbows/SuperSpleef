@@ -1075,6 +1075,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3769221563553268298}
+  - component: {fileID: 871429126660209539}
   m_Layer: 0
   m_Name: ClientPackage
   m_TagString: Untagged
@@ -1104,6 +1105,22 @@ Transform:
   - {fileID: 7310509733245411004}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &871429126660209539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4746357663598293306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15554f5b6c2de284abc2062c4184ad40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApocalypseText: 'OBJECTIVE: SURVIVE'
+  CreativeText: 'OBJECTIVE: BUILD'
+  MultiplayerText: 'OBJECTIVE: LAST ONE STANDING WINS'
+  BelowTimerText: {fileID: 4025056296703332927}
 --- !u!1 &4874568090499676145
 GameObject:
   m_ObjectHideFlags: 0
