@@ -299,7 +299,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             } 
             else if (holdingPlaceableBlock && heldItem.OnSecondaryUse(this) && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air) //Place a block with right click
             {
-                Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
+                Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.48f, 0.48f, 0.48f));
                 bool NoEntities = inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0;
                 if (NoEntities)
                 {
