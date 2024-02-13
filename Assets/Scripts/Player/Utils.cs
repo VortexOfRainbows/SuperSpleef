@@ -131,4 +131,17 @@ public static class Utils ///Team members that contributed to this script: Ian B
         mesh.RecalculateNormals();
         return mesh;
     }
+    /// <summary>
+    /// Generates a random oval vector within the boundaries of x, y, and z
+    /// If edge is true, guarantees that the value will fall on the edge. Otherwise, it will fall elsewhere in the circle.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="edge"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public static Vector3 randVector3Circular(float x, float y, float z, bool edge = false)
+    {
+        throw new NotImplementedException();
+    }
 }

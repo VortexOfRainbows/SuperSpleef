@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
@@ -15,20 +11,28 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     private GameObject[,] chunk;
     public const int ChunkRadius = 15; //this is the total number of chunks in each direction xz
     public const int WorldLayer = 3;
+    public static Vector3Int MaxTiles;
     [SerializeField]
     private ParticleSystem BlockParticles;
     public static ParticleSystem BlockParticleRef;
+    public static bool WorldGenFinished { get; private set; }
     private void Awake()
     {
         BlockParticleRef = BlockParticles;
     }
     private void Start()
     {
+        WorldGenFinished = false;
         Instance = this;
+        GenWorld();
+    }
+    private void GenWorld()
+    {
+        MaxTiles = new Vector3Int(ChunkRadius * Chunk.Width, Chunk.Height, ChunkRadius * Chunk.Width);
         chunk = new GameObject[ChunkRadius, ChunkRadius];
         for (int i = 0; i < chunk.GetLength(1); i++)
         {
-            for(int j = 0; j < chunk.GetLength(0); j++)
+            for (int j = 0; j < chunk.GetLength(0); j++)
             {
                 Vector2Int chunkPos = new Vector2Int(i, j);
                 chunk[i, j] = Instantiate(chunkObj, new Vector3(chunkPos.x * Chunk.Width, 0, chunkPos.y * Chunk.Width), Quaternion.identity, transform);
@@ -36,11 +40,76 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 chunk[i, j].layer = WorldLayer; //set to world layer
             }
         }
-        for (int i = 0; i < chunk.GetLength(1); i++)
+        GenerateTrees();
+        for (int i = 0; i < chunk.GetLength(1); i++) //Completes the mesh for the chunk so it is visible and collideable
         {
             for (int j = 0; j < chunk.GetLength(0); j++)
             {
                 chunk[i, j].GetComponent<Chunk>().BuildMesh();
+            }
+        }
+        WorldGenFinished = true;
+    }
+    [SerializeField] private float TreeChance = 0.0175f;
+    [SerializeField] private int WoodIntoLeaves = 2;
+    [SerializeField] private float LeavesRadius = 3.0f;
+    [SerializeField] private float LeavesVerticalMult = 0.5f;
+    [SerializeField] private Vector2Int TreeHeightMinMax = new Vector2Int(3, 5);
+    [SerializeField] private Vector2Int LeavesHeightMinMax = new Vector2Int(4, 5);
+    [SerializeField] private Vector2Int LeavesWidthMinMax = new Vector2Int(3, 3);
+    private void GenerateTrees()
+    {
+        for(int i = 0; i < MaxTiles.x; i++)
+        {
+            for(int k = 0; k < MaxTiles.z; k++)
+            {
+                if(Random.Range(0, 1f) < TreeChance)
+                {
+                    for (int j = MaxTiles.y - 1; j >= 0; j--)
+                    {
+                        int blockType = Block(i, j - 1, k); //If the block below is not air, and is in fact grass, place a tree
+                        if (blockType != BlockID.Air)
+                        {
+                            if(blockType == BlockID.Grass)
+                            {
+                                GenerateTree(i, j, k);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private void GenerateTree(int i, int j, int k)
+    {
+        int height = Random.Range(TreeHeightMinMax.x, TreeHeightMinMax.y + 1);
+        int leavesHeight = Random.Range(LeavesHeightMinMax.x, LeavesHeightMinMax.y + 1);
+        int leavesWidth = Random.Range(LeavesWidthMinMax.x, LeavesWidthMinMax.y + 1);
+        for (int j2 = 0; j2 < height + leavesHeight; j2++)
+        {
+            if (j2 < height)
+            {
+                SetBlock(i, j + j2, k, BlockID.Wood);
+            }
+            else if (j2 < height + leavesHeight)
+            {
+                if(j2 < height + WoodIntoLeaves)
+                {
+                    SetBlock(i, j + j2, k, BlockID.Wood);
+                }
+                for (int i2 = -leavesWidth; i2 <= leavesWidth; i2++)
+                {
+                    for (int k2 = -leavesWidth; k2 <= leavesWidth; k2++)
+                    {
+                        float distFromBark = Mathf.Abs(i2) + Mathf.Abs(k2) + Mathf.Abs(j2 - height) * LeavesVerticalMult;
+                        if (distFromBark < LeavesRadius)
+                        {
+                            if (i2 != 0 || k2 != 0 || j2 >= height + WoodIntoLeaves)
+                                SetBlock(i + i2, j + j2, k + k2, BlockID.Leaves);
+                        }
+                    }
+                }
             }
         }
     }
@@ -125,6 +194,10 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
 
                 chunk.blocks[blockX, blockY, blockZ] = blockID;
 
+                if (!WorldGenFinished)
+                {
+                    return true;
+                }
                 if(blockID == BlockID.Air && ReleaseParticles) //If we are breaking the block, generate particles
                 {
                     ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(Mathf.FloorToInt(x) + 0.5f, Mathf.FloorToInt(y) + 0.5f, Mathf.FloorToInt(z) + 0.5f), Quaternion.identity, Instance.transform);

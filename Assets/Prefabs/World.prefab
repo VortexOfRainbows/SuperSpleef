@@ -47,6 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunkObj: {fileID: 851272441892067424, guid: 3128472b9eb4a3a44af78ae0373fca5c, type: 3}
   BlockParticles: {fileID: 5148993926940872743, guid: 36dc4c90d22100b47a6ee4f3f157fbf5, type: 3}
+  TreeChance: 0.01
+  WoodIntoLeaves: 3
+  LeavesRadius: 3.5
+  LeavesVerticalMult: 0.6
+  TreeHeightMinMax: {x: 3, y: 4}
+  LeavesHeightMinMax: {x: 6, y: 8}
+  LeavesWidthMinMax: {x: 3, y: 3}
 --- !u!114 &2798543730182124783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,3 +72,9 @@ MonoBehaviour:
   SpawnSpread: 12
   RandomVelocity: 3
   SpawnHeight: 70
+  SecondsUntilMaxDifficulty: 900
+  FragChance: 0.125
+  SuperFragChance: 0.025
+  TunnelBoreChance: 0.025
+  FragFragChance: 0.025
+  MaxDifficultyMultiplier: 2
