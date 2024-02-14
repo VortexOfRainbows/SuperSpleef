@@ -89,7 +89,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Forward) 
         {
-            perpendicularVelocity.y += speed;
+            perpendicularVelocity.y += speed * Mathf.Abs(Control.YMove);
         }
         else
         {
@@ -98,7 +98,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Left)
         {
-            perpendicularVelocity.x -= speed;
+            perpendicularVelocity.x -= speed * Mathf.Abs(Control.XMove);
         }
         else
         {
@@ -107,7 +107,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Back)
         {
-            perpendicularVelocity.y -= speed;
+            perpendicularVelocity.y -= speed * Mathf.Abs(Control.YMove);
         }
         else
         {
@@ -116,7 +116,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Right)
         {
-            perpendicularVelocity.x += speed;
+            perpendicularVelocity.x += speed * Mathf.Abs(Control.XMove);
         }
         else
         {

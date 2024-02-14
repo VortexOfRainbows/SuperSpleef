@@ -1,9 +1,20 @@
+using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
+    private GamepadControls GamepadControls;
+    public bool UsingGamepad = false;
     public ControlDown Control = new ControlDown(); //Stores player input for the current frame
     public ControlDown LastControl = new ControlDown(); //Record player input from the previous frame
+    private void Awake()
+    {
+        GamepadControls = new GamepadControls();
+        GamepadControls.Enable();
+    }
     public struct ControlDown
     {
         public bool LeftClick;
@@ -13,6 +24,8 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
         public bool Forward;
         public bool Back;
         public bool Jump;
+        public float XMove;
+        public float YMove;
 
         public bool Hotkey1; //Structs cannot store an array without a reference. Doing these seperately is sadly easier than using an array, as the system im using would need to establish a reference to a new array every frame.
         public bool Hotkey2;
@@ -33,7 +46,7 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
             LeftClick = Left = Right = Forward = Back = Jump  = Shift = defaultState;
             RightClick = defaultState;
             Hotkey1 = Hotkey2 = Hotkey3 = Hotkey4 = Hotkey5 = Hotkey6 = Hotkey7 = Hotkey8 = Hotkey9 = Hotkey0 = defaultState;
-            XAxis = YAxis = ScrollDelta = 0f;
+            XAxis = YAxis = ScrollDelta = XMove = YMove = 0f;
         }
     }
     public void UpdateKey(bool AssociatedInput, bool LastControl, ref bool ControlToUpdate)
@@ -48,12 +61,8 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
                 ControlToUpdate = false;
         }
     }
-    public void OnUpdate()
+    public void DoKeyboardMouseControls()
     {
-        if(PauseUI.GameIsPaused)
-        {
-            return;
-        }
         Control.ScrollDelta = Input.mouseScrollDelta.y;
         Control.XAxis = Input.GetAxisRaw("Mouse X");
         Control.YAxis = Input.GetAxisRaw("Mouse Y");
@@ -77,6 +86,61 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
         UpdateKey(Input.GetKey(KeyCode.Alpha8), LastControl.Hotkey8, ref Control.Hotkey8);
         UpdateKey(Input.GetKey(KeyCode.Alpha9), LastControl.Hotkey9, ref Control.Hotkey9);
         UpdateKey(Input.GetKey(KeyCode.Alpha0), LastControl.Hotkey0, ref Control.Hotkey0);
+    }
+    public void OnUpdate()
+    {
+        if(PauseUI.GameIsPaused)
+        {
+            return;
+        }
+        if(GamepadControls.Input.Start.inProgress)
+        {
+            UsingGamepad = true;
+        }
+        else if(Input.GetMouseButton(0))
+        {
+            UsingGamepad = false;
+        }
+        if (UsingGamepad)
+        {
+            Control.ScrollDelta = 0;
+
+            GamepadControls.InputActions pInput = GamepadControls.Input;
+            Vector2 direction = pInput.RightJoystick.ReadValue<Vector2>();
+            Control.XAxis = direction.x;
+            Control.YAxis = direction.y / 2f;
+
+            direction = pInput.LeftJoystick.ReadValue<Vector2>();
+            Control.XMove = direction.x;
+            Control.YMove = -direction.y;
+            //Debug.Log(direction);
+
+            Control.Left = Control.XMove < 0;
+            Control.Right = Control.XMove > 0;
+            Control.Forward = Control.YMove < 0;
+            Control.Back = Control.YMove > 0;
+
+            UpdateKey(pInput.LeftTrigger.inProgress || pInput.LeftTrigger.IsPressed(), LastControl.LeftClick, ref Control.LeftClick);
+            UpdateKey(pInput.RightTrigger.inProgress || pInput.RightTrigger.IsPressed(), LastControl.RightClick, ref Control.RightClick);
+            UpdateKey(pInput.LeftJoystickDown.inProgress || pInput.LeftJoystickDown.IsPressed(), LastControl.Shift, ref Control.Shift);
+            UpdateKey(pInput.ButtonBottom.inProgress || pInput.ButtonBottom.IsPressed(), LastControl.Jump, ref Control.Jump);
+
+            bool leftBumper = pInput.LeftBumper.WasPressedThisFrame();
+            bool rightBumper = pInput.RightBumper.WasPressedThisFrame();
+            Control.ScrollDelta += (leftBumper ? -1 : 0) + (rightBumper ? 1 : 0);
+        }
+        else
+        {
+            DoKeyboardMouseControls();
+            if(Control.Right || Control.Left)
+                Control.XMove = 1;
+            else
+                Control.XMove = 0;
+            if (Control.Forward || Control.Back)
+                Control.YMove = 1;
+            else
+                Control.YMove = 0;
+        }
     }
     public void OnFixedUpdate()
     {
