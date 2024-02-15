@@ -201,6 +201,9 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 if(blockID == BlockID.Air && ReleaseParticles) //If we are breaking the block, generate particles
                 {
                     ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(Mathf.FloorToInt(x) + 0.5f, Mathf.FloorToInt(y) + 0.5f, Mathf.FloorToInt(z) + 0.5f), Quaternion.identity, Instance.transform);
+                    ParticleSystem.TextureSheetAnimationModule texture = p.textureSheetAnimation;
+                    texture.rowIndex = 112 + Random.Range(0, 8);
+                    texture.startFrame = 0;
                     p.Play();
                     Destroy(p.gameObject, p.main.duration);
                 }
