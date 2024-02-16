@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
@@ -176,9 +178,9 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <param name="z"></param>
-    /// <param name="blockID"></param>
+    /// <param name="blockType"></param>
     /// <returns></returns>
-    public static bool SetBlock(float x, float y, float z, int blockID, bool ReleaseParticles = true)
+    public static bool SetBlock(float x, float y, float z, int blockType, bool ReleaseParticles = true)
     {
         GameObject chunkObj = Instance.BoundingChunk(x, z);
         if (chunkObj != null)
@@ -189,21 +191,32 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             Chunk chunk = chunkObj.GetComponent<Chunk>();
             if (blockY < Chunk.Height && blockY >= 0)
             {
-                if (chunk.blocks[blockX, blockY, blockZ] == blockID)
+                if (chunk.blocks[blockX, blockY, blockZ] == blockType)
                     return false; //Do not place the same block again
 
-                chunk.blocks[blockX, blockY, blockZ] = blockID;
+                int typeBeforeBreaking = chunk.blocks[blockX, blockY, blockZ];
+                chunk.blocks[blockX, blockY, blockZ] = blockType;
 
                 if (!WorldGenFinished)
                 {
                     return true;
                 }
-                if(blockID == BlockID.Air && ReleaseParticles) //If we are breaking the block, generate particles
+                if(blockType == BlockID.Air && ReleaseParticles) //If we are breaking the block, generate particles
                 {
                     ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(Mathf.FloorToInt(x) + 0.5f, Mathf.FloorToInt(y) + 0.5f, Mathf.FloorToInt(z) + 0.5f), Quaternion.identity, Instance.transform);
-                    ParticleSystem.TextureSheetAnimationModule texture = p.textureSheetAnimation;
-                    texture.rowIndex = 112 + Random.Range(0, 8);
-                    texture.startFrame = 0;
+                    ParticleSystemRenderer r = p.GetComponent<ParticleSystemRenderer>();
+
+                    if(typeBeforeBreaking == BlockID.Dirt)
+                    {
+                        r.material.mainTextureOffset = new Vector2(0, 2 / 16f);
+                    }
+                    else if(typeBeforeBreaking == BlockID.Grass)
+                    {
+                        r.material.mainTextureOffset = new Vector2(0, 1 / 16f);
+                    }
+
+                    r.material.mainTextureScale = new Vector2(1 / 16f, 1 / 16f);
+
                     p.Play();
                     Destroy(p.gameObject, p.main.duration);
                 }
