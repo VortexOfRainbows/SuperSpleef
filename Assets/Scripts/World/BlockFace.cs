@@ -7,6 +7,7 @@ public class BlockFace ///Team members that contributed to this script: Ian Bunn
     public const float TotalSpritesX = 16;
     public const float TotalSpritesY = 16;
     public const float Padding = 0;
+    public Vector2Int UVPos { get; private set; }
     public static BlockFace FaceSprite(Tile tile)
     {
         return tiles[tile];
@@ -26,6 +27,7 @@ public class BlockFace ///Team members that contributed to this script: Ian Bunn
     private readonly Vector2[] uvs;
     private BlockFace(int xPos, int yPos) //yPos is how many tiles up it is from bottom. x is how many tiles to the right
     {
+        UVPos = new Vector2Int(xPos, yPos);
         //This does the math for fetching the position of a block sprite on the tile atlas
         float smallStepX = 1f / 4 / TotalSpritesX / SpriteSize;
         float smallStepY = 1f / 4 / TotalSpritesY / SpriteSize;

@@ -23,8 +23,8 @@ public class TunnelBore : Projectile ///Team members that contributed to this sc
     {
         if(!OutBoundDeath)
         {
-            World.FillBlock(transform.position - Vector3.one * BlockBreakRadius, transform.position + Vector3.one * BlockBreakRadius, BlockID.Air, true); //Breaks blocks in an area
-            World.FillBlock(transform.position - Vector3.one * BlockBreakRadius + Vector3.down * BonusDepth, transform.position + Vector3.one * BlockBreakRadius, BlockID.Air, false); //Blocks broken after that don't generate particles (reduce lag)
+            World.FillBlock(transform.position - Vector3.one * BlockBreakRadius, transform.position + Vector3.one * BlockBreakRadius, BlockID.Air, 0.4f); //Breaks blocks in an area
+            World.FillBlock(transform.position - Vector3.one * BlockBreakRadius + Vector3.down * BonusDepth, transform.position + Vector3.one * BlockBreakRadius, BlockID.Air, 0.0f); //Blocks broken after that don't generate particles (reduce lag)
         }
     }
     public override void OnFixedUpdate()
