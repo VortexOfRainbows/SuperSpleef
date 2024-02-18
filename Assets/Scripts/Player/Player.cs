@@ -37,6 +37,11 @@ public class Player : Entity ///Team members that contributed to this script: Ia
 
     private void Start()
     {
+        int StartingItemCount = 20;
+        if(GameStateManager.Mode == GameModeID.Creative)
+        {
+            StartingItemCount = Item.DefaultMaxCount;
+        }
         Inventory = new Inventory(30);
         for(int i = 0; i < Inventory.Count; i++) //Initializies a basic inventory for the purpose of testing
         {
@@ -45,7 +50,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             else if (i == 1)
                 Inventory.Set(i, new BlockGun());
             else if (i <= BlockID.Max + 1)
-                Inventory.Set(i, new PlaceableBlock(i - 1, 20));
+                Inventory.Set(i, new PlaceableBlock(i - 1, StartingItemCount));
             else if (i == 9)
                 Inventory.Set(i, new WorldDestroyer());
             else
@@ -84,7 +89,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Forward) 
         {
-            perpendicularVelocity.y += speed;
+            perpendicularVelocity.y += speed * Mathf.Abs(Control.YMove);
         }
         else
         {
@@ -93,7 +98,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Left)
         {
-            perpendicularVelocity.x -= speed;
+            perpendicularVelocity.x -= speed * Mathf.Abs(Control.XMove);
         }
         else
         {
@@ -102,7 +107,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Back)
         {
-            perpendicularVelocity.y -= speed;
+            perpendicularVelocity.y -= speed * Mathf.Abs(Control.YMove);
         }
         else
         {
@@ -111,7 +116,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Right)
         {
-            perpendicularVelocity.x += speed;
+            perpendicularVelocity.x += speed * Mathf.Abs(Control.XMove);
         }
         else
         {
@@ -294,7 +299,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             } 
             else if (holdingPlaceableBlock && heldItem.OnSecondaryUse(this) && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air) //Place a block with right click
             {
-                Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.49f, 0.49f, 0.49f));
+                Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.48f, 0.48f, 0.48f));
                 bool NoEntities = inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0;
                 if (NoEntities)
                 {

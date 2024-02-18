@@ -9,13 +9,15 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
 {
     public static int Seed = -1;
     public Vector2Int Index { get; set; }
-    public const float StoneLayer = 0.5f;
-    public const float TerrainHeightMultiplier = 0.5f;
+    public const float StoneLayer = 0.35f;
+    public const float TerrainHeightMultiplier = 0.225f; //A multiplier on how much terrain there is until the bottom of the world
     public const float TerrainMinimum = 0.2f;
-    public const float NoisePosMult = 0.5f;
+    public const float NoisePosMult = 0.25f; //Smaller values result in smoother terrain. Larger values result in more varied and jagged terrain
+    public const int AirBelowMap = 16; //Eventually, characters will have abilities to place blocks below the map, so the bottom of the map should be air
     //chunk size
     public const int Width = 8;
     public const int Height = 64;
+    public const int SeedNoiseModifier = 256;
     public int[,,] blocks = new int[Width, Height, Width];
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
@@ -23,25 +25,27 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
     private void Awake()
     {
         if(Seed == -1)
-            Seed = Random.Range(0, 25555); //25555 is just an arbitrarily picked number.
+            Seed = Random.Range(0, int.MaxValue);
         meshFilter = this.GetComponent<MeshFilter>();
         meshCollider = GetComponent<MeshCollider>();
         GenerateChunk();
     }
     public void GenerateChunk()
     {
+        float seedMod = Seed % SeedNoiseModifier;
+        seedMod /= (float)SeedNoiseModifier;
         for (int x = 0; x < Width; x++)
         {
             for (int z = 0; z < Width; z++)
             {
-                Vector2 posInNoise = new Vector2(transform.position.x + x, transform.position.z + z) / Width * NoisePosMult;
-                float noise = Mathf.Sqrt(Mathf.PerlinNoise(Seed + posInNoise.x, posInNoise.y)) * TerrainHeightMultiplier + TerrainMinimum;
-                float stoneLayerNoise = Mathf.Sqrt(Mathf.PerlinNoise(posInNoise.y, Seed + posInNoise.x)) * TerrainHeightMultiplier * StoneLayer + TerrainMinimum;
+                Vector2 posInNoise = new Vector2(transform.position.x + x, transform.position.z + z) / (float)Width * NoisePosMult;
+                float noise = Mathf.PerlinNoise(seedMod + posInNoise.x, posInNoise.y) * TerrainHeightMultiplier + TerrainMinimum;
+                float stoneLayerNoise = Mathf.Sqrt(Mathf.PerlinNoise(posInNoise.y, seedMod + posInNoise.x)) * TerrainHeightMultiplier * StoneLayer + TerrainMinimum;
                 for (int y = Height - 1; y >= 0; y--)
                 {
-                    if (y < Height * noise)
+                    if (y < (Height + AirBelowMap) * noise && y >= AirBelowMap)
                     {
-                        if (y < Height * stoneLayerNoise)
+                        if (y < (Height + AirBelowMap) * stoneLayerNoise)
                             blocks[x, y, z] = BlockID.Stone;
                         else
                         {

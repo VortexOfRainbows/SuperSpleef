@@ -19,6 +19,19 @@ public class BlockMesh ///Team members that contributed to this script: Ian Bunn
     };
     private int Type;
     public BlockFace top, left, right, front, back, bottom;
+    public List<BlockFace> UniqueFaces { get; private set; }
+    private void SetFaceArray()
+    {
+        BlockFace[] faces = new BlockFace[] { top, left, right, front, back, bottom };
+        UniqueFaces = new List<BlockFace>();
+        foreach (BlockFace face in faces)
+        {
+            if (!UniqueFaces.Contains(face))
+            {
+                UniqueFaces.Add(face);
+            }
+        }
+    }
     private BlockMesh(int type)
     {
         Type = type;
@@ -57,6 +70,7 @@ public class BlockMesh ///Team members that contributed to this script: Ian Bunn
         {
             SetAllFaces(Tile.Leaves);
         }
+        SetFaceArray();
     }
     private void SetAllFaces(Tile tile)
     {

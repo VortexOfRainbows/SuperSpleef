@@ -18,8 +18,7 @@ public class FragFragBall : Projectile ///Team members that contributed to this 
     {
         if(!OutBoundDeath)
         {
-            World.FillBlock(transform.position, transform.position + Vector3.one * 3, BlockID.Air); //Only the top parts of the fill will generate particles
-            World.FillBlock(transform.position - Vector3.one * 3, transform.position + Vector3.one * 3, BlockID.Air, false);
+            World.FillBlock(transform.position - Vector3.one * 3, transform.position + Vector3.one * 3, BlockID.Air, 0.2f);
             for (int i = 0; i < TotalFrags; i++)
             {
                 Vector2 circularSpread = new Vector2(ExplosionSpeedMult, 0).RotatedBy(i * 2 * Mathf.PI / TotalFrags);

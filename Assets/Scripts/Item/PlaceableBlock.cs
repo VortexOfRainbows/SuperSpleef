@@ -20,6 +20,6 @@ public class PlaceableBlock : Item ///Team members that contributed to this scri
     } */
     public override bool IsConsumedOnUse(Player player)
     {
-        return true;
+        return GameStateManager.Mode != GameModeID.Creative; //Don't consume placeable blocks in creative mode
     }
 }

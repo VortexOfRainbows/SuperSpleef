@@ -18,8 +18,12 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
     [SerializeField] private float MaxDifficultyMultiplier = 2f;
     private float timer;
     private float TotalTimePassed;
-    private void FixedUpdate()
+    private void FixedUpdate() ///Summoning falling balls is only for the apocalypse game mode
     {
+        if(GameStateManager.Mode != GameModeID.Apocalypse)
+        {
+            return;
+        }
         float scaleMult = TotalTimePassed / SecondsUntilMaxDifficulty;
         if (scaleMult > MaxDifficultyMultiplier)
             scaleMult = MaxDifficultyMultiplier;

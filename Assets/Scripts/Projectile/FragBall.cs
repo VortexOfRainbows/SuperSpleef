@@ -18,7 +18,7 @@ public class FragBall : Projectile ///Team members that contributed to this scri
     {
         if(!OutBoundDeath)
         {
-            World.FillBlock(transform.position - Vector3.one * 2, transform.position + Vector3.one * 2, BlockID.Air); 
+            World.FillBlock(transform.position - Vector3.one * 2, transform.position + Vector3.one * 2, BlockID.Air, 0.5f); 
             for (int i = 0; i < TotalFrags; i++)
             {
                 Vector2 circularSpread = new Vector2(ExplosionSpeedMult, 0).RotatedBy(i * 2 * Mathf.PI / TotalFrags);
