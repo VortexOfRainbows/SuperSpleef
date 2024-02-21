@@ -93,14 +93,14 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
         {
             return;
         }
-        if(GamepadControls.Input.Start.inProgress)
+        /*if(GamepadControls.Input.Start.inProgress)
         {
             UsingGamepad = true;
         }
         else if(Input.GetMouseButton(0))
         {
             UsingGamepad = false;
-        }
+        }*/
         if (UsingGamepad)
         {
             Control.ScrollDelta = 0;

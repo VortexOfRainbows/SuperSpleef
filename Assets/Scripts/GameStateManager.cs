@@ -30,6 +30,14 @@ public class GameStateManager :MonoBehaviour
     public static void StartGame(int mode)
     {
         Mode = mode;
-        SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
+        if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.NetMultiplayer)
+        {
+            Mode = mode == GameModeID.NetMultiplayer ? GameModeID.Apocalypse : GameModeID.None;
+            SceneManager.LoadScene(2);
+        }
+        else
+        {
+            SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
+        }
     }
 }

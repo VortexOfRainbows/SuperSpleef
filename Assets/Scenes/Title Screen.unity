@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1054,8 +1054,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 68}
-  m_SizeDelta: {x: 2, y: -188}
+  m_AnchoredPosition: {x: 0, y: 37}
+  m_SizeDelta: {x: 2, y: -126}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &526338998
 MonoBehaviour:
@@ -1404,8 +1404,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 68}
-  m_SizeDelta: {x: 2, y: -188}
+  m_AnchoredPosition: {x: 0, y: 37}
+  m_SizeDelta: {x: 2, y: -126}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &804714624
 MonoBehaviour:
@@ -1455,7 +1455,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Net Versus
+  m_Text: Apocalypse Versus
 --- !u!222 &804714626
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1898,8 +1898,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 68}
-  m_SizeDelta: {x: 2, y: -188}
+  m_AnchoredPosition: {x: 0, y: 37}
+  m_SizeDelta: {x: 2, y: -126}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1023758747
 MonoBehaviour:
@@ -2037,8 +2037,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 68}
-  m_SizeDelta: {x: 2, y: -188}
+  m_AnchoredPosition: {x: 0, y: 37}
+  m_SizeDelta: {x: 2, y: -126}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1115387638
 MonoBehaviour:
