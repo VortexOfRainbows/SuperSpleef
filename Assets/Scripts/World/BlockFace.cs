@@ -22,6 +22,8 @@ public class BlockFace ///Team members that contributed to this script: Ian Bunn
         {Tile.LogSide, new BlockFace(0,5)},
         {Tile.Log, new BlockFace(0,6)},
         {Tile.Leaves, new BlockFace(0,7)},
+        {Tile.YellowBricks, new BlockFace(0,8)},
+        {Tile.BlueBricks, new BlockFace(0,9)},
         {Tile.Air, new BlockFace(1,0)},
     };
     private readonly Vector2[] uvs;
@@ -48,4 +50,4 @@ public class BlockFace ///Team members that contributed to this script: Ian Bunn
         return uvs;
     }
 }
-public enum Tile { Dirt, Grass, GrassSide, Glass, Stone, LogSide, Log, Leaves, Air }
+public enum Tile { Dirt, Grass, GrassSide, Glass, Stone, LogSide, Log, Leaves, Air, YellowBricks, BlueBricks }
