@@ -13,11 +13,19 @@ public class GameStateManager :MonoBehaviour
 {
     public static GameStateManager Instance;
     public static int Mode { get; private set; }
+    public static float ParticleMultiplier { get; private set; }
+    public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {
+        LocalMultiplayer = false;
+        ParticleMultiplier = 1f;
         Mode = GameModeID.None;
         Instance = this;
         DontDestroyOnLoad(this);
+    }
+    public static void SetParticleMultiplier(float mult)
+    {
+        ParticleMultiplier = Mathf.Clamp01(mult);
     }
     public static void MainMenu()
     {
@@ -32,11 +40,13 @@ public class GameStateManager :MonoBehaviour
         Mode = mode;
         if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.NetMultiplayer)
         {
+            LocalMultiplayer = true;
             Mode = mode == GameModeID.NetMultiplayer ? GameModeID.Apocalypse : GameModeID.None;
             SceneManager.LoadScene(2);
         }
         else
         {
+            LocalMultiplayer = false;
             SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
         }
     }

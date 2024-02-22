@@ -42,19 +42,42 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             StartingItemCount = Item.DefaultMaxCount;
         }
+        if(GameStateManager.LocalMultiplayer)
+        {
+            StartingItemCount = 100;
+        }
         Inventory = new Inventory(30);
         for(int i = 0; i < Inventory.Count; i++) //Initializies a basic inventory for the purpose of testing
         {
-            if (i == 0)
-                Inventory.Set(i, new BasicBlaster());
-            else if (i == 1)
-                Inventory.Set(i, new BlockGun());
-            else if (i <= BlockID.Max + 1)
-                Inventory.Set(i, new PlaceableBlock(i - 1, StartingItemCount));
-            else if (i == 9)
-                Inventory.Set(i, new WorldDestroyer());
+            if (GameStateManager.LocalMultiplayer) //Special inventory for multiplayer
+            {
+                if (i == 0)
+                    Inventory.Set(i, new BasicBlaster());
+                else if (i == 1)
+                    Inventory.Set(i, new BlockGun());
+                else if (i == 2)
+                {
+                    int iType = BlockID.YellowBricks; //Player one gets yellow blocks
+                    if(ControlManager.UsingGamepad) //Player two gets blue blocks
+                        iType = BlockID.BlueBricks;
+                    Inventory.Set(i, new PlaceableBlock(iType, StartingItemCount));
+                }
+                else
+                    Inventory.Set(i, new NoItem());
+            }
             else
-                Inventory.Set(i, new NoItem());
+            {
+                if (i == 0)
+                    Inventory.Set(i, new BasicBlaster());
+                else if (i == 1)
+                    Inventory.Set(i, new BlockGun());
+                else if (i <= BlockID.Max + 1)
+                    Inventory.Set(i, new PlaceableBlock(i - 1, StartingItemCount));
+                else if (i == 9)
+                    Inventory.Set(i, new WorldDestroyer());
+                else
+                    Inventory.Set(i, new NoItem());
+            }
         }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

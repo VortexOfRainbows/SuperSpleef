@@ -182,21 +182,28 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         BlockMesh mesh = BlockMesh.Get(blockType);
         int totalUniqueFaces = mesh.UniqueFaces.Count;
-        float totalParticles = DefaultBlockParticleCount / totalUniqueFaces * particleMultiplier;
+        float totalParticles = DefaultBlockParticleCount / totalUniqueFaces * particleMultiplier * GameStateManager.ParticleMultiplier;
         //Debug.Log(totalUniqueFaces);
         for(int i = 0; i < totalUniqueFaces; i++)
         {
-            ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(Mathf.FloorToInt(pos.x) + 0.5f, Mathf.FloorToInt(pos.y) + 0.5f, Mathf.FloorToInt(pos.z) + 0.5f), Quaternion.identity, Instance.transform);
-            p.emission.SetBurst(0, new ParticleSystem.Burst() { count = totalParticles });
+            bool success = true;
+            if (totalParticles < 1) //With a low particle setting, particles should still be able to spawn occassional (unless the rate is ZERO)
+                success = Random.Range(0, 1f) < totalParticles;
+            if(success)
+            {
+                float particlesToSpawn = Mathf.Max(1, totalParticles);
+                ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(Mathf.FloorToInt(pos.x) + 0.5f, Mathf.FloorToInt(pos.y) + 0.5f, Mathf.FloorToInt(pos.z) + 0.5f), Quaternion.identity, Instance.transform);
+                p.emission.SetBurst(0, new ParticleSystem.Burst() { count = particlesToSpawn });
 
-            ParticleSystemRenderer r = p.GetComponent<ParticleSystemRenderer>();
-            Vector2Int vector = mesh.UniqueFaces[i].UVPos;
+                ParticleSystemRenderer r = p.GetComponent<ParticleSystemRenderer>();
+                Vector2Int vector = mesh.UniqueFaces[i].UVPos;
 
-            r.material.mainTextureOffset = new Vector2(vector.x / 16f, vector.y / 16f);
-            r.material.mainTextureScale = new Vector2(1f / 16f, 1f / 16f);
+                r.material.mainTextureOffset = new Vector2(vector.x / 16f, vector.y / 16f);
+                r.material.mainTextureScale = new Vector2(1f / 16f, 1f / 16f);
 
-            p.Play();
-            Destroy(p.gameObject, p.main.duration);
+                p.Play();
+                Destroy(p.gameObject, p.main.duration);
+            }
         }
     }
     /// <summary>
