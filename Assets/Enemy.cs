@@ -4,24 +4,33 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Transform player;
+    public string playerTag = "Player";
     public float speed = 5f;
     public float approachDistance = 10f;
 
-    // Start is called before the first frame update
+    private Rigidbody rb;
+
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
+
+        if (rb == null)
+        {
+            rb = gameObject.AddComponent<Rigidbody>();
+        }
+
+        rb.useGravity = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        GameObject playerObject = GameObject.FindWithTag(playerTag);
+
+        float distanceToPlayer = Vector3.Distance(transform.position, playerObject.transform.position);
 
         if (distanceToPlayer < approachDistance)
         {
-            Vector3 direction = (player.position - transform.position).normalized;
+            Vector3 direction = (playerObject.transform.position - transform.position).normalized;
             transform.Translate(direction * speed * Time.deltaTime);
         }
     }
