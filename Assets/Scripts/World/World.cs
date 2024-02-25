@@ -42,7 +42,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 chunk[i, j].layer = WorldLayer; //set to world layer
             }
         }
-        GenerateTrees();
+        GenerateFoliage();
         for (int i = 0; i < chunk.GetLength(1); i++) //Completes the mesh for the chunk so it is visible and collideable
         {
             for (int j = 0; j < chunk.GetLength(0); j++)
@@ -52,6 +52,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
         }
         WorldGenFinished = true;
     }
+    [SerializeField] private float BushChance = 0.05f;
     [SerializeField] private float TreeChance = 0.0175f;
     [SerializeField] private int WoodIntoLeaves = 2;
     [SerializeField] private float LeavesRadius = 3.0f;
@@ -59,7 +60,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     [SerializeField] private Vector2Int TreeHeightMinMax = new Vector2Int(3, 5);
     [SerializeField] private Vector2Int LeavesHeightMinMax = new Vector2Int(4, 5);
     [SerializeField] private Vector2Int LeavesWidthMinMax = new Vector2Int(3, 3);
-    private void GenerateTrees()
+    private void GenerateFoliage()
     {
         for(int i = 0; i < MaxTiles.x; i++)
         {
@@ -80,14 +81,61 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                         }
                     }
                 }
+                else if (Random.Range(0, 1f) < BushChance)
+                {
+                    Vector2 fromCenter = new Vector2(MaxTiles.x / 2 - i, MaxTiles.y / 2 - k);
+                    float percentFromCenter = fromCenter.magnitude / MaxTiles.x;
+                    if(Random.Range(0.2f, 1f) < Mathf.Sqrt(percentFromCenter)) //The farther away the bush spawn spot is from the center, the higher chance it has of spawning
+                    {
+                        for (int j = MaxTiles.y - 1; j >= 0; j--)
+                        {
+                            int blockType = Block(i, j - 1, k); //If the block below is not air, and is in fact grass, place a tree
+                            if (blockType != BlockID.Air)
+                            {
+                                if (blockType == BlockID.Grass)
+                                {
+                                    GenerateBush(i, j - 1, k);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private void GenerateBush(int i, int j, int k)
+    {
+        int leavesHeight = (int)(Random.Range(LeavesHeightMinMax.x, LeavesHeightMinMax.y + 1) / 2f);
+        int leavesWidth = (int)(Random.Range(LeavesWidthMinMax.x, LeavesWidthMinMax.y + 1) / 1.5f);
+        float size = leavesHeight / 5f + leavesWidth / 3f + LeavesRadius / 5f;
+        for (int j2 = 0; j2 < leavesHeight; j2++)
+        {
+            if (j2 < leavesHeight)
+            {
+                for (int i2 = -leavesWidth; i2 <= leavesWidth; i2++)
+                {
+                    for (int k2 = -leavesWidth; k2 <= leavesWidth; k2++)
+                    {
+                        int blockType = Block(i + i2, j + j2, k + k2);
+                        if(blockType == BlockID.Air)
+                        {
+                            Vector3 offset = new Vector3(i2, k2, j2);
+                            if (offset.magnitude < size * Random.Range(0.75f, 1.25f))
+                            {
+                                SetBlock(i + i2, j + j2, k + k2, BlockID.Leaves);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
     private void GenerateTree(int i, int j, int k)
     {
         int height = Random.Range(TreeHeightMinMax.x, TreeHeightMinMax.y + 1);
-        int leavesHeight = Random.Range(LeavesHeightMinMax.x, LeavesHeightMinMax.y + 1);
-        int leavesWidth = Random.Range(LeavesWidthMinMax.x, LeavesWidthMinMax.y + 1);
+        int leavesHeight = LeavesHeightMinMax.x;
+        int leavesWidth = LeavesWidthMinMax.x;
         for (int j2 = 0; j2 < height + leavesHeight; j2++)
         {
             if (j2 < height)
@@ -96,7 +144,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             }
             else if (j2 < height + leavesHeight)
             {
-                if(j2 < height + WoodIntoLeaves)
+                if (j2 < height + WoodIntoLeaves)
                 {
                     SetBlock(i, j + j2, k, BlockID.Wood);
                 }
