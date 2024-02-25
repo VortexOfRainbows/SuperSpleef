@@ -12,6 +12,9 @@ public static class GameModeID
 }
 public class GameStateManager :MonoBehaviour
 {
+    public const string DefaultGameOverText = "You Lose";
+    public static string GameOverText;
+    public static Color GameOverTextColor;
     private const int GameEndFrameDelay = 3;
     private static float GameEndDelay;
     private static bool GameOver;
@@ -43,15 +46,17 @@ public class GameStateManager :MonoBehaviour
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {
-        GameEndDelay = GameEndFrameDelay;
         LocalMultiplayer = false;
         ParticleMultiplier = 1f;
         Mode = GameModeID.None;
         Instance = this;
         DontDestroyOnLoad(this);
+        ResetStates();
     }
     private static void ResetStates()
     {
+        GameOverTextColor = Color.white;
+        GameOverText = DefaultGameOverText;
         GameEndDelay = GameEndFrameDelay; //This is a arbitrary number set to delay the ending of a game for a bit, so certain functions that need to be run can run.
         GameOver = false;
         Unpause();
@@ -99,13 +104,16 @@ public class GameStateManager :MonoBehaviour
         GamePaused = false; // Sets the boolean statement GameIsPaused to false.
         Time.timeScale = 1f; // Unfreezes the state of the game
     }
-    public static void EndGame()
+    public static void EndGame(string Subscript, Color color = default)
     {
         if (GameEndDelay > 0)
         {
             GameEndDelay--;
             return;
         }
+        GameOverText = Subscript;
+        if (color != default)
+            GameOverTextColor = color;
         GameOver = true;
         Time.timeScale = 0.5f;
     }

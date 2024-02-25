@@ -86,7 +86,7 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
     }
     public void OnUpdate()
     {
-        Debug.Log(GameStateManager.GameIsOver);
+        //Debug.Log(GameStateManager.GameIsOver);
         if(GameStateManager.GameIsPausedOrOver) 
         {
             UnityEngine.Cursor.lockState = CursorLockMode.None; ///This code would be better in a different location, but works here for now.

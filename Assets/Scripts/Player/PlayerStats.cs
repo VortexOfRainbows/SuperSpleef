@@ -10,16 +10,13 @@ public class PlayerStats : MonoBehaviour ///Team members that contributed to thi
     public const float DamageFromVoid = 200f;
     [SerializeField] private float maxPlayerHP; // Assigns the Max HP of the player
     [SerializeField] private float currentPlayerHP; // Assigns the current HP of the character
-    [SerializeField] private GameObject GameOverUI; // Gameobject which encompasses all objects related to the Game Over UI
-    [SerializeField] private GameObject GameplayUI; // Gameobject which encompasses all objects related to the Gameplay UI
     //[SerializeField] private GameObject ClientPackage;
-
-    public Rigidbody rb; // The rigidbody of the player gameobject
+    [SerializeField] private Player player;
+    [SerializeField] private Rigidbody rb; // The rigidbody of the player gameobject
 
     private void Start()
     {
         currentPlayerHP = maxPlayerHP; // sets current HP to max HP upon loading the scene
-        GameOverUI.SetActive(false); // Disambes Game Over UI upon loading scene
     }
     private void Update()
     {
@@ -46,12 +43,27 @@ public class PlayerStats : MonoBehaviour ///Team members that contributed to thi
     {
         deathAnimTimer += Time.deltaTime; // Start the stopwatch
         transform.rotation = Quaternion.Slerp(Quaternion.Euler(0,0,0), Quaternion.Euler(0, 0, 90), deathAnimTimer * deathAnimTimer * 9); // Interpolate the player and Rotate the character 90 degrees
-        GameOverUI.SetActive(true); // Make the Game Over UI visible
-        GameplayUI.SetActive(false); // Make the Gameplay UI invisible
         if(Time.timeScale >= 1)
         {
             //Debug.Log(currentPlayerHP);
-            GameStateManager.EndGame();
+            string DeathText = GameStateManager.DefaultGameOverText;
+            Color deathColor = Color.white;
+            if(GameStateManager.LocalMultiplayer)
+            {
+                if(player.ControlManager.UsingGamepad)
+                {
+                    //blue player uses gamepad
+                    DeathText = "Yellow Wins";
+                    deathColor = Color.yellow;
+                }
+                else
+                {
+                    //yellow player uses gamepad
+                    DeathText = "Blue Wins";
+                    deathColor = Color.blue;
+                }
+            }
+            GameStateManager.EndGame(DeathText, deathColor);
         }
     }
 }

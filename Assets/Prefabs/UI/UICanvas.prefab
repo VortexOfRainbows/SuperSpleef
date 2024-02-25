@@ -229,6 +229,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PauseUI_gobj: {fileID: 7975204064996581473}
   Player: {fileID: 0}
+  GameOverUI: {fileID: 804017898342698646}
+  GameplayUI: {fileID: 4185740726733201976}
+  gameOverSubscript: {fileID: 1141291680439763043}
 --- !u!114 &8044152773331101686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2241,6 +2244,22 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98bac9ee67b31534287e33f321bef8c8, type: 3}
+--- !u!1 &804017898342698646 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6262946143784695820, guid: 98bac9ee67b31534287e33f321bef8c8, type: 3}
+  m_PrefabInstance: {fileID: 6755969336314541722}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1141291680439763043 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5914537949085382393, guid: 98bac9ee67b31534287e33f321bef8c8, type: 3}
+  m_PrefabInstance: {fileID: 6755969336314541722}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8178736616835307721 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3189309191286648403, guid: 98bac9ee67b31534287e33f321bef8c8, type: 3}

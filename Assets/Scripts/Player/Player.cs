@@ -15,9 +15,10 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     #endregion
 
     /// <summary>
-    /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls
+    /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls.
+    /// This is public because it needs to be accessible by other classes
     /// </summary>
-    [SerializeField] private PlayerControls ControlManager;
+    public PlayerControls ControlManager;
     public PlayerControls.ControlDown Control => ControlManager.Control;
     public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
 
