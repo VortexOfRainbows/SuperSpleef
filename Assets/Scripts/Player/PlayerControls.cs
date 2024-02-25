@@ -127,7 +127,7 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
 
             bool leftBumper = pInput.LeftBumper.WasPressedThisFrame();
             bool rightBumper = pInput.RightBumper.WasPressedThisFrame();
-            Control.ScrollDelta += (leftBumper ? -1 : 0) + (rightBumper ? 1 : 0);
+            Control.ScrollDelta += (leftBumper ? 1 : 0) + (rightBumper ? -1 : 0);
         }
         else
         {

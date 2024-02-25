@@ -13,7 +13,7 @@ public class GameStateManager :MonoBehaviour
 {
     public static GameStateManager Instance;
     public static int Mode { get; private set; }
-    public static float ParticleMultiplier { get; private set; }
+    public static float ParticleMultiplier { get; private set; } = 1;
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {
