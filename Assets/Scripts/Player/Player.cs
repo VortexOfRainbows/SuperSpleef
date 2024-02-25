@@ -79,8 +79,6 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                     Inventory.Set(i, new NoItem());
             }
         }
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
         RB.maxDepenetrationVelocity = 0;
     }
     public int SelectedItem { get; private set; }
@@ -92,9 +90,12 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     private void Update()
     {
         ControlManager.OnUpdate();
-        HotbarControls();
-        MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
-        BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
+        if (!GameStateManager.GameIsPausedOrOver)
+        {
+            HotbarControls();
+            MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
+            BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
+        }
     }
     /// <summary>
     /// This field is only serialized so it can display in the editor. It is not actually meant to be modified

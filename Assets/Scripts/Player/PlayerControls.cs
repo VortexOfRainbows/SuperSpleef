@@ -1,7 +1,4 @@
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
@@ -89,9 +86,17 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
     }
     public void OnUpdate()
     {
-        if(PauseUI.GameIsPaused)
+        Debug.Log(GameStateManager.GameIsOver);
+        if(GameStateManager.GameIsPausedOrOver) 
         {
+            UnityEngine.Cursor.lockState = CursorLockMode.None; ///This code would be better in a different location, but works here for now.
+            UnityEngine.Cursor.visible = true;
             return;
+        }
+        else
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            UnityEngine.Cursor.visible = false;
         }
         /*if(GamepadControls.Input.Start.inProgress)
         {

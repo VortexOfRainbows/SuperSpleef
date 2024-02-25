@@ -810,6 +810,10 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 8469860445121477388}
+    - target: {fileID: 7967193132478613454, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
+      propertyPath: PauseUI_gobj
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7978586055082482276, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -870,16 +874,14 @@ PrefabInstance:
       propertyPath: Owner
       value: 
       objectReference: {fileID: 6447179496307387707}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedComponents:
+    - {fileID: 7967193132478613454, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 7975204064996581473, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
+    - {fileID: 804017898342698646, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
---- !u!1 &1480944811327779793 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 804017898342698646, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
-  m_PrefabInstance: {fileID: 2280278751380225351}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2716673823665741695 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4185740726733201976, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
@@ -917,10 +919,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2692037336782053526, guid: 52398b591dcfcb745862f464625d635b, type: 3}
-      propertyPath: GameOverUI
-      value: 
-      objectReference: {fileID: 1480944811327779793}
     - target: {fileID: 2692037336782053526, guid: 52398b591dcfcb745862f464625d635b, type: 3}
       propertyPath: GameplayUI
       value: 
