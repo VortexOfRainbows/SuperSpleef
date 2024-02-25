@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -43,6 +44,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             }
         }
         GenerateFoliage();
+        GenerateUCI();
         for (int i = 0; i < chunk.GetLength(1); i++) //Completes the mesh for the chunk so it is visible and collideable
         {
             for (int j = 0; j < chunk.GetLength(0); j++)
@@ -52,7 +54,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
         }
         WorldGenFinished = true;
     }
-    [SerializeField] private float BushChance = 0.05f;
+    [SerializeField] private float BushChance = 0.02f;
     [SerializeField] private float TreeChance = 0.0175f;
     [SerializeField] private int WoodIntoLeaves = 2;
     [SerializeField] private float LeavesRadius = 3.0f;
@@ -60,6 +62,8 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     [SerializeField] private Vector2Int TreeHeightMinMax = new Vector2Int(3, 5);
     [SerializeField] private Vector2Int LeavesHeightMinMax = new Vector2Int(4, 5);
     [SerializeField] private Vector2Int LeavesWidthMinMax = new Vector2Int(3, 3);
+    [SerializeField] private Vector2Int UCIPadding = new Vector2Int(6, 32);
+    [SerializeField] private Vector2Int UCIYLevel = new Vector2Int(34, 50);
     private void GenerateFoliage()
     {
         for(int i = 0; i < MaxTiles.x; i++)
@@ -158,6 +162,57 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                             if (i2 != 0 || k2 != 0 || j2 >= height + WoodIntoLeaves)
                                 SetBlock(i + i2, j + j2, k + k2, BlockID.Leaves);
                         }
+                    }
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// Generates the UCI acronym somewhere in the sky of the world.
+    /// </summary>
+    private void GenerateUCI()
+    {
+        ///There are a lot of "magic numbers" here because I didn't want to serialize a ton of these values.
+        ///They are chosen deliberately, and there is math behind this, but I was just doing this for fun.
+        ///Please don't remove points from this. I could easily remove this method completely and it wouldn't impact the gameplay. 
+        ///         ;)
+  
+        //multiplying Z position by 3/4 so it faces the correct direction towards the players
+        Vector2Int whereToPutUCILogo = new Vector2Int(Random.Range(UCIPadding.y, MaxTiles.x - UCIPadding.y), Random.Range(UCIPadding.x + MaxTiles.x * 3 / 4, MaxTiles.x - UCIPadding.x));
+        int randomY = Random.Range(UCIYLevel.x, UCIYLevel.y); //This should typically put the logo somewhere in the sky!
+
+        ///The math below centers the structure
+        whereToPutUCILogo.x += 3;
+        int UPosition = whereToPutUCILogo.x - 10; //-14 from position originally
+        int CPosition = whereToPutUCILogo.x;
+        int IPosition = whereToPutUCILogo.x + 7; //8 away from position
+
+        ///This generates the U shape
+        GenerateColumn(UPosition - 3, randomY, whereToPutUCILogo.y, 1, 9, BlockID.BlueBricks);
+        GenerateColumn(UPosition, randomY, whereToPutUCILogo.y, 1, 3, BlockID.BlueBricks);
+        GenerateColumn(UPosition + 3, randomY, whereToPutUCILogo.y, 1, 9, BlockID.BlueBricks);
+
+        ///This generates the C shape
+        GenerateColumn(CPosition - 3, randomY, whereToPutUCILogo.y, 1, 9, BlockID.YellowBricks);
+        GenerateColumn(CPosition, randomY, whereToPutUCILogo.y, 1, 3, BlockID.YellowBricks);
+        GenerateColumn(CPosition + 3, randomY, whereToPutUCILogo.y, 1, 3, BlockID.YellowBricks);
+        GenerateColumn(CPosition, randomY + 6, whereToPutUCILogo.y, 1, 3, BlockID.YellowBricks);
+        GenerateColumn(CPosition + 3, randomY + 6, whereToPutUCILogo.y, 1, 3, BlockID.YellowBricks);
+
+        ///This generates the I shape
+        GenerateColumn(IPosition, randomY, whereToPutUCILogo.y, 1, 9, BlockID.BlueBricks);
+    }
+    private void GenerateColumn(int i, int j, int k, int width, int height, int type)
+    {
+        for (int j2 = 0; j2 < height; j2++)
+        {
+            for (int i2 = -width; i2 <= width; i2++)
+            {
+                for (int k2 = -width; k2 <= width; k2++)
+                {
+                    if (Block(i + i2, j + j2, k + k2) == BlockID.Air)
+                    {
+                        SetBlock(i + i2, j + j2, k + k2, type);
                     }
                 }
             }

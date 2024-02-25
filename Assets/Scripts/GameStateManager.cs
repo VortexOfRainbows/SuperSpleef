@@ -94,7 +94,7 @@ public class GameStateManager : MonoBehaviour
         Mode = mode;
         if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.NetMultiplayer)
         {
-            LocalMultiplayer = true;
+            LocalMultiplayer = true; //For now, net and local multiplayer are considered the same (since there is no NET Multiplayer yet)
             Mode = mode == GameModeID.NetMultiplayer ? GameModeID.Apocalypse : GameModeID.None;
             SceneManager.LoadScene(2);
         }
