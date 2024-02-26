@@ -9,6 +9,8 @@ public class BlockMesh ///Team members that contributed to this script: Ian Bunn
     }
     private static Dictionary<int, BlockMesh> tiles = new Dictionary<int, BlockMesh>()
     {
+        {BlockID.BlueBricks, new BlockMesh(BlockID.BlueBricks)},
+        {BlockID.YellowBricks, new BlockMesh(BlockID.YellowBricks)},
         {BlockID.Wood, new BlockMesh(BlockID.Wood)},
         {BlockID.Leaves, new BlockMesh(BlockID.Leaves)},
         {BlockID.Glass, new BlockMesh(BlockID.Glass)},
@@ -69,6 +71,14 @@ public class BlockMesh ///Team members that contributed to this script: Ian Bunn
         if (Type == BlockID.Leaves)
         {
             SetAllFaces(Tile.Leaves);
+        }
+        if (Type == BlockID.BlueBricks)
+        {
+            SetAllFaces(Tile.BlueBricks);
+        }
+        if (Type == BlockID.YellowBricks)
+        {
+            SetAllFaces(Tile.YellowBricks);
         }
         SetFaceArray();
     }

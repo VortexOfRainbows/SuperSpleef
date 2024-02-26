@@ -15,9 +15,10 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     #endregion
 
     /// <summary>
-    /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls
+    /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls.
+    /// This is public because it needs to be accessible by other classes
     /// </summary>
-    [SerializeField] private PlayerControls ControlManager;
+    public PlayerControls ControlManager;
     public PlayerControls.ControlDown Control => ControlManager.Control;
     public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
 
@@ -42,22 +43,43 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             StartingItemCount = Item.DefaultMaxCount;
         }
+        if(GameStateManager.LocalMultiplayer)
+        {
+            StartingItemCount = 100;
+        }
         Inventory = new Inventory(30);
         for(int i = 0; i < Inventory.Count; i++) //Initializies a basic inventory for the purpose of testing
         {
-            if (i == 0)
-                Inventory.Set(i, new BasicBlaster());
-            else if (i == 1)
-                Inventory.Set(i, new BlockGun());
-            else if (i <= BlockID.Max + 1)
-                Inventory.Set(i, new PlaceableBlock(i - 1, StartingItemCount));
-            else if (i == 9)
-                Inventory.Set(i, new WorldDestroyer());
+            if (GameStateManager.LocalMultiplayer) //Special inventory for multiplayer
+            {
+                if (i == 0)
+                    Inventory.Set(i, new BasicBlaster());
+                else if (i == 1)
+                    Inventory.Set(i, new BlockGun());
+                else if (i == 2)
+                {
+                    int iType = BlockID.YellowBricks; //Player one gets yellow blocks
+                    if(ControlManager.UsingGamepad) //Player two gets blue blocks
+                        iType = BlockID.BlueBricks;
+                    Inventory.Set(i, new PlaceableBlock(iType, StartingItemCount));
+                }
+                else
+                    Inventory.Set(i, new NoItem());
+            }
             else
-                Inventory.Set(i, new NoItem());
+            {
+                if (i == 0)
+                    Inventory.Set(i, new BasicBlaster());
+                else if (i == 1)
+                    Inventory.Set(i, new BlockGun());
+                else if (i <= BlockID.Max + 1)
+                    Inventory.Set(i, new PlaceableBlock(i - 1, StartingItemCount));
+                else if (i == 9)
+                    Inventory.Set(i, new WorldDestroyer());
+                else
+                    Inventory.Set(i, new NoItem());
+            }
         }
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
         RB.maxDepenetrationVelocity = 0;
     }
     public int SelectedItem { get; private set; }
@@ -69,9 +91,12 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     private void Update()
     {
         ControlManager.OnUpdate();
-        HotbarControls();
-        MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
-        BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
+        if (!GameStateManager.GameIsPausedOrOver)
+        {
+            HotbarControls();
+            MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
+            BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
+        }
     }
     /// <summary>
     /// This field is only serialized so it can display in the editor. It is not actually meant to be modified

@@ -45,7 +45,8 @@ public class Timer : MonoBehaviour ///Team members that contributed to this scri
     }
     private void Update()
     {
-        AccumulatedTime += Time.deltaTime;
+        if(Time.timeScale >= 1)
+            AccumulatedTime += Time.deltaTime;
         timeText.text = AssembleTimeString(DefaultText, CurrentTime);
     }
 }

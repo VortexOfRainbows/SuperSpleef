@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f265624daddefe44a80ef65a892421f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UsingGamepad: 0
 --- !u!114 &2692037336782053526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,9 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxPlayerHP: 100
   currentPlayerHP: 100
-  GameOverUI: {fileID: 0}
-  GameplayUI: {fileID: 0}
-  ClientPackage: {fileID: 0}
+  player: {fileID: 7380683411496612807}
   rb: {fileID: 1326384001663812332}
 --- !u!114 &4504802999161380935
 MonoBehaviour:

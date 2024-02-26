@@ -18,4 +18,8 @@ public class ButtonBehaviors : MonoBehaviour ///Team members that contributed to
     {
         GameStateManager.StartGame(GameStateManager.Mode); // Loads the Main Scene (Gameplay Scene)
     }
+    public void RestartGame()
+    {
+        GameStateManager.RestartGame();
+    }
 }

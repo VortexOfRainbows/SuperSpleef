@@ -1,7 +1,4 @@
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
@@ -89,18 +86,26 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
     }
     public void OnUpdate()
     {
-        if(PauseUI.GameIsPaused)
+        //Debug.Log(GameStateManager.GameIsOver);
+        if(GameStateManager.GameIsPausedOrOver) 
         {
+            UnityEngine.Cursor.lockState = CursorLockMode.None; ///This code would be better in a different location, but works here for now.
+            UnityEngine.Cursor.visible = true;
             return;
         }
-        if(GamepadControls.Input.Start.inProgress)
+        else
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            UnityEngine.Cursor.visible = false;
+        }
+        /*if(GamepadControls.Input.Start.inProgress)
         {
             UsingGamepad = true;
         }
         else if(Input.GetMouseButton(0))
         {
             UsingGamepad = false;
-        }
+        }*/
         if (UsingGamepad)
         {
             Control.ScrollDelta = 0;
@@ -127,7 +132,7 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
 
             bool leftBumper = pInput.LeftBumper.WasPressedThisFrame();
             bool rightBumper = pInput.RightBumper.WasPressedThisFrame();
-            Control.ScrollDelta += (leftBumper ? -1 : 0) + (rightBumper ? 1 : 0);
+            Control.ScrollDelta += (leftBumper ? 1 : 0) + (rightBumper ? -1 : 0);
         }
         else
         {

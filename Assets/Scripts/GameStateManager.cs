@@ -1,3 +1,4 @@
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,13 +12,58 @@ public static class GameModeID
 }
 public class GameStateManager :MonoBehaviour
 {
+    public const string DefaultGameOverText = "You Lose";
+    public static string GameOverText;
+    public static Color GameOverTextColor;
+    private const int GameEndFrameDelay = 3;
+    private static float GameEndDelay;
+    private static bool GameOver;
+    private static bool GamePaused;
+    public static bool GameIsOver
+    {
+        get
+        {
+            return GameOver;
+        }
+    }
+    public static bool GameIsPaused
+    {
+        get
+        {
+            return GamePaused;
+        }
+    }
+    public static bool GameIsPausedOrOver
+    { 
+        get 
+        { 
+            return GameOver || GamePaused; 
+        }
+    }
     public static GameStateManager Instance;
     public static int Mode { get; private set; }
+    public static float ParticleMultiplier { get; private set; } = 1;
+    public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {
+        LocalMultiplayer = false;
+        ParticleMultiplier = 1f;
         Mode = GameModeID.None;
         Instance = this;
         DontDestroyOnLoad(this);
+        ResetStates();
+    }
+    private static void ResetStates()
+    {
+        GameOverTextColor = Color.white;
+        GameOverText = DefaultGameOverText;
+        GameEndDelay = GameEndFrameDelay; //This is a arbitrary number set to delay the ending of a game for a bit, so certain functions that need to be run can run.
+        GameOver = false;
+        Unpause();
+    }
+    public static void SetParticleMultiplier(float mult)
+    {
+        ParticleMultiplier = Mathf.Clamp01(mult);
     }
     public static void MainMenu()
     {
@@ -29,7 +75,46 @@ public class GameStateManager :MonoBehaviour
     }
     public static void StartGame(int mode)
     {
+        ResetStates();
         Mode = mode;
-        SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
+        if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.NetMultiplayer)
+        {
+            LocalMultiplayer = true;
+            Mode = mode == GameModeID.NetMultiplayer ? GameModeID.Apocalypse : GameModeID.None;
+            SceneManager.LoadScene(2);
+        }
+        else
+        {
+            LocalMultiplayer = false;
+            SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
+        }
+    }
+    public static void RestartGame()
+    {
+        ResetStates();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public static void Pause()
+    {
+        GamePaused = true; // Sets the boolean statement GameIsPaused to true.
+        Time.timeScale = 0f; // Freezes the state of the game
+    }   
+    public static void Unpause()
+    {
+        GamePaused = false; // Sets the boolean statement GameIsPaused to false.
+        Time.timeScale = 1f; // Unfreezes the state of the game
+    }
+    public static void EndGame(string Subscript, Color color = default)
+    {
+        if (GameEndDelay > 0)
+        {
+            GameEndDelay--;
+            return;
+        }
+        GameOverText = Subscript;
+        if (color != default)
+            GameOverTextColor = color;
+        GameOver = true;
+        Time.timeScale = 0.5f;
     }
 }
