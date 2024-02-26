@@ -4,6 +4,8 @@ using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 public class Chunk : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
@@ -22,6 +24,7 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
     // Start is called before the first frame update
+
     private void Awake()
     {
         if(Seed == -1)
@@ -30,6 +33,7 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
         meshCollider = GetComponent<MeshCollider>();
         GenerateChunk();
     }
+
     public void GenerateChunk()
     {
         float seedMod = Seed % SeedNoiseModifier;
