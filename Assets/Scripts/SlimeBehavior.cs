@@ -37,6 +37,8 @@ public class SlimeBehavior : Entity
         innerCube.transform.localScale = innerCubeSizeMult * Vector3.one * (attackInnerCubeSizePercentage + (1 - attackInnerCubeSizePercentage) * Mathf.Clamp(1 - attackTimer / timeBetweenAttacks, 0, 1)); //Change size of cube in the middle depending on how the attack timer is going
         innerCube.transform.localPosition = rb.velocity.normalized * -Mathf.Clamp(rb.velocity.magnitude * innerCubeSizeMult, 0, innerCubeSizeMult / 4.05f); //Makes the inner cube stray slightly behind the movement of the greater cube
         innerCube.transform.rotation = Quaternion.identity;
+
+        ///STATE 3: The slime will slam down on the player and do damage to the environment if a player is near and it is above the player.
         if(Mathf.Abs(rb.velocity.y) < 1) //If roughly at the apex of the jump
         {
             if(attackTimer <= 0 && target != null)
@@ -88,15 +90,18 @@ public class SlimeBehavior : Entity
                 target = GameStateManager.Players[i];
             }
         }
-        if (target != null)
+        ///STATE 1: If a player is near the slime, it will chase the player
+        if (target != null) 
         {
             Chase(target);
         }
+        ///STATE 2: If a player is not near the slime, it will wander around
         else
         {
             Wander();
         }
-        if(justSlammed)
+        ///STATE 3: The slime will slam down on the player and do damage to the environment if a player is near and it is above the player.
+        if (justSlammed)
         {
             justSlammed = false;
             World.FillBlock(transform.position + new Vector3(2, 1, 2), transform.position - new Vector3(2, 1, 2), BlockID.Air, 0.5f);
