@@ -1,64 +1,123 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class SlimeBehavior : MonoBehaviour
+public class SlimeBehavior : Entity
 {
-    // Start is called before the first frame update
+    [SerializeField] private int TotalFrags = 8;
+    [SerializeField] private float ExplosionSpeedMult = 3f;
+    [SerializeField] private float RandomBonusSpread = 1f;
 
-    public GameObject player;
-    private Rigidbody m_Rigidbody;
-    private Vector3 wanderTarget;
-    private bool isGrounded;
-
-    public Vector3 targetDirection;
-
-    [SerializeField] private int speed;
-    [SerializeField] private int jumpForce;
-    [SerializeField] private float rotationSpeed;
-
-
+    [SerializeField] private GameObject innerCube;
+    [SerializeField] private float innerCubeSizeMult = 0.5f;
+    [SerializeField] private float attackInnerCubeSizePercentage = 0.2f;
+    private Player target;
+    private Rigidbody rb;
+    private float jumpTimer;
+    private float attackTimer;
+    private bool justSlammed;
+    [SerializeField] private float approachDistance = 6;
+    [SerializeField] private float speed;
+    [SerializeField] private float slamRadius = 2;
+    [SerializeField] private float slamSpeed = 10;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float timeBetweenJumps = 1;
+    [SerializeField] private float timeBetweenAttacks = 3;
+    [SerializeField] private float chaseJumpBonus = 0.5f;
     void Start()
     {
-        m_Rigidbody = GetComponent<Rigidbody>();
-        wanderTarget = transform.position + new Vector3(Random.Range(-10, 10), 1, Random.Range(-10, 10));
+        Inventory = new Inventory(1);
+        rb = GetComponent<Rigidbody>();
     }
-
-    // Update is called once per frame
-    void Update()
+    public override void OnFixedUpdate()
     {
-
+        attackTimer -= Time.fixedDeltaTime;
+        jumpTimer -= Time.fixedDeltaTime;
+        innerCube.transform.localScale = innerCubeSizeMult * Vector3.one * (attackInnerCubeSizePercentage + (1 - attackInnerCubeSizePercentage) * Mathf.Clamp(1 - attackTimer / timeBetweenAttacks, 0, 1)); //Change size of cube in the middle depending on how the attack timer is going
+        innerCube.transform.localPosition = rb.velocity.normalized * -Mathf.Clamp(rb.velocity.magnitude * innerCubeSizeMult, 0, innerCubeSizeMult / 4.05f); //Makes the inner cube stray slightly behind the movement of the greater cube
+        innerCube.transform.rotation = Quaternion.identity;
+        if(Mathf.Abs(rb.velocity.y) < 1) //If roughly at the apex of the jump
+        {
+            if(attackTimer <= 0 && target != null)
+            {
+                Vector2 xzToPlayer = new Vector2(target.transform.position.x, target.transform.position.z) - new Vector2(transform.position.x, transform.position.z);
+                if(xzToPlayer.magnitude < slamRadius && target.transform.position.y < transform.position.y) //Only do the slame if above the player in some way
+                {
+                    Attack();
+                }
+            }
+        }
+        if(rb.velocity.x != 0 && rb.velocity.z != 0)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.rotation.x, new Vector2(-rb.velocity.x, -rb.velocity.z).ToRotation() * Mathf.Rad2Deg, transform.rotation.z), 0.04f);
     }
-
-    public void Chase()
+    public void Chase(Player player)
     {
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+        rb.velocity += (player.transform.position + Vector3.up * chaseJumpBonus - transform.position).normalized * speed;
     }
-
     public void Wander()
     {
-        
+        Vector3 wanderTarget = Utils.randVector3Circular(1, 0.5f, 1f).normalized;
+        rb.velocity += wanderTarget * speed;
     }
-    public void Attack() 
-    { 
-        
+    public void Attack()
+    {
+        rb.velocity *= 0.1f;
+        attackTimer = timeBetweenAttacks;
+        rb.velocity += Vector3.down * slamSpeed;
+        justSlammed = true;
     }
     public void Multiply() 
     { 
         
     }
-    private void OnCollisionEnter(Collision collision)
+    public void Jump()
     {
-        isGrounded = true;
-        m_Rigidbody.velocity = Vector3.zero;
-        
-        if (collision.gameObject.tag == "Ground")
-            m_Rigidbody.AddForce(Vector3.up * jumpForce);
-    }
+        rb.velocity *= 0.1f;
+        rb.AddForce(Vector3.up * jumpForce);
+        jumpTimer = timeBetweenJumps;
 
-    private void OnTriggerStay(Collider other)
+        target = null;
+        float minDist = approachDistance;
+        for (int i = 0; i < GameStateManager.Players.Count; i++)
+        {
+            float distanceToPlayer = Vector3.Distance(transform.position, GameStateManager.Players[i].transform.position);
+            if (distanceToPlayer < minDist)
+            {
+                minDist = distanceToPlayer; //This is a simple way of maing the enemy search for the closest player, in cases such as multiplayer
+                target = GameStateManager.Players[i];
+            }
+        }
+        if (target != null)
+        {
+            Chase(target);
+        }
+        else
+        {
+            Wander();
+        }
+        if(justSlammed)
+        {
+            justSlammed = false;
+            World.FillBlock(transform.position + new Vector3(2, 1, 2), transform.position - new Vector3(2, 1, 2), BlockID.Air, 0.5f);
+            for (int i = 0; i < TotalFrags; i++)
+            {
+                Vector2 circularSpread = new Vector2(ExplosionSpeedMult, 0).RotatedBy(i * 2 * Mathf.PI / TotalFrags);
+                Vector3 velo = new Vector3(circularSpread.x, 3 * ExplosionSpeedMult, circularSpread.y); //The balls travel up in a circle pattern around the projectile
+                Rigidbody rb = Instantiate(ProjectileManager.GetProjectile(ProjectileID.BouncyDeathBall), transform.position + velo.normalized, Quaternion.identity).GetComponent<Rigidbody>();
+                rb.velocity = velo + new Vector3(Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread));
+            }
+        }
+    }
+    private void OnCollisionStay(Collision collision)
     {
-        if(other.gameObject.tag == "Player")
-            Chase();
+        if (collision.gameObject.tag == "Ground")
+        {
+            if(collision.impulse.y > 0) //This essentially checks if the collision is vertical in nature
+            {
+                if(jumpTimer <= 0)
+                    Jump();
+            }
+        }
     }
 }

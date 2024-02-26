@@ -9,6 +9,10 @@ public class Inventory //This class exists so that the UI for displaying an item
     {
         item = new Item[size];
         Count = size;
+        for(int i = 0; i < size; i++)
+        {
+            Set(i, new NoItem());
+        }
     }
     public void Set(int i, Item item)
     {

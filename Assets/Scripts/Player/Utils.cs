@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public static class Utils ///Team members that contributed to this script: Ian Bunnell
@@ -140,8 +141,32 @@ public static class Utils ///Team members that contributed to this script: Ian B
     /// <param name="edge"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public static Vector3 randVector3Circular(float x, float y, float z, bool edge = false)
+    public static Vector2 randVector2Circular(float width, float height, bool edge = false)
     {
-        throw new NotImplementedException();
+        Vector2 random = UnityEngine.Random.insideUnitCircle;
+        if (edge)
+        {
+            random = random.normalized;
+        }
+        random.x *= width;
+        random.y *= height;
+        return random;
+    }
+    /// <summary>
+    /// Generates a random oval vector within the boundaries of x, y, and z
+    /// If edge is true, guarantees that the value will fall on the edge. Otherwise, it will fall elsewhere in the circle.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="edge"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public static Vector3 randVector3Circular(float widthX, float height, float widthZ, bool edge = false)
+    {
+        Vector3 random = edge ? UnityEngine.Random.onUnitSphere : UnityEngine.Random.insideUnitSphere;
+        random.x *= widthX;
+        random.y *= height;
+        random.z *= widthZ;
+        return random;
     }
 }

@@ -17,8 +17,7 @@ public class Enemy : Entity  ///Team members that contributed to this script: Se
         }
         rb.useGravity = false;
     }
-
-    private void FixedUpdate()
+    public override void OnFixedUpdate()
     {
         //GameObject playerObject = GameObject.FindWithTag(playerTag); //Don't ever do this. Using find function in update is painfully slow and memory intensive
         Player player = null;
@@ -37,7 +36,6 @@ public class Enemy : Entity  ///Team members that contributed to this script: Se
             Approach(player.transform.position);
         }
     }
-
     private void Approach(Vector3 location)
     {
         Vector3 direction = (location - transform.position).normalized;

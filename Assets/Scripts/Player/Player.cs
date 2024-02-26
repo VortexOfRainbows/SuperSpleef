@@ -55,16 +55,12 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 if (i == 0)
                     Inventory.Set(i, new BasicBlaster());
                 else if (i == 1)
-                    Inventory.Set(i, new BlockGun());
-                else if (i == 2)
                 {
                     int iType = BlockID.YellowBricks; //Player one gets yellow blocks
                     if(ControlManager.UsingGamepad) //Player two gets blue blocks
                         iType = BlockID.BlueBricks;
                     Inventory.Set(i, new PlaceableBlock(iType, StartingItemCount));
                 }
-                else
-                    Inventory.Set(i, new NoItem());
             }
             else
             {
@@ -76,8 +72,6 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                     Inventory.Set(i, new PlaceableBlock(i - 1, StartingItemCount));
                 else if (i == 9)
                     Inventory.Set(i, new WorldDestroyer());
-                else
-                    Inventory.Set(i, new NoItem());
             }
         }
         RB.maxDepenetrationVelocity = 0;
@@ -108,7 +102,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// This field is only serialized so it can display in the editor. It is not actually meant to be modified
     /// </summary>
     [SerializeField] private Vector2 perpendicularVelocity;
-    public void FixedUpdate()
+    public override void OnFixedUpdate()
     {
         //Movement should be updated in fixed update so it works probably on all systems
         perpendicularVelocity = new Vector2(RB.velocity.x, RB.velocity.z).RotatedBy(Direction.y * Mathf.Deg2Rad); //Speed is modified as a perpendicular value to make stopping and switching directions more smooth and consistent. Also allows modifying speed more easily.
