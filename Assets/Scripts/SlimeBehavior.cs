@@ -114,13 +114,21 @@ public class SlimeBehavior : Entity
             }
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        OnCollision(collision);
+    }
     private void OnCollisionStay(Collision collision)
+    {
+        OnCollision(collision);
+    }
+    private void OnCollision(Collision collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
-            if(collision.impulse.y > 0) //This essentially checks if the collision is vertical in nature
+            if (collision.impulse.y > 0) //This essentially checks if the collision is vertical in nature
             {
-                if(jumpTimer <= 0)
+                if (jumpTimer <= 0)
                     Jump();
             }
         }
