@@ -11,11 +11,11 @@ public class ClientManager : MonoBehaviour
     [SerializeField] private Text BelowTimerText;
     public void Start()
     {
-        if(GameStateManager.Mode == GameModeID.Apocalypse)
-            BelowTimerText.text = ApocalypseText;
-        if (GameStateManager.Mode == GameModeID.Creative)
-            BelowTimerText.text = CreativeText;
-        else
+        if(GameStateManager.LocalMultiplayer)
             BelowTimerText.text = MultiplayerText;
+        else if (GameStateManager.Mode == GameModeID.Apocalypse)
+            BelowTimerText.text = ApocalypseText;
+        else if(GameStateManager.Mode == GameModeID.Creative)
+            BelowTimerText.text = CreativeText;
     }
 }

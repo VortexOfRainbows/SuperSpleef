@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SpawnBalls : MonoBehaviour ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
 {
-    [SerializeField] private List<GameObject> players;
     [SerializeField] private Vector2 BallCountMinMax = new Vector2(4, 20);
     [SerializeField] private float SpawnTime = 3;
     [SerializeField] private float SpawnSpread = 5f;
@@ -29,11 +28,11 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
             scaleMult = MaxDifficultyMultiplier;
         TotalTimePassed += Time.fixedDeltaTime;
         timer += Time.deltaTime * (1 + scaleMult); //Timer goes faster the longer you have been alive
-        int pCount = players.Count;
+        int pCount = GameStateManager.Players.Count;
         float ballChanceMult = (1 + scaleMult * 2);
         if (timer > SpawnTime && pCount > 0) 
         { 
-            foreach(GameObject player in players)
+            foreach(Player player in GameStateManager.Players)
             {
                 for (int i = 0; i < Mathf.Lerp(BallCountMinMax.x, BallCountMinMax.y, scaleMult / MaxDifficultyMultiplier) / pCount; i++)
                 {

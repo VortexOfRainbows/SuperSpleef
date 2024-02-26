@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public static class GameModeID
 {
@@ -10,8 +12,20 @@ public static class GameModeID
     public const int LocalMultiplayer = 2;
     public const int NetMultiplayer = 3;
 }
-public class GameStateManager :MonoBehaviour
+public class GameStateManager : MonoBehaviour
 {
+    public static List<Player> Players
+    {
+        get
+        {
+            if(Player == null)
+            {
+                Player = new List<Player>();
+            }
+            return Player;
+        }
+    }
+    private static List<Player> Player;
     public const string DefaultGameOverText = "You Lose";
     public static string GameOverText;
     public static Color GameOverTextColor;
@@ -55,6 +69,7 @@ public class GameStateManager :MonoBehaviour
     }
     private static void ResetStates()
     {
+        Player = new List<Player>();
         GameOverTextColor = Color.white;
         GameOverText = DefaultGameOverText;
         GameEndDelay = GameEndFrameDelay; //This is a arbitrary number set to delay the ending of a game for a bit, so certain functions that need to be run can run.
@@ -79,7 +94,7 @@ public class GameStateManager :MonoBehaviour
         Mode = mode;
         if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.NetMultiplayer)
         {
-            LocalMultiplayer = true;
+            LocalMultiplayer = true; //For now, net and local multiplayer are considered the same (since there is no NET Multiplayer yet)
             Mode = mode == GameModeID.NetMultiplayer ? GameModeID.Apocalypse : GameModeID.None;
             SceneManager.LoadScene(2);
         }

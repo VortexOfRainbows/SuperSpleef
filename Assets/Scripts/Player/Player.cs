@@ -88,8 +88,14 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         return Inventory.Get(SelectedItem);
     }
     private float PreviousYVelocity = 0;
+    private bool HasBeenAddedToPlayerList = false;
     private void Update()
     {
+        if(!HasBeenAddedToPlayerList && !GameStateManager.Players.Contains(this))
+        {
+            GameStateManager.Players.Add(this);
+            HasBeenAddedToPlayerList = true;
+        }
         ControlManager.OnUpdate();
         if (!GameStateManager.GameIsPausedOrOver)
         {
