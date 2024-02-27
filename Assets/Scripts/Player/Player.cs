@@ -225,8 +225,8 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// </summary>
     private void MouseControls()
     {
-        float mouseX = Control.XAxis * Time.deltaTime * Sensitivity * GameStateManager.SensitivityMultiplier;
-        float mouseY = Control.YAxis * Time.deltaTime * Sensitivity * GameStateManager.SensitivityMultiplier;
+        float mouseX = Control.XAxis * Time.deltaTime * Sensitivity;
+        float mouseY = Control.YAxis * Time.deltaTime * Sensitivity;
         Direction.y += mouseX;
         Direction.x -= mouseY;
 

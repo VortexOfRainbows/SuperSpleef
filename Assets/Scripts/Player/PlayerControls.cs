@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
+public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell, David Bu
 {
     private GamepadControls GamepadControls;
     public bool UsingGamepad = false;
@@ -61,8 +61,8 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
     public void DoKeyboardMouseControls()
     {
         Control.ScrollDelta = Input.mouseScrollDelta.y;
-        Control.XAxis = Input.GetAxisRaw("Mouse X");
-        Control.YAxis = Input.GetAxisRaw("Mouse Y");
+        Control.XAxis = Input.GetAxisRaw("Mouse X") * GameStateManager.SensitivityMultiplier;
+        Control.YAxis = Input.GetAxisRaw("Mouse Y") * GameStateManager.SensitivityMultiplier;
         UpdateKey(Input.GetKey(KeyCode.A), LastControl.Left, ref Control.Left);
         UpdateKey(Input.GetKey(KeyCode.D), LastControl.Right, ref Control.Right);
         UpdateKey(Input.GetKey(KeyCode.W), LastControl.Forward, ref Control.Forward);
@@ -112,8 +112,8 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
 
             GamepadControls.InputActions pInput = GamepadControls.Input;
             Vector2 direction = pInput.RightJoystick.ReadValue<Vector2>();
-            Control.XAxis = direction.x;
-            Control.YAxis = direction.y / 2f;
+            Control.XAxis = direction.x * GameStateManager.ControllerSensitivityMultiplier;
+            Control.YAxis = direction.y / 2f * GameStateManager.ControllerSensitivityMultiplier;
 
             direction = pInput.LeftJoystick.ReadValue<Vector2>();
             Control.XMove = direction.x;
