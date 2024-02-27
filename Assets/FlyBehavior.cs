@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-public class FlyBehavior : Entity
+public class FlyBehavior : Entity ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
 {
     [SerializeField] private GameObject inner;
     private bool GroundIsBelow = false;
@@ -29,9 +29,9 @@ public class FlyBehavior : Entity
         rb = GetComponent<Rigidbody>();
         NewWander();
     }
-    private void NewWander()
+    private void NewWander() //pick a random nearby position to wander to
     {
-        //pick a random nearby position to wander to
+        
         wanderTarget = transform.position + new Vector3(Random.Range(-wanderableRange.x, wanderableRange.x), -Random.Range(0, wanderableRange.y), Random.Range(-wanderableRange.z, wanderableRange.z)); //Slowly wanders down and around the map
         wanderTarget.x = Mathf.Clamp(wanderTarget.x, 0, World.ChunkRadius * Chunk.Width);
         wanderTarget.z = Mathf.Clamp(wanderTarget.z, 0, World.ChunkRadius * Chunk.Width); //Make sure it doesn't wander horizontally outside of the world
@@ -40,20 +40,21 @@ public class FlyBehavior : Entity
     {
         inner.transform.rotation = Quaternion.identity; //The inner should not rotate. It is meant to hold a collider in place that is used for stuff.
         Player player = FindClosestPlayer(approachDistance);
-        ///STATE 1: If a player is near the slime, it will dive into the player like a kamikaze air plane
+        
+        ///STATE 1: If the killer fly is near a player, it will dive into the player like a kamikaze air plane
         if (player != null)
         {
             approachDistance = int.MaxValue; //Now that it has seen the player once, it has always seen the player.
-            speed = selfDestructSpeed = Mathf.Clamp(selfDestructSpeed + acceleration * Time.fixedDeltaTime, -maxSpeed, maxSpeed);
+            speed = selfDestructSpeed = Mathf.Clamp(selfDestructSpeed + acceleration * Time.fixedDeltaTime, -maxSpeed, maxSpeed); // the entity reels back, then charges as the player
             rb.velocity = transform.forward * speed;
             selfDestruct = true;
             if (speed < 0)
             {
-                transform.LookAt(player.transform.position);
+                transform.LookAt(player.transform.position); // the entity is always facing the player when in winds back.
             }
-            else if (speed > 0)
+            else if (speed > 0) // when the entity begins its charge, it should no longer adjust its rotation.
             {
-                Quaternion setRotation = transform.rotation;
+                Quaternion setRotation = transform.rotation; // records the direction of the player before charging forvard.
                 transform.rotation = setRotation;
             }
         }

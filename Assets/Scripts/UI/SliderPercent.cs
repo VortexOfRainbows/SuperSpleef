@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SliderPercent : MonoBehaviour
+public class SliderPercent : MonoBehaviour //Team members that contributed to this script: David Bu, Ian Bunnel
 {
     [SerializeField] private bool Percent = false;
     private Text percentText;

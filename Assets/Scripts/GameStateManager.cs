@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public static class GameModeID
+///Team members that contributed to this script: Ian Bunnell
+public static class GameModeID // Assigns an int as a reference to each game mode.
 {
     public const int None = -1;
     public const int Creative = 0;
