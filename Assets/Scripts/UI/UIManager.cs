@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
-{
+{ 
     public void ModifyGameOverText(string str, Color color)
     {
         gameOverSubscript.text = str;

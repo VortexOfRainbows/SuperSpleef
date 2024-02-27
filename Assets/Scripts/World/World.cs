@@ -44,7 +44,12 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             }
         }
         GenerateFoliage();
-        GenerateUCI();
+        
+        if(GameStateManager.settingsDoIGenerateUCI == true)
+        {
+            GenerateUCI();
+        }
+
         for (int i = 0; i < chunk.GetLength(1); i++) //Completes the mesh for the chunk so it is visible and collideable
         {
             for (int j = 0; j < chunk.GetLength(0); j++)
