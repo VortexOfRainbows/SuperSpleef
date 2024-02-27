@@ -1699,8 +1699,8 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Player 1 - Use WASD to move, SHIFT to sprint and SPACEBAR to jump. Left
-    click to break blocks, Right clck to use your held item and use the numbers or
-    scroll wheel to switch through your hotbar. Use the mouse(pad) to look around.
+    click to break blocks, Right click to use your held item and use the numbers
+    or scroll wheel to switch through your hotbar. Use the mouse(pad) to look around.
 --- !u!222 &471109380
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2975,7 +2975,7 @@ MonoBehaviour:
   m_Text: Player 2 - Use the Left Joystick to move and press it down to sprint. Use
     the right-side bottom button to jump. Use Left Trigger to break blocks, Right
     Trigger to use your held item and the Left and Right Bumpers to switch through
-    your hotbar. Use Right Joystick to look around.
+    your hotbar. Use the Right Joystick to look around.
 --- !u!222 &906855238
 CanvasRenderer:
   m_ObjectHideFlags: 0
