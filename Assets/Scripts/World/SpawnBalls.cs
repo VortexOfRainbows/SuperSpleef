@@ -15,6 +15,12 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
     [SerializeField] private float TunnelBoreChance = 0.025f;
     [SerializeField] private float FragFragChance = 0.025f;
     [SerializeField] private float MaxDifficultyMultiplier = 2f;
+
+    //Enemies
+
+    [SerializeField] private float SlimeChance = 0.06f;
+    [SerializeField] private float FlyChance = 0.06f;
+
     private float timer;
     private float TotalTimePassed;
     private void FixedUpdate() ///Summoning falling balls is only for the apocalypse game mode
@@ -57,7 +63,19 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
                     {
                         ballType = ProjectileManager.GetProjectile<BouncyDeathBall>();
                     }
+
+                    if (Random.value < SlimeChance) 
+                    {
+                        ballType = ProjectileManager.GetProjectile(ProjectileID.Slime);
+                    }
+
+                    if (Random.value < FlyChance)
+                    {
+                        ballType = ProjectileManager.GetProjectile(ProjectileID.KillerFly);
+                    }
+
                     float mult = 1;
+                    
                     if (i == 0)
                         mult = 0; //Make one ball always guaranteed to spawn right on top of the player.
                     Vector3 spawnPosition = new Vector3(player.transform.position.x + Random.Range(-SpawnSpread, SpawnSpread) * mult, SpawnHeight, player.transform.position.z + Random.Range(-SpawnSpread, SpawnSpread) * mult);

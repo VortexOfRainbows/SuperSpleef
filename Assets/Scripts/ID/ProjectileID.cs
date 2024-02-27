@@ -9,9 +9,11 @@ public static class ProjectileID ///Team members that contributed to this script
     public const int SuperFragBall = 3;
     public const int TunnelBore = 4;
     public const int FragFragBall = 5;
+    public const int Slime = 6;
+    public const int KillerFly = 7;
 
     /// <summary>
     /// Whenever a new projectile is added, this number should be increased to the highest one
     /// </summary>
-    public const int Max = 5;
+    public const int Max = 7;
 }

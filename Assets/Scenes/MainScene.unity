@@ -882,6 +882,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: ProjectileManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5123197028570177758, guid: d8ee2f89fdebd72429832ee7d9d38698, type: 3}
+      propertyPath: ProjectilePrefabs.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5123197028570177758, guid: d8ee2f89fdebd72429832ee7d9d38698, type: 3}
+      propertyPath: ProjectilePrefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 2055854199054703611, guid: 646ae6b2f463b1a459e57eda1e085ca3, type: 3}
+    - target: {fileID: 5123197028570177758, guid: d8ee2f89fdebd72429832ee7d9d38698, type: 3}
+      propertyPath: ProjectilePrefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 653664958243415698, guid: 2114677d69e04e84884a974962c41985, type: 3}
     - target: {fileID: 5216370964135903738, guid: d8ee2f89fdebd72429832ee7d9d38698, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
