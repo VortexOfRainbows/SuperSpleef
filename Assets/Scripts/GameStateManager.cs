@@ -56,14 +56,15 @@ public class GameStateManager : MonoBehaviour
     public static int Mode { get; private set; }
     public static float ParticleMultiplier { get; private set; } = 1;
     public static float SensitivityMultiplier { get; private set; } = 1;
+    public static float WorldSizeOverride { get; private set; } = World.DefaultChunkRadius;
     public static bool settingsDoIGenerateUCI { get; private set;  }
-    public static int chunkCount { get; private set; }
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {
         LocalMultiplayer = false;
         ParticleMultiplier = 1f;
         SensitivityMultiplier = 1f;
+        WorldSizeOverride = World.DefaultChunkRadius;
         Mode = GameModeID.None;
         Instance = this;
         DontDestroyOnLoad(this);
@@ -82,12 +83,14 @@ public class GameStateManager : MonoBehaviour
     {
         ParticleMultiplier = Mathf.Clamp01(mult);
     }
-
     public static void SetSensitivityMultiplier(float sensMulti)
     {
-        SensitivityMultiplier = Mathf.Clamp01(sensMulti);
+        SensitivityMultiplier = Mathf.Clamp(sensMulti, 0.01f, 10); //Lowest sensitivity we will let you have is 0.01f. Highest is 10
     }
-
+    public static void SetWorldSizeOverride(float size)
+    {
+        WorldSizeOverride = Mathf.Clamp(size, 1, 100); //Lowest size is 1 chunk. Biggest is 100x100 chunks
+    }
     public static void GenerateUCI(bool doIGenerate)
     {
         settingsDoIGenerateUCI = doIGenerate;

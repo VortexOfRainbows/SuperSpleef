@@ -12,7 +12,14 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     public static World Instance { get; private set; }
     public GameObject chunkObj;
     private GameObject[,] chunk;
-    public const int ChunkRadius = 15; //this is the total number of chunks in each direction xz
+    public const int DefaultChunkRadius = 15;
+    public static int ChunkRadius
+    {
+        get
+        {
+            return (int)GameStateManager.WorldSizeOverride;
+        }
+    }
     public const int WorldLayer = 3;
     public static Vector3Int MaxTiles;
     [SerializeField]
@@ -44,12 +51,10 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             }
         }
         GenerateFoliage();
-        
-        if(GameStateManager.settingsDoIGenerateUCI == true)
+        if(GameStateManager.settingsDoIGenerateUCI)
         {
             GenerateUCI();
         }
-
         for (int i = 0; i < chunk.GetLength(1); i++) //Completes the mesh for the chunk so it is visible and collideable
         {
             for (int j = 0; j < chunk.GetLength(0); j++)

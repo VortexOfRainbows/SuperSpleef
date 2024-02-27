@@ -5,17 +5,17 @@ using UnityEngine.UI;
 
 public class SliderPercent : MonoBehaviour
 {
-
-    Text percentText;
-
-    // Start is called before the first frame update
+    [SerializeField] private bool Percent = false;
+    private Text percentText;
     void Start()
     {
         percentText = GetComponent<Text>();
     }
-
-    public void textUpdate(float value)
+    public void TextUpdate(float value)
     {
-        percentText.text = Mathf.RoundToInt(value * 100) + "%";
+        if (Percent)
+            percentText.text = Mathf.RoundToInt(value * 100) + "%";
+        else
+            percentText.text = (Mathf.RoundToInt(value * 100) / 100f).ToString();
     }
 }

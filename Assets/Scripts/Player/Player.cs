@@ -75,6 +75,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
         }
         RB.maxDepenetrationVelocity = 0;
+        transform.position = new Vector3(Chunk.Width * GameStateManager.WorldSizeOverride / 2f, transform.position.y, Chunk.Width * GameStateManager.WorldSizeOverride / 2f); //Centers the player in teh world when they spawn in
     }
     public int SelectedItem { get; private set; }
     public Item HeldItem()
