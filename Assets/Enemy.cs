@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Obsolete] ///This script is currently unused but is planned to be used later
 public class Enemy : Entity  ///Team members that contributed to this script: Sehun Heo, Ian Bunnell
 {
     [SerializeField] private float speed = 5f;
@@ -9,7 +11,6 @@ public class Enemy : Entity  ///Team members that contributed to this script: Se
     private Rigidbody rb;
     private void Start()
     {
-        Inventory = new Inventory(1);
         rb = GetComponent<Rigidbody>();
         if (rb == null)
         {
@@ -20,18 +21,8 @@ public class Enemy : Entity  ///Team members that contributed to this script: Se
     public override void OnFixedUpdate()
     {
         //GameObject playerObject = GameObject.FindWithTag(playerTag); //Don't ever do this. Using find function in update is painfully slow and memory intensive
-        Player player = null;
-        float minDist = approachDistance;
-        for(int i = 0; i < GameStateManager.Players.Count; i++)
-        {
-            float distanceToPlayer = Vector3.Distance(transform.position, GameStateManager.Players[i].transform.position);
-            if(distanceToPlayer < minDist)
-            {
-                minDist = distanceToPlayer; //This is a simple way of maing the enemy search for the closest player, in cases such as multiplayer
-                player = GameStateManager.Players[i];
-            }
-        }
-        if(player != null)
+        Player player = FindClosestPlayer(approachDistance);
+        if (player != null)
         {
             Approach(player.transform.position);
         }

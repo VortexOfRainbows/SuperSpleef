@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class SlimeBehavior : Entity
 {
@@ -27,7 +28,6 @@ public class SlimeBehavior : Entity
     [SerializeField] private float chaseJumpBonus = 0.5f;
     void Start()
     {
-        Inventory = new Inventory(1);
         rb = GetComponent<Rigidbody>();
     }
     public override void OnFixedUpdate()
@@ -78,18 +78,7 @@ public class SlimeBehavior : Entity
         rb.velocity *= 0.1f;
         rb.AddForce(Vector3.up * jumpForce);
         jumpTimer = timeBetweenJumps;
-
-        target = null;
-        float minDist = approachDistance;
-        for (int i = 0; i < GameStateManager.Players.Count; i++)
-        {
-            float distanceToPlayer = Vector3.Distance(transform.position, GameStateManager.Players[i].transform.position);
-            if (distanceToPlayer < minDist)
-            {
-                minDist = distanceToPlayer; //This is a simple way of maing the enemy search for the closest player, in cases such as multiplayer
-                target = GameStateManager.Players[i];
-            }
-        }
+        target = FindClosestPlayer(approachDistance);
         ///STATE 1: If a player is near the slime, it will chase the player
         if (target != null) 
         {

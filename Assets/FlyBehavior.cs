@@ -1,156 +1,148 @@
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 public class FlyBehavior : Entity
 {
-    [SerializeField] private int TotalFrags = 8;
-    [SerializeField] private float ExplosionSpeedMult = 3f;
-    [SerializeField] private float RandomBonusSpread = 1f;
-
-    private Player target;
+    [SerializeField] private GameObject inner;
+    private bool GroundIsBelow = false;
     private Rigidbody rb;
 
-    [SerializeField] private float approachDistance = 6;
-    [SerializeField] private float speed;
+    [SerializeField] private Vector3 wanderableRange;
+
+    [SerializeField] private float approachDistance;
+    [SerializeField] private float speed = 5;
+    [SerializeField] private float selfDestructSpeed = -50;
     [SerializeField] private float acceleration;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private bool selfDestruct;
+    [SerializeField] private float maxSpeed = 50;
 
     [SerializeField] private float detonationTimer;
+    private Vector3 wanderTarget;
 
-    public Vector3 wanderTarget;
-
-
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        wanderTarget = new Vector3(Random.Range(0, 100), Random.Range(50, 50), Random.Range(0, 100));
-}
-    private void FixedUpdate()
+        NewWander();
+    }
+    private void NewWander()
     {
-        /*if (target != null)
+        //pick a random nearby position to wander to
+        wanderTarget = transform.position + new Vector3(Random.Range(-wanderableRange.x, wanderableRange.x), -Random.Range(0, wanderableRange.y), Random.Range(-wanderableRange.z, wanderableRange.z)); //Slowly wanders down and around the map
+        wanderTarget.x = Mathf.Clamp(wanderTarget.x, 0, World.ChunkRadius * Chunk.Width);
+        wanderTarget.z = Mathf.Clamp(wanderTarget.z, 0, World.ChunkRadius * Chunk.Width); //Make sure it doesn't wander horizontally outside of the world
+    }
+    public override void OnFixedUpdate()
+    {
+        inner.transform.rotation = Quaternion.identity; //The inner should not rotate. It is meant to hold a collider in place that is used for stuff.
+        Player player = FindClosestPlayer(approachDistance);
+        ///STATE 1: If a player is near the slime, it will dive into the player like a kamikaze air plane
+        if (player != null)
         {
-            Chase(target);
+            approachDistance = int.MaxValue; //Now that it has seen the player once, it has always seen the player.
+            speed = selfDestructSpeed = Mathf.Clamp(selfDestructSpeed + acceleration * Time.fixedDeltaTime, -maxSpeed, maxSpeed);
+            rb.velocity = transform.forward * speed;
+            selfDestruct = true;
+            if (speed < 0)
+            {
+                transform.LookAt(player.transform.position);
+            }
+            else if (speed > 0)
+            {
+                Quaternion setRotation = transform.rotation;
+                transform.rotation = setRotation;
+            }
         }
-        ///STATE 2: If a player is not near the slime, it will wander around
         else
         {
-            Wander();
-        }*/
-
-        //SelfDestruct(target);
-        
-        /*if (selfDestruct == false && detonationTimer > 0)
-        {
-            Chase(target);
-            detonationTimer -= Time.deltaTime;
+            ///STATE 3: If there is ground 10 blocks below this (based on the size of a collider): Hover above the ground to reach a higher altitude.
+            if (GroundIsBelow) 
+            {
+                GoUp(); //go up as to hover over the blocks
+            }
+            ///STATE 2: If there is NOT ground 10 blocks below this (based on the size of a collider): Decend while wandering around randomly
+            else 
+            {
+                Wander();
+            }
         }
-        else if(detonationTimer < 0 || selfDestruct == true)
-        {
-            selfDestruct = true;
-            SelfDestruct(target);
-            detonationTimer = 1;
-        }*/
-
-        //Debug.Log(detonationTimer);
-
-        SelfDestruct(target);
-
+        GroundIsBelow = false;
     }
-
-    public void SelfDestruct(Player player) // We want the entity to wind the attack, then move very fast.
-    {
-        target = GameStateManager.Players[0];
-        selfDestruct = true;
-        
-        rb.velocity = transform.forward * speed;
-        speed = Mathf.Clamp(speed + acceleration, -100, 50);
-        //acceleration = (acceleration/ (1.01f)) * Time.deltaTime;
-
-        /*if (speed == 0)
-        {
-            speed = 0f;
-            acceleration = 0f;
-            attackdelay += Time.deltaTime;
-        }
-        
-        if (attackdelay >= 1) 
-        {
-            acceleration = 10;
-        }*/
-
-        if (speed < 0) 
-        {
-            transform.LookAt(player.transform.position);
-        }
-        else if (speed > 0) 
-        {
-            Quaternion setRotation = transform.rotation;
-            transform.rotation = setRotation;
-        }
-    }
-
-    public void Chase(Player player) 
-    {
-        target = GameStateManager.Players[0];
-        speed = 5f;
-        rb.velocity = transform.forward * speed;
-        transform.LookAt(player.transform.position);
-    }
-
-    public float nextMovement = 3;
+    [SerializeField] private float TimeUntilMove = 3;
+    private float nextMovement;
     public void Wander()
     {
-        
-        rb.velocity = transform.forward * speed;
-        float angleBetween = Vector3.Angle(rb.transform.position, wanderTarget);
-
-        if (angleBetween < 20)
+        float distance = Vector3.Distance(transform.position, wanderTarget);
+        if (nextMovement <= 0)
         {
-            speed = 0;
-            nextMovement -= 1f * Time.deltaTime;
             transform.LookAt(wanderTarget);
-            Debug.Log(true);
+            if (distance > 2) //if roughly around the destination
+            {
+                float speedToMove = speed;
+                if (speedToMove > distance)
+                    speedToMove = distance;
+                rb.velocity = transform.forward * speedToMove;
+            }
+            else
+            {
+                NewWander();
+                nextMovement = TimeUntilMove;
+                transform.LookAt(wanderTarget);
+            }
         }
-        else 
+        else
         {
-            speed = 10f;
-            transform.LookAt(wanderTarget);
+            rb.velocity *= 0.8f; //Slow down while anticipating next movement.
         }
-        
-        if (nextMovement < 0) 
+        nextMovement -= Time.fixedDeltaTime;
+    }
+    public void GoUp()
+    {
+        rb.velocity = Vector3.up * speed;
+        if(nextMovement != 0)
         {
-            speed = 10f;
-            nextMovement = 3;
-            wanderTarget = new Vector3(Random.Range(0, 150), Random.Range(50, 50), Random.Range(0, 150));
+            NewWander();
+            nextMovement = 0; //Reset the wander timer so it will wander right away again
         }
     }
-
-    public void Circle() 
-    { 
-        
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
-        if (selfDestruct) 
+        OnCollision(collision);
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        OnCollision(collision);
+    }
+    private void OnCollision(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
         {
-            Vector3 explosionPos = transform.position;
-            Collider[] colliders = Physics.OverlapSphere(explosionPos, 50);
-            
-            foreach (Collider hit in colliders)
+            if (selfDestruct)
             {
-                Rigidbody rb = hit.GetComponent<Rigidbody>();
-
-                if (rb != null)
-                    rb.AddExplosionForce(3000f, explosionPos, 50, 3.0F);
+                ///Removed the explosion radius because I believe it interferes with the idea of the game... and because I want to incorporate helper methods for this in the future instead.
+                /*int hitRadius = 5;
+                Vector3 explosionPos = transform.position;
+                Collider[] colliders = Physics.OverlapSphere(explosionPos, hitRadius);
+                foreach (Collider hit in colliders)
+                {
+                    Rigidbody rb = hit.GetComponent<Rigidbody>();
+                    if (rb != null)
+                        rb.AddExplosionForce(100f, explosionPos, hitRadius, 4.0f);
+                }*/
+                World.FillBlock(transform.position + new Vector3(2, 3, 2), transform.position - new Vector3(2, 3, 2), BlockID.Air, 0.1f);
+                Destroy(rb.gameObject);
             }
-            
-            World.FillBlock(transform.position + new Vector3(3, 4, 3), transform.position - new Vector3(3, 4, 3), BlockID.Air, 0.5f);
-            Destroy(rb.gameObject); 
         }
-        
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Ground")
+        {
+            GroundIsBelow = true;
+        }
     }
 }
