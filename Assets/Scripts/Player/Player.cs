@@ -224,8 +224,8 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// </summary>
     private void MouseControls()
     {
-        float mouseX = Control.XAxis * Time.deltaTime * Sensitivity;
-        float mouseY = Control.YAxis * Time.deltaTime * Sensitivity;
+        float mouseX = Control.XAxis * Time.deltaTime * Sensitivity * GameStateManager.SensitivityMultiplier;
+        float mouseY = Control.YAxis * Time.deltaTime * Sensitivity * GameStateManager.SensitivityMultiplier;
         Direction.y += mouseX;
         Direction.x -= mouseY;
 
@@ -235,6 +235,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
         //transform.rotation = Quaternion.Euler(0, Direction.y, 0f);
     }
+
     /// <summary>
     /// Manages which item is selected by the player
     /// </summary>

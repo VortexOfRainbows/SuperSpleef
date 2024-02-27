@@ -55,11 +55,15 @@ public class GameStateManager : MonoBehaviour
     public static GameStateManager Instance;
     public static int Mode { get; private set; }
     public static float ParticleMultiplier { get; private set; } = 1;
+    public static float SensitivityMultiplier { get; private set; } = 1;
+    public static bool settingsDoIGenerateUCI { get; private set;  }
+    public static int chunkCount { get; private set; }
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {
         LocalMultiplayer = false;
         ParticleMultiplier = 1f;
+        SensitivityMultiplier = 1f;
         Mode = GameModeID.None;
         Instance = this;
         DontDestroyOnLoad(this);
@@ -78,6 +82,17 @@ public class GameStateManager : MonoBehaviour
     {
         ParticleMultiplier = Mathf.Clamp01(mult);
     }
+
+    public static void SetSensitivityMultiplier(float sensMulti)
+    {
+        SensitivityMultiplier = Mathf.Clamp01(sensMulti);
+    }
+
+    public static void GenerateUCI(bool doIGenerate)
+    {
+        settingsDoIGenerateUCI = doIGenerate;
+    }
+
     public static void MainMenu()
     {
         SceneManager.LoadScene(0); //Loads the SuperSpleef Title Page
