@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
-public class SlimeBehavior : Entity
+public class SlimeBehavior : Entity ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
 {
     [SerializeField] private int TotalFrags = 8;
     [SerializeField] private float ExplosionSpeedMult = 3f;

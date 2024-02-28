@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AINavigation : MonoBehaviour
+[Obsolete] // This script is no longer used.
+public class AINavigation : MonoBehaviour ///Team members that contributed to this script: Samuel Gines
 {
     // Start is called before the first frame update
 

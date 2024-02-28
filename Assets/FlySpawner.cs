@@ -6,13 +6,13 @@ using UnityEngine;
 /// <summary>
 /// This class is currently unused.
 /// </summary>
-[Obsolete]
-public class FlySpawner : MonoBehaviour
+[Obsolete] // This script is no longer used.
+public class FlySpawner : MonoBehaviour ///Team members that contributed to this script: Samuel Gines
 {
     [SerializeField] private GameObject fly;
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if(Input.GetKeyDown(KeyCode.E)) //if the E-key is pressed, a killerfly spawns into the game sceme.
             Instantiate(fly);
     }
 }
