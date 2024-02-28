@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using TreeEditor;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class FlyBehavior : Entity ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
 {

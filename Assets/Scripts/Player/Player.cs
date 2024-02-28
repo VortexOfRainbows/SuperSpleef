@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo
