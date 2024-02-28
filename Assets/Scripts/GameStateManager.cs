@@ -92,7 +92,7 @@ public class GameStateManager : MonoBehaviour
     }
     public static void SetControllerSensitivityMultiplier(float controlMulti)
     {
-        SensitivityMultiplier = Mathf.Clamp(controlMulti, 0.01f, 10); //Lowest sensitivity we will let you have is 0.01f. Highest is 10
+        ControllerSensitivityMultiplier = Mathf.Clamp(controlMulti, 0.01f, 10); //Lowest sensitivity we will let you have is 0.01f. Highest is 10
     }
     public static void SetWorldSizeOverride(float size)
     {

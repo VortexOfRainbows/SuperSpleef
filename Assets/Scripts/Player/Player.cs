@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo
@@ -35,6 +36,11 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     [SerializeField] private float MoveAcceleration = 0.1f;
     [SerializeField] private float JumpDrag = 0.95f;
     [SerializeField] private bool OnTheFloor = false;
+    /// <summary>
+    /// How long until the player can use an item. 
+    /// Public float since it is used inside ITEM.
+    /// </summary>
+    public float ItemUseTime { get; private set; } 
 
     private void Start()
     {
@@ -48,12 +54,16 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             StartingItemCount = 100;
         }
         Inventory = new Inventory(30);
-        Inventory.AddItem(GameStateManager.LocalMultiplayer ? new LaserCannon() : new BasicBlaster());
+        Inventory.AddItem(new BasicBlaster());
+        if(GameStateManager.LocalMultiplayer) //These if statements are very deliberately placed, since i want items to be in the hotbar in a certain order...
+        {
+            Inventory.AddItem(new LaserCannon());
+        }
         if (GameStateManager.Mode == GameModeID.Apocalypse)
         {
             Inventory.AddItem(new BlockGun());
         }
-        if (GameStateManager.LocalMultiplayer)
+        if (GameStateManager.LocalMultiplayer) //That is why these if statements are seperate, despite involving the same boolean expression.
         {
             Inventory.AddItem(new PlaceableBlock(ControlManager.UsingGamepad ? BlockID.BlueBricks : BlockID.YellowBricks, StartingItemCount));
         }
@@ -262,11 +272,20 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// <summary>
     /// Manages the players item usage
     /// </summary>
-    private void HeldItemUpdate() 
+    private void HeldItemUpdate()
     {
         Item heldItem = HeldItem();
-        bool left = Control.LeftClick && !LastControl.LeftClick;
-        bool right = Control.RightClick && !LastControl.RightClick;
+        bool left = Control.LeftClick;
+        bool right = Control.RightClick;
+        if (ItemUseTime > 0)
+        {
+            left = right = false; //Do not consider an input if the item timer is up
+        }
+        bool holdingClick = (Control.LeftClick && LastControl.LeftClick) || (Control.RightClick && LastControl.RightClick);
+        if (holdingClick)
+            ItemUseTime--;
+        else
+            ItemUseTime = -1;
         bool itemUsed = false;
         RaycastHit hitInfo;
         Vector3 TargetPosition = transform.position + new Vector3(0, 0.5f, 0);
@@ -314,22 +333,25 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 blocksWereModified = World.SetBlock(TargetPosition, BlockID.Air);
                 updateBlockOutline = blocksWereModified;
             } 
-            else if (holdingPlaceableBlock && heldItem.OnSecondaryUse(this) && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air) //Place a block with right click
+            else if (holdingPlaceableBlock && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air) //Place a block with right click
             {
-                Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.48f, 0.48f, 0.48f));
-                bool NoEntities = inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0;
-                if (NoEntities)
+                if(heldItem.UseSecondary(this))
                 {
-                    bool placedBlocks = World.SetBlock(TargetPosition, blockToPlace);
-                    updateBlockOutline = placedBlocks;
-                    if (placedBlocks)
+                    Collider[] inBlockPosition = Physics.OverlapBox(centerOfBlock, new Vector3(0.48f, 0.48f, 0.48f));
+                    bool NoEntities = inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0;
+                    if (NoEntities)
                     {
-                        itemUsed = true;
-                        blocksWereModified = true;
+                        bool placedBlocks = World.SetBlock(TargetPosition, blockToPlace);
+                        updateBlockOutline = placedBlocks;
+                        if (placedBlocks)
+                        {
+                            itemUsed = true;
+                            blocksWereModified = true;
+                        }
                     }
+                    else
+                        updateBlockOutline = false;
                 }
-                else
-                    updateBlockOutline = false;
             }
             if (updateBlockOutline)
             {
@@ -352,17 +374,24 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             if(left)
             {
-                if(heldItem.OnPrimaryUse(this))
+                if(heldItem.UsePrimary(this))
                 {
                     itemUsed = true;
                 }
             }
             if(right && !holdingPlaceableBlock)
             {
-                if (heldItem.OnSecondaryUse(this))
+                if (heldItem.UseSecondary(this))
                 {
                     itemUsed = true;
                 }
+            }
+        }
+        else //if blocks WERE modified
+        {
+            if(left)
+            {
+                ItemUseTime = Item.DefaultItemFirerate;
             }
         }
         if(itemUsed)
@@ -374,6 +403,11 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 {
                     Inventory.Set(SelectedItem, Item.Empty);
                 }
+            }
+            ItemUseTime = heldItem.Firerate;
+            if(ItemUseTime <= 0)
+            {
+                ItemUseTime = Item.DefaultItemFirerate;
             }
         }
     }
