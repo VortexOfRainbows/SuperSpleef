@@ -58,7 +58,7 @@ public class GameStateManager : MonoBehaviour
     public static float SensitivityMultiplier { get; private set; } = 1;
     public static float ControllerSensitivityMultiplier { get; private set; } = 1;
     public static float WorldSizeOverride { get; private set; } = World.DefaultChunkRadius;
-    public static bool settingsDoIGenerateUCI { get; private set;  }
+    public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {

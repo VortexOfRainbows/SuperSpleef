@@ -230,6 +230,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da4335b592e59e47bb8d0d757a57758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TotalFrags: 8
+  ExplosionSpeedMult: 3
+  RandomBonusSpread: 1
   innerCube: {fileID: 971028521194669727}
   innerCubeSizeMult: 0.5
   attackInnerCubeSizePercentage: 0.2
@@ -240,3 +243,4 @@ MonoBehaviour:
   jumpForce: 100
   timeBetweenJumps: 1
   timeBetweenAttacks: 2.5
+  chaseJumpBonus: 0.5

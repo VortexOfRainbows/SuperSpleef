@@ -48,30 +48,20 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             StartingItemCount = 100;
         }
         Inventory = new Inventory(30);
-        for(int i = 0; i < Inventory.Count; i++) //Initializies a basic inventory for the purpose of testing
+        Inventory.AddItem(GameStateManager.LocalMultiplayer ? new LaserCannon() : new BasicBlaster());
+        if (GameStateManager.Mode == GameModeID.Apocalypse)
         {
-            if (GameStateManager.LocalMultiplayer) //Special inventory for multiplayer
+            Inventory.AddItem(new BlockGun());
+        }
+        if (GameStateManager.LocalMultiplayer)
+        {
+            Inventory.AddItem(new PlaceableBlock(ControlManager.UsingGamepad ? BlockID.BlueBricks : BlockID.YellowBricks, StartingItemCount));
+        }
+        else
+        {
+            for (int i = 1; i < BlockID.Max; i++) //Initializies a basic inventory for the purpose of testing
             {
-                if (i == 0)
-                    Inventory.Set(i, new BasicBlaster());
-                else if (i == 1)
-                {
-                    int iType = BlockID.YellowBricks; //Player one gets yellow blocks
-                    if(ControlManager.UsingGamepad) //Player two gets blue blocks
-                        iType = BlockID.BlueBricks;
-                    Inventory.Set(i, new PlaceableBlock(iType, StartingItemCount));
-                }
-            }
-            else
-            {
-                if (i == 0)
-                    Inventory.Set(i, new BasicBlaster());
-                else if (i == 1)
-                    Inventory.Set(i, new BlockGun());
-                else if (i <= BlockID.Max + 1)
-                    Inventory.Set(i, new PlaceableBlock(i - 1, StartingItemCount));
-                else if (i == 9)
-                    Inventory.Set(i, new WorldDestroyer());
+                Inventory.AddItem(new PlaceableBlock(i, StartingItemCount));
             }
         }
         RB.maxDepenetrationVelocity = 0;

@@ -69,16 +69,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d24d7fdb3caf1044b9b539f95043b17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  players:
-  - {fileID: 0}
+  KillerFly: {fileID: 817726872655957687, guid: 2114677d69e04e84884a974962c41985, type: 3}
+  Slime: {fileID: 5293615958095127334, guid: 646ae6b2f463b1a459e57eda1e085ca3, type: 3}
   BallCountMinMax: {x: 5, y: 20}
   SpawnTime: 3
   SpawnSpread: 12
   RandomVelocity: 3
   SpawnHeight: 70
   SecondsUntilMaxDifficulty: 900
-  FragChance: 0.125
-  SuperFragChance: 0.025
-  TunnelBoreChance: 0.025
-  FragFragChance: 0.025
+  FragChance: 0.1
+  SuperFragChance: 0.0225
+  TunnelBoreChance: 0.0225
+  FragFragChance: 0.02
   MaxDifficultyMultiplier: 2
+  SlimeChance: 0.08
+  FlyChance: 0.05
+  EnemySpawnPadding: 4

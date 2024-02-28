@@ -14,7 +14,7 @@ public static class BlockID ///Team members that contributed to this script: Ian
     public const int YellowBricks = 7;
     public const int BlueBricks = 8;
     /// <summary>
-    /// Whenever a new block is added, this number should be increased to the highest one
+    /// Whenever a new block is added, this number should be increased to the highest one + 1
     /// </summary>
-    public const int Max = 8;
+    public const int Max = 9;
 }

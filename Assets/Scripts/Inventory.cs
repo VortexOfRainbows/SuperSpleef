@@ -1,4 +1,6 @@
 using System;
+using System.Drawing;
+using TMPro.EditorUtilities;
 ///Team members that contributed to this script: Ian Bunnell
 [Serializable]
 public class Inventory //This class exists so that the UI for displaying an item slot could be used in other places in the future.
@@ -21,5 +23,18 @@ public class Inventory //This class exists so that the UI for displaying an item
     public Item Get(int i)
     {
         return item[i];
+    }
+    public bool AddItem(Item itemToAdd)
+    {
+        for (int i = 0; i < Count; i++)
+        {
+            Item iItem = item[i];
+            if(iItem is NoItem)
+            {
+                item[i] = itemToAdd;
+                return true;
+            }
+        }
+        return false;
     }
 }

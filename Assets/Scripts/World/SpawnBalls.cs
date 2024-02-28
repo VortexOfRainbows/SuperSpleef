@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class SpawnBalls : MonoBehaviour ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
 {
+    [SerializeField] private Entity KillerFly;
+    [SerializeField] private Entity Slime;
     [SerializeField] private Vector2 BallCountMinMax = new Vector2(4, 20);
     [SerializeField] private float SpawnTime = 3;
     [SerializeField] private float SpawnSpread = 5f;
@@ -17,9 +21,9 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
     [SerializeField] private float MaxDifficultyMultiplier = 2f;
 
     //Enemies
-
     [SerializeField] private float SlimeChance = 0.06f;
     [SerializeField] private float FlyChance = 0.06f;
+    [SerializeField] private float EnemySpawnPadding = 4;
 
     private float timer;
     private float TotalTimePassed;
@@ -63,17 +67,6 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
                     {
                         ballType = ProjectileManager.GetProjectile<BouncyDeathBall>();
                     }
-
-                    if (Random.value < SlimeChance) 
-                    {
-                        ballType = ProjectileManager.GetProjectile(ProjectileID.Slime);
-                    }
-
-                    if (Random.value < FlyChance)
-                    {
-                        ballType = ProjectileManager.GetProjectile(ProjectileID.KillerFly);
-                    }
-
                     float mult = 1;
                     
                     if (i == 0)
@@ -84,6 +77,16 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
                         rb.velocity = new Vector3(Random.Range(-RandomVelocity, RandomVelocity), Random.Range(-RandomVelocity, RandomVelocity), Random.Range(-RandomVelocity, RandomVelocity));
                 }
                 timer = 0;
+            }
+            if(Random.Range(0, 1f) < SlimeChance * (1 + scaleMult * 2))
+            {
+                Vector3 randomSpawnPosition = new Vector3(Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding), SpawnHeight, Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding));
+                Instantiate(Slime, randomSpawnPosition, Quaternion.identity);
+            }
+            if(Random.Range(0, 1f) < FlyChance * (1 + scaleMult * 2))
+            {
+                Vector3 randomSpawnPosition = new Vector3(Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding), SpawnHeight, Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding));
+                Instantiate(KillerFly, randomSpawnPosition, Quaternion.identity);
             }
         }
     }
