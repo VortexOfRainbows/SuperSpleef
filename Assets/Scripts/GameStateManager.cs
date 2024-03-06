@@ -69,8 +69,15 @@ public class GameStateManager : MonoBehaviour
         ControllerSensitivityMultiplier = 1f;
         WorldSizeOverride = World.DefaultChunkRadius;
         Mode = GameModeID.None;
-        Instance = this;
-        DontDestroyOnLoad(this);
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         ResetStates();
     }
     private static void ResetStates()
