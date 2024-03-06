@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,10 +10,11 @@ public static class GameModeID // Assigns an int as a reference to each game mod
     public const int Creative = 0;
     public const int Apocalypse = 1;
     public const int LocalMultiplayer = 2;
-    public const int NetMultiplayer = 3;
+    public const int LocalMultiplayerApocalypse = 3;
 }
 public class GameStateManager : MonoBehaviour
 {
+    public const string MainScene = "MainScene";
     public static List<Player> Players
     {
         get
@@ -122,16 +124,19 @@ public class GameStateManager : MonoBehaviour
     {
         ResetStates();
         Mode = mode;
-        if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.NetMultiplayer)
+        if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.LocalMultiplayerApocalypse)
         {
             LocalMultiplayer = true; //For now, net and local multiplayer are considered the same (since there is no NET Multiplayer yet)
-            Mode = mode == GameModeID.NetMultiplayer ? GameModeID.Apocalypse : GameModeID.None;
+            Mode = mode == GameModeID.LocalMultiplayerApocalypse ? GameModeID.Apocalypse : GameModeID.None;
             SceneManager.LoadScene(2);
         }
         else
         {
             LocalMultiplayer = false;
-            SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
+            if(NetHandler.OnNetwork)
+                NetworkManager.Singleton.SceneManager.LoadScene(MainScene, LoadSceneMode.Single);
+            else
+                SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
         }
     }
     public static void RestartGame()
