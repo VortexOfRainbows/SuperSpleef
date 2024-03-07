@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 
 public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell, David Bu
 {
+    [SerializeField] private Player player;
     private GamepadControls GamepadControls;
     public bool UsingGamepad = false;
     public ControlDown Control = new ControlDown(); //Stores player input for the current frame
@@ -98,14 +99,10 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = false;
         }
-        /*if(GamepadControls.Input.Start.inProgress)
+        if(!player.IsOwner && player.NetworkManager != null) //Only let the owner of the player move it
         {
-            UsingGamepad = true;
+            return;
         }
-        else if(Input.GetMouseButton(0))
-        {
-            UsingGamepad = false;
-        }*/
         if (UsingGamepad)
         {
             Control.ScrollDelta = 0;

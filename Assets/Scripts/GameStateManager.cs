@@ -14,7 +14,9 @@ public static class GameModeID // Assigns an int as a reference to each game mod
 }
 public class GameStateManager : MonoBehaviour
 {
+    [SerializeField] private GameObject player;
     public const string MainScene = "MainScene";
+    public const string MultiplayerScene = "MultiplayerScene";
     public static List<Player> Players
     {
         get
@@ -74,12 +76,12 @@ public class GameStateManager : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
+            //DontDestroyOnLoad(this);
         }
-        else
+        /*else
         {
             Destroy(gameObject);
-        }
+        }*/
         ResetStates();
     }
     private static void ResetStates()
@@ -134,7 +136,9 @@ public class GameStateManager : MonoBehaviour
         {
             LocalMultiplayer = false;
             if(NetHandler.OnNetwork)
-                NetworkManager.Singleton.SceneManager.LoadScene(MainScene, LoadSceneMode.Single);
+            {
+                NetworkManager.Singleton.SceneManager.LoadScene(MultiplayerScene, LoadSceneMode.Single); 
+            }
             else
                 SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
         }
@@ -166,5 +170,26 @@ public class GameStateManager : MonoBehaviour
             GameOverTextColor = color;
         GameOver = true;
         Time.timeScale = 0.5f;
+    }
+    private float WaitSomeTimeForAssetsToLoad = 0;
+    private bool HasSpawnedPlayers = false;
+    private void LateUpdate()
+    {
+        if (!HasSpawnedPlayers && SceneManager.GetActiveScene().name == MultiplayerScene)
+        {
+            WaitSomeTimeForAssetsToLoad += Time.deltaTime;
+            if(WaitSomeTimeForAssetsToLoad > 1)
+            {
+                if (NetworkManager.Singleton.IsServer)
+                {
+                    foreach (NetworkPlayer nPlayer in NetHandler.LoggedPlayers)
+                    {
+                        GameObject go = Instantiate(Instance.player, new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2), Quaternion.identity);
+                        go.GetComponent<NetworkObject>().SpawnAsPlayerObject(nPlayer.OwnerClientId);
+                    }
+                }
+                HasSpawnedPlayers = true;
+            }
+        }
     }
 }

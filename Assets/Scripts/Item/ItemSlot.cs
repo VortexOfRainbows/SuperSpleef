@@ -21,6 +21,12 @@ public class ItemSlot : MonoBehaviour ///Team members that contributed to this s
     public bool IsSelected = false;
     private void Update()
     {
+        if(Owner == null)
+        {
+            if(GameStateManager.Players.Count > 0)
+                Owner = GameStateManager.Players[0];
+            return;
+        }
         IsSelected = false;
         if (Owner is Player p)
         {

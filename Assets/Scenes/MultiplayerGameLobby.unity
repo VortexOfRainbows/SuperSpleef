@@ -754,6 +754,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3167217915162448950, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3468058531384818672, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -766,7 +770,19 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 468370844}
+    - target: {fileID: 5839459020468267563, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7072909272817255188, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7136988355529536546, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8069560609728917150, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}

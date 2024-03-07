@@ -29,11 +29,11 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     private void Awake()
     {
         BlockParticleRef = BlockParticles;
+        Instance = this;
     }
     private void Start()
     {
         WorldGenFinished = false;
-        Instance = this;
         GenWorld();
     }
     private void GenWorld()

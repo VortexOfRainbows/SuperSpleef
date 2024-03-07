@@ -9,7 +9,9 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     [SerializeField] private Rigidbody RB;
     [SerializeField] private BoxCollider JumpHitbox;
     #endregion
-
+    private Transform CameraTransform => ClientManager.Camera.transform;
+    private ScreenBlocker ScreenBlocker => ClientManager.Blocker;
+    private GameObject BlockOutline => ClientManager.Outline;
     /// <summary>
     /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls.
     /// This is public because it needs to be accessible by other classes
@@ -19,8 +21,6 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
 
     [SerializeField] private float Sensitivity = 1;
-    [SerializeField] private Transform CameraTransform;
-    [SerializeField] private ScreenBlocker ScreenBlocker;
     public const int EntityLayer = 6;
     [SerializeField] private float BlockRange = 4;
     [SerializeField] private float jumpForce = 10f;
@@ -35,10 +35,18 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// How long until the player can use an item. 
     /// Public float since it is used inside ITEM.
     /// </summary>
-    public float ItemUseTime { get; private set; } 
-
+    public float ItemUseTime { get; private set; }
+    public override void OnNetworkSpawn()
+    {
+        OnStart();
+    }
     private void Start()
     {
+        OnStart();
+    }
+    private void OnStart()
+    {
+        Inventory = new Inventory(30);
         int StartingItemCount = 20;
         if(GameStateManager.Mode == GameModeID.Creative)
         {
@@ -48,7 +56,6 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             StartingItemCount = 100;
         }
-        Inventory = new Inventory(30);
         Inventory.AddItem(new BasicBlaster());
         if(GameStateManager.LocalMultiplayer) //These if statements are very deliberately placed, since i want items to be in the hotbar in a certain order...
         {
@@ -227,8 +234,11 @@ public class Player : Entity ///Team members that contributed to this script: Ia
 
         Direction.x = Mathf.Clamp(Direction.x, -90f, 90f);
 
-        CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
-        CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+        if(IsOwner || NetworkManager == null)
+        {
+            CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
+            CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+        }
         //transform.rotation = Quaternion.Euler(0, Direction.y, 0f);
     }
 
@@ -263,7 +273,6 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             newSelectedItem = 10 + newSelectedItem;
         SelectedItem = newSelectedItem;
     }
-    [SerializeField] private GameObject BlockOutline;
     /// <summary>
     /// Manages the players item usage
     /// </summary>
@@ -406,13 +415,26 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
         }
     }
-    [SerializeField] private GameObject InBlockColliderTop;
-    [SerializeField] private GameObject InBlockColliderBottom;
+    [SerializeField] private GameObject InBlockColliderTemplate;
+    private GameObject InBlockColliderTop, InBlockColliderBottom;
+    private void InitializeInBlockColliders()
+    {
+        InBlockColliderBottom = Instantiate(InBlockColliderTemplate, null);
+        InBlockColliderTop = Instantiate(InBlockColliderTemplate, null);
+        InBlockColliderBottom.name = "BottomInBlockCollider";
+        InBlockColliderTop.name = "TopInBlockCollider";
+        InBlockColliderBottom.GetComponent<BarrierBlock>().IgnoreTop = true;
+        InBlockColliderTop.GetComponent<BarrierBlock>().IgnoreBot = true;
+    }
     /// <summary>
     /// Updates the colliders that surround the player to make sure they can't fall out of the world if they clip out of the chunk's mesh
     /// </summary>
     private void BlockCollisionCheck()
     {
+        if(InBlockColliderTop == null && InBlockColliderBottom == null)
+        {
+            InitializeInBlockColliders();
+        }
         Vector3 topAsInt = new Vector3(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y + 0.5f), Mathf.FloorToInt(transform.position.z));
         InBlockColliderTop.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f), Mathf.FloorToInt(transform.position.z) + 0.5f);
         InBlockColliderBottom.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f) - 1, Mathf.FloorToInt(transform.position.z) + 0.5f);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 910251393658398682}
   - component: {fileID: 7872693681532538637}
   - component: {fileID: 3130170715592984045}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Pickup Radius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8010838436936143650}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: DirectionVector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,6 +118,8 @@ GameObject:
   - component: {fileID: 2692037336782053526}
   - component: {fileID: 4504802999161380935}
   - component: {fileID: 2651317863319354778}
+  - component: {fileID: 2250533076441766739}
+  - component: {fileID: 7241555210621592036}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -236,8 +238,6 @@ MonoBehaviour:
   JumpHitbox: {fileID: 2651317863319354778}
   ControlManager: {fileID: 5101752403716287785}
   Sensitivity: 400
-  CameraTransform: {fileID: 0}
-  ScreenBlocker: {fileID: 0}
   BlockRange: 4.6
   jumpForce: 10
   WalkSpeed: 4
@@ -248,9 +248,7 @@ MonoBehaviour:
   JumpDrag: 0.95
   OnTheFloor: 0
   perpendicularVelocity: {x: 0, y: 0}
-  BlockOutline: {fileID: 0}
-  InBlockColliderTop: {fileID: 0}
-  InBlockColliderBottom: {fileID: 0}
+  InBlockColliderTemplate: {fileID: 8847359203406491454, guid: 0419566e7de6cbd41bc5eeb4fee2bb51, type: 3}
 --- !u!65 &1213534850690080090
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -284,6 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f265624daddefe44a80ef65a892421f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 7380683411496612807}
   UsingGamepad: 0
 --- !u!114 &2692037336782053526
 MonoBehaviour:
@@ -297,8 +296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4157efcde027c104495469b7ce51049c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPlayerHP: 100
-  currentPlayerHP: 100
   player: {fileID: 7380683411496612807}
   rb: {fileID: 1326384001663812332}
 --- !u!114 &4504802999161380935
@@ -337,3 +334,53 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.02, z: 0.5}
   m_Center: {x: 0, y: -1, z: 0}
+--- !u!114 &2250533076441766739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377142725127841264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &7241555210621592036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377142725127841264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0

@@ -260,67 +260,10 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!1001 &1006831463
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 704.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 289.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1367921222881860352, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: m_Name
-      value: GameManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
 --- !u!114 &1172666746 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2073345897902180056, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-  m_PrefabInstance: {fileID: 1006831463}
+  m_CorrespondingSourceObject: {fileID: 2763758011399544010, guid: 691866399383fa74493e1711675ecf52, type: 3}
+  m_PrefabInstance: {fileID: 1736439003}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -407,6 +350,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2725738062096682887, guid: 691866399383fa74493e1711675ecf52, type: 3}
+      propertyPath: NetworkConfig.ConnectionApproval
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4514141844027338931, guid: 691866399383fa74493e1711675ecf52, type: 3}
       propertyPath: hostButton
       value: 
@@ -417,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 8033940469957604008}
     - target: {fileID: 5134759539436619617, guid: 691866399383fa74493e1711675ecf52, type: 3}
       propertyPath: m_Name
-      value: NetworkHandler
+      value: Main
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -578,5 +525,4 @@ SceneRoots:
   - {fileID: 468370845}
   - {fileID: 8033940469957604007}
   - {fileID: 1215900017}
-  - {fileID: 1006831463}
   - {fileID: 1736439003}

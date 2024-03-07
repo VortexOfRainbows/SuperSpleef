@@ -8,12 +8,11 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
 {
     public const float DamageFromVoid = 200f;
-    [SerializeField] private float maxPlayerHP; // Assigns the Max HP of the player
-    [SerializeField] private float currentPlayerHP; // Assigns the current HP of the character
+    private const float maxPlayerHP = 100; // Assigns the Max HP of the player
+    private float currentPlayerHP = maxPlayerHP; // Assigns the current HP of the character
     //[SerializeField] private GameObject ClientPackage;
     [SerializeField] private Player player;
     [SerializeField] private Rigidbody rb; // The rigidbody of the player gameobject
-
     private void Start()
     {
         currentPlayerHP = maxPlayerHP; // sets current HP to max HP upon loading the scene
