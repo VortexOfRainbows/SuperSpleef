@@ -38,6 +38,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     }
     private void GenWorld()
     {
+        Random.InitState(GameStateManager.GenSeed.Value);
         MaxTiles = new Vector3Int(ChunkRadius * Chunk.Width, Chunk.Height, ChunkRadius * Chunk.Width);
         chunk = new GameObject[ChunkRadius, ChunkRadius];
         for (int i = 0; i < chunk.GetLength(1); i++)

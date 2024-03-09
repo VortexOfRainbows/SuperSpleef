@@ -12,8 +12,9 @@ public static class GameModeID // Assigns an int as a reference to each game mod
     public const int LocalMultiplayer = 2;
     public const int LocalMultiplayerApocalypse = 3;
 }
-public class GameStateManager : MonoBehaviour
+public class GameStateManager : NetworkBehaviour
 {
+    public static NetworkVariable<int> GenSeed;
     [SerializeField] private GameObject player;
     public const string MainScene = "MainScene";
     public const string MultiplayerScene = "MultiplayerScene";
@@ -67,6 +68,7 @@ public class GameStateManager : MonoBehaviour
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {
+        GenSeed = new NetworkVariable<int>(Random.Range(0, int.MaxValue), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         LocalMultiplayer = false;
         ParticleMultiplier = 1f;
         SensitivityMultiplier = 1f;
@@ -76,12 +78,12 @@ public class GameStateManager : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
-            //DontDestroyOnLoad(this);
+            DontDestroyOnLoad(this);
         }
-        /*else
+        else
         {
             Destroy(gameObject);
-        }*/
+        }
         ResetStates();
     }
     private static void ResetStates()
@@ -175,20 +177,25 @@ public class GameStateManager : MonoBehaviour
     private bool HasSpawnedPlayers = false;
     private void LateUpdate()
     {
-        if (!HasSpawnedPlayers && SceneManager.GetActiveScene().name == MultiplayerScene)
+        if (NetworkManager.Singleton.IsServer)
         {
-            WaitSomeTimeForAssetsToLoad += Time.deltaTime;
-            if(WaitSomeTimeForAssetsToLoad > 1)
+            if (!HasSpawnedPlayers && SceneManager.GetActiveScene().name == MultiplayerScene)
             {
-                if (NetworkManager.Singleton.IsServer)
+                WaitSomeTimeForAssetsToLoad += Time.deltaTime;
+                Debug.Log(WaitSomeTimeForAssetsToLoad);
+                if (WaitSomeTimeForAssetsToLoad > 1)
                 {
+                    Debug.Log("Finished Waiting");
+                    int i = 0;
                     foreach (NetworkPlayer nPlayer in NetHandler.LoggedPlayers)
                     {
+                        Debug.Log(i);
                         GameObject go = Instantiate(Instance.player, new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2), Quaternion.identity);
                         go.GetComponent<NetworkObject>().SpawnAsPlayerObject(nPlayer.OwnerClientId);
+                        i++;
                     }
+                    HasSpawnedPlayers = true;
                 }
-                HasSpawnedPlayers = true;
             }
         }
     }
