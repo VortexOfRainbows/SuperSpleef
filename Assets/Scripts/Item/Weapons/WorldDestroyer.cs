@@ -8,8 +8,8 @@ public class WorldDestroyer : Weapon ///Team members that contributed to this sc
     {
         ShootSpeed = 25;
     }
-    public override GameObject ShootType(Player player)
+    public override int ShootType(Player player)
     {
-        return ProjectileManager.GetProjectile(ProjectileID.FragBall);
+        return ProjectileID.FragBall;
     }
 }

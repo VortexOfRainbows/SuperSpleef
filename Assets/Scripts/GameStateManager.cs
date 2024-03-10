@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -209,5 +210,10 @@ public class GameStateManager : NetworkBehaviour
     public void TileFillRpc(int x, int y, int z, int x2, int y2, int z2, int blockID, float particleMultiplier, RpcParams rpcParams)
     {
         World.FillBlock(x, y, z, x2, y2, z2, blockID, particleMultiplier, true);
+    }
+    [Rpc(SendTo.Server)]
+    public void SpawnProjectileRpc(int Type, Vector3 pos, Quaternion rot, Vector3 velo)
+    {
+        Projectile.NewProjectile(Type, pos, rot, velo);
     }
 }

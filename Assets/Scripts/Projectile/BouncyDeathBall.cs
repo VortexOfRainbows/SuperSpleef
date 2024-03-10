@@ -1,36 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using Unity.Netcode;
 public class BouncyDeathBall : Projectile ///Team members that contributed to this script: Ian Bunnell
 {
     private const int MaxCollisions = 4;
-    private int TotalCollisions = 0;
+    NetworkVariable<int> TotalCollisions = new NetworkVariable<int>(0);
     public override bool OnCollision(Collision collision)
     {
-        for (int i = 0; i < collision.contacts.Length; i++)
+        if(NetworkManager.Singleton.IsServer)
         {
-            ContactPoint cPoint = collision.GetContact(i);
-            /*if (!cPoint.otherCollider.CompareTag("Ground"))
+            for (int i = 0; i < collision.contacts.Length; i++)
             {
-                Debug.Log("Warning: collider is not a ground tag");
-                continue;
-            }*/
-            Vector3 point = cPoint.point - cPoint.normal * 0.1f;
-            Vector3 InsideBlock = point;
-            Vector3 HitPoint = new Vector3(Mathf.FloorToInt(InsideBlock.x) + 0.5f, Mathf.FloorToInt(InsideBlock.y) + 0.5f, Mathf.FloorToInt(InsideBlock.z) + 0.5f);
-            bool successfullyBrokeABlock = World.SetBlock(HitPoint, BlockID.Air);
-            if (successfullyBrokeABlock)
-                break; //Realistically, there will only be one contact with the projectile (since it has a spherical hitbox)
+                ContactPoint cPoint = collision.GetContact(i);
+                /*if (!cPoint.otherCollider.CompareTag("Ground"))
+                {
+                    Debug.Log("Warning: collider is not a ground tag");
+                    continue;
+                }*/
+                Vector3 point = cPoint.point - cPoint.normal * 0.1f;
+                Vector3 InsideBlock = point;
+                Vector3 HitPoint = new Vector3(Mathf.FloorToInt(InsideBlock.x) + 0.5f, Mathf.FloorToInt(InsideBlock.y) + 0.5f, Mathf.FloorToInt(InsideBlock.z) + 0.5f);
+                bool successfullyBrokeABlock = World.SetBlock(HitPoint, BlockID.Air);
+                if (successfullyBrokeABlock)
+                    break; //Realistically, there will only be one contact with the projectile (since it has a spherical hitbox)
+            }
+            TotalCollisions.Value++;
         }
-        TotalCollisions++;
-        return TotalCollisions > MaxCollisions;
+        return TotalCollisions.Value > MaxCollisions;
     }
     public override Color DrawColor()
     {
-        if(TotalCollisions >= 1)
+        if(TotalCollisions.Value >= 1)
         { 
-            return Color.Lerp(Color.yellow, Color.red, (TotalCollisions - 1) / (float)(MaxCollisions - 1f));
+            return Color.Lerp(Color.yellow, Color.red, (TotalCollisions.Value - 1) / (float)(MaxCollisions - 1f));
         }
         return Color.white;
     }

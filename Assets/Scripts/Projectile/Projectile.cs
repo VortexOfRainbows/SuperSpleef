@@ -1,14 +1,37 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Projectile : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
+public abstract class Projectile : NetworkBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
+    private NetworkVariable<Vector3> velocity = new NetworkVariable<Vector3>(Vector3.zero);
+    public static GameObject NewProjectile(int ProjectileType, Vector3 position, Quaternion rotation, Vector3 velocity)
+    {
+        if (NetworkManager.Singleton.IsServer)
+        {
+            GameObject pObject = Instantiate(ProjectileManager.GetProjectile(ProjectileType), position, rotation);
+            pObject.GetComponent<Rigidbody>().velocity = velocity;
+            pObject.GetComponent<NetworkObject>().Spawn();
+            return pObject;
+        }
+        GameStateManager.Instance.SpawnProjectileRpc(ProjectileType, position, rotation, velocity);
+        return null;
+    }
     protected MeshRenderer mRenderer;
     public Entity owner { get; protected set; }
-    // Start is called before the first frame update
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        if(NetworkManager.Singleton.IsServer)
+        {
+            Vector3 velo = GetComponent<Rigidbody>().velocity;
+            Debug.Log("Spawn velo: " + velo);
+            velocity.Value = velo;
+        }
         mRenderer = GetComponent<MeshRenderer>();
         OnSpawn();
+    }
+    void Start()
+    {
+        OnNetworkSpawn();
     }
     /// <summary>
     /// Called when the projectile spawns into the world.
@@ -46,6 +69,16 @@ public abstract class Projectile : MonoBehaviour ///Team members that contribute
             Kill(true);
             return;
         }
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (NetworkManager.Singleton.IsServer)
+        {
+            Vector3 velo = rb.velocity;
+            Debug.Log("update velo: " + velo);
+            velocity.Value = velo;
+        }
+        else
+            Debug.Log("client velo: " + velocity.Value);
+        rb.velocity = velocity.Value;
         ModifyColors();
         OnFixedUpdate();
     }
@@ -86,7 +119,9 @@ public abstract class Projectile : MonoBehaviour ///Team members that contribute
     /// <summary>
     /// Ran before the object is destroyed. 
     /// OutBoundDeath is whether or not the projectile died due to being out of bounds.
-    /// If the OutBoundDeath is true, it died from being out of bounds. False otherwise.
+    /// If the OutBoundDeath is true, it died from being out of bounds. False otherwise.  
+    /// 
+    /// Only called on server
     /// </summary>
     public virtual void OnDeath(bool OutBoundDeath)
     {
@@ -98,7 +133,10 @@ public abstract class Projectile : MonoBehaviour ///Team members that contribute
     /// <param name="OutBoundDeath"></param>
     public void Kill(bool OutBoundDeath = false)
     {
-        OnDeath(OutBoundDeath);
-        Destroy(gameObject);
+        if(IsServer)
+        {
+            OnDeath(OutBoundDeath);
+            GetComponent<NetworkObject>().Despawn();
+        }
     }
 }
