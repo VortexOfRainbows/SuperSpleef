@@ -116,7 +116,7 @@ public class GameStateManager : NetworkBehaviour
         Unpause();
 
         WaitSomeTimeForAssetsToLoad = NoPlayersLeftTimer = 0; 
-        if(NetworkManager.Singleton != null)
+        if(NetworkManager.Singleton != null && NetworkManager.Singleton.IsServer)
         {
             ResetServerSyncedStates();
         }
@@ -244,6 +244,8 @@ public class GameStateManager : NetworkBehaviour
                 Players.RemoveAt(i);
             }
         }
+        Debug.Log("World Size: " + WorldSizeOverride.Value);
+        Debug.Log("Gen Rand: " + GenSeed.Value);
         if (SceneManager.GetActiveScene().name == MultiplayerScene)
         {
             if (NetworkManager.Singleton.IsServer)
@@ -269,8 +271,6 @@ public class GameStateManager : NetworkBehaviour
                 }
                 //if (WorldSizeOverride.Value <= 0)
                 //    WorldSizeOverride.Value = World.DefaultChunkRadius;
-                Debug.Log("World Size: " + WorldSizeOverride.Value);
-                Debug.Log("Gen Rand: " + GenSeed.Value);
             }
             if(HasSpawnedPlayers.Value)
             {
