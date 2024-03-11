@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class SpawnBalls : MonoBehaviour ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
@@ -25,10 +26,12 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
     private float TotalTimePassed;
     private void FixedUpdate() ///Summoning falling balls is only for the apocalypse game mode
     {
-        if(GameStateManager.Mode != GameModeID.Apocalypse)
+        if(GameStateManager.Mode != GameModeID.Apocalypse && GameStateManager.Mode != GameModeID.LaserBattleApocalypse)
         {
             return;
         }
+        if (NetworkManager.Singleton != null && !NetworkManager.Singleton.IsServer)
+            return;
         float scaleMult = TotalTimePassed / SecondsUntilMaxDifficulty;
         if (scaleMult > MaxDifficultyMultiplier)
             scaleMult = MaxDifficultyMultiplier;
@@ -78,12 +81,14 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
             if(Random.Range(0, 1f) < SlimeChance * (1 + scaleMult * 2))
             {
                 Vector3 randomSpawnPosition = new Vector3(Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding), SpawnHeight, Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding));
-                Instantiate(Slime, randomSpawnPosition, Quaternion.identity);
+                NetworkObject nObject = Instantiate(Slime, randomSpawnPosition, Quaternion.identity).GetComponent<NetworkObject>();
+                nObject.Spawn(true);
             }
             if(Random.Range(0, 1f) < FlyChance * (1 + scaleMult * 2))
             {
                 Vector3 randomSpawnPosition = new Vector3(Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding), SpawnHeight, Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding));
-                Instantiate(KillerFly, randomSpawnPosition, Quaternion.identity);
+                NetworkObject nObject = Instantiate(KillerFly, randomSpawnPosition, Quaternion.identity).GetComponent<NetworkObject>();
+                nObject.Spawn(true);
             }
         }
     }

@@ -10,7 +10,7 @@ public abstract class Projectile : NetworkBehaviour ///Team members that contrib
         {
             GameObject pObject = Instantiate(ProjectileManager.GetProjectile(ProjectileType), position, rotation);
             pObject.GetComponent<Rigidbody>().velocity = velocity;
-            pObject.GetComponent<NetworkObject>().Spawn();
+            pObject.GetComponent<NetworkObject>().Spawn(true);
             return pObject;
         }
         GameStateManager.Instance.SpawnProjectileRpc(ProjectileType, position, rotation, velocity);

@@ -45,6 +45,8 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     }
     private void OnStart()
     {
+        bool apocalypse = GameStateManager.Mode == GameModeID.Apocalypse || GameStateManager.Mode == GameModeID.LaserBattleApocalypse;
+        bool giveLaser = GameStateManager.LocalMultiplayer || GameStateManager.Mode == GameModeID.LaserBattleApocalypse || GameStateManager.Mode == GameModeID.LaserBattle;
         currentPlayerHP = maxPlayerHP;
         Inventory = new Inventory(30);
         int StartingItemCount = 20;
@@ -52,20 +54,20 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             StartingItemCount = Item.DefaultMaxCount;
         }
-        if(GameStateManager.LocalMultiplayer)
+        if(giveLaser) //These if statements are very deliberately placed, since i want items to be in the hotbar in a certain order...
         {
             StartingItemCount = 100;
         }
         Inventory.AddItem(new BasicBlaster());
-        if(GameStateManager.LocalMultiplayer) //These if statements are very deliberately placed, since i want items to be in the hotbar in a certain order...
+        if (giveLaser) 
         {
             Inventory.AddItem(new LaserCannon());
         }
-        if (GameStateManager.Mode == GameModeID.Apocalypse)
+        if (apocalypse)
         {
             Inventory.AddItem(new BlockGun());
         }
-        if (GameStateManager.LocalMultiplayer) //That is why these if statements are seperate, despite involving the same boolean expression.
+        if (giveLaser) //That is why these if statements are seperate, despite involving the same boolean expression.
         {
             Inventory.AddItem(new PlaceableBlock(ControlManager.UsingGamepad ? BlockID.BlueBricks : BlockID.YellowBricks, StartingItemCount));
         }
@@ -289,6 +291,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// </summary>
     private void HeldItemUpdate()
     {
+        ClientManager.InventoryInterface.SetActive(true); //Turn on the inventory if alive
         Item heldItem = HeldItem();
         bool left = Control.LeftClick;
         bool right = Control.RightClick;

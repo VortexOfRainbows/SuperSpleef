@@ -4,6 +4,7 @@ using Unity.Collections;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NetworkPlayer : NetworkBehaviour
 {
@@ -34,7 +35,7 @@ public class NetworkPlayer : NetworkBehaviour
     }
     private void Update()
     {
-        if(GameStateManager.Players.Count > 0)
+        if(SceneManager.GetActiveScene().name == GameStateManager.MultiplayerScene && GameStateManager.StartingPlayerCount.Value > 0)
         {
             myPlayer = null;
             foreach (Player player in GameStateManager.Players)
@@ -93,7 +94,7 @@ public class NetworkPlayer : NetworkBehaviour
     [SerializeField] private float MoveAcceleration = 0.125f;
     private void FixedUpdate()
     {
-        if (GameStateManager.Players.Count > 0)
+        if (SceneManager.GetActiveScene().name == GameStateManager.MultiplayerScene && GameStateManager.StartingPlayerCount.Value > 0)
         {
             if (myPlayer == null) //Usually the update is done in player. Do the update here if we can't find a player.
             {

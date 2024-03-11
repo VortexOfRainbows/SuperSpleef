@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.Netcode;
 using Unity.Networking.Transport;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,6 +14,8 @@ public static class GameModeID // Assigns an int as a reference to each game mod
     public const int Apocalypse = 1;
     public const int LocalMultiplayer = 2;
     public const int LocalMultiplayerApocalypse = 3;
+    public const int LaserBattle = 4;
+    public const int LaserBattleApocalypse = 5;
 }
 public class GameStateManager : NetworkBehaviour
 {
@@ -64,23 +67,33 @@ public class GameStateManager : NetworkBehaviour
         }
     }
     public static GameStateManager Instance;
-    public static int Mode { get; private set; }
+    private static NetworkVariable<int> SyncedMode;
+    public static int Mode { 
+        get 
+        {
+            return SyncedMode.Value;
+        } 
+        private set
+        {
+            SyncedMode.Value = value;
+        } 
+    }
     public static float ParticleMultiplier { get; private set; } = 1;
     public static float SensitivityMultiplier { get; private set; } = 1;
     public static float ControllerSensitivityMultiplier { get; private set; } = 1;
     public static NetworkVariable<float> WorldSizeOverride;
     public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
-    private static NetworkVariable<int> StartingPlayerCount = new NetworkVariable<int>(-1);
+    public static NetworkVariable<int> StartingPlayerCount = new NetworkVariable<int>(-1);
     public void Awake()
     {
+        SyncedMode = new NetworkVariable<int>(0);
         GenSeed = new NetworkVariable<int>(Random.Range(0, int.MaxValue), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         WorldSizeOverride = new NetworkVariable<float>(World.DefaultChunkRadius);
         LocalMultiplayer = false;
         ParticleMultiplier = 1f;
         SensitivityMultiplier = 1f;
         ControllerSensitivityMultiplier = 1f;
-        Mode = GameModeID.None;
         if(Instance == null)
         {
             Instance = this;
@@ -114,6 +127,7 @@ public class GameStateManager : NetworkBehaviour
         if (GenSeed.Value <= 0)
             GenSeed.Value = Random.Range(0, int.MaxValue);
         HasSpawnedPlayers.Value = false;
+        Mode = GameModeID.None;
     }
     public static void SetParticleMultiplier(float mult)
     {
@@ -279,7 +293,12 @@ public class GameStateManager : NetworkBehaviour
                                 break;
                             }
                         }
-                        EndGame(VictoryText + " Wins");
+                        bool IAmWinner = remainingPlayer.OwnerClientId == NetworkManager.Singleton.LocalClientId;
+                        if (IAmWinner)
+                            VictoryText = "You Win";
+                        else
+                            VictoryText += " Wins";
+                        EndGame(VictoryText , IAmWinner ? Color.green : Color.red);
                     }
                 }
                 if (Player.Count <= 0)
