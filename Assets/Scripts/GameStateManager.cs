@@ -98,7 +98,7 @@ public class GameStateManager : NetworkBehaviour
         if(Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
+            DontDestroyOnLoad(Instance);
         }
         else if(this != Instance)
         {
@@ -226,10 +226,6 @@ public class GameStateManager : NetworkBehaviour
         {
             if(SceneManager.GetActiveScene().name == MultiplayerGameLobby)
             {
-                foreach (NetworkPlayer nPlayer in NetHandler.LoggedPlayers)
-                {
-                    nPlayer.transform.position = new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2);
-                }
                 if (!HasResetStateSinceReload)
                 {
                     HasResetStateSinceReload = true;

@@ -6807,10 +6807,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2725738062096682887, guid: 691866399383fa74493e1711675ecf52, type: 3}
-        m_TargetAssemblyTypeName: Unity.Netcode.NetworkManager, Unity.Netcode.Runtime
-        m_MethodName: Shutdown
-        m_Mode: 6
+      - m_Target: {fileID: 4514141844027338931, guid: 691866399383fa74493e1711675ecf52, type: 3}
+        m_TargetAssemblyTypeName: NetHandler, Assembly-CSharp
+        m_MethodName: StopTryingToConnect
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6830,18 +6830,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7136988355529536546}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!1 &7043737197859434141
 GameObject:
@@ -8247,6 +8235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UsernameField: {fileID: 5696825119849214852}
+  IPField: {fileID: 2570723328834359742}
 --- !u!1 &8459393134706514673
 GameObject:
   m_ObjectHideFlags: 0

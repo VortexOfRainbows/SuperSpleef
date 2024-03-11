@@ -32,6 +32,10 @@ public class NetHandler : MonoBehaviour
             Instance.UnityTransport.ConnectionData.Port = value;
         }
     }
+    public static void StopTryingToConnect()
+    {
+        NetworkManager.Singleton.Shutdown();
+    }
     public void SetIP(string newIP)
     {
         IP = newIP;
@@ -57,12 +61,17 @@ public class NetHandler : MonoBehaviour
         hostButton.onClick.AddListener(HostGame);
         joinButton.onClick.AddListener(JoinGame);
     }
+    private bool AddedListeners = false;
     private void FixedUpdate()
     {
-        if (InitHost || InitClient)
+        if(!AddedListeners)
         {
-            NetworkManager.Singleton.OnServerStopped += NetworkStopped;
-            NetworkManager.Singleton.OnClientStopped += NetworkStopped;
+            if (NetworkManager.Singleton != null)
+            {
+                AddedListeners = true;
+                NetworkManager.Singleton.OnServerStopped += NetworkStopped;
+                NetworkManager.Singleton.OnClientStopped += NetworkStopped;
+            }
         }
         if (InitHost)
         {
@@ -82,10 +91,11 @@ public class NetHandler : MonoBehaviour
                 LoggedPlayers.RemoveAt(i);
             }
         }
-        if(GameStateManager.Instance == null)
+        /*if(GameStateManager.Instance == null)
         {
             SceneManager.LoadScene(GameStateManager.TitleScreen);
-        }
+            Debug.Log("Lost GameStateManager Instance");
+        }*/
     }
     private static void HostGame()
     {
@@ -98,8 +108,7 @@ public class NetHandler : MonoBehaviour
     }
     private static void NetworkStopped(bool IDontKnowWhatThisValueIs)
     {
-        if(SceneManager.GetActiveScene().name != GameStateManager.TitleScreen)
-            SceneManager.LoadScene(GameStateManager.TitleScreen);
+        SceneManager.LoadScene(GameStateManager.TitleScreen);
         Debug.Log("Server Ended, Returning to Main Menu");
     }
 }

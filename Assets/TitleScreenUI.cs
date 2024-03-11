@@ -20,12 +20,15 @@ public class TitleScreenUI : MonoBehaviour
     };
 
     [SerializeField] private InputField UsernameField;
+    [SerializeField] private InputField IPField;
+    private bool HasUpdatedIPField = false;
     public void Start()
     {
         if(GameStateManager.LocalUsername.Equals(string.Empty))
         {
             RandomizeUsername();
         }
+        IPField.text = NetHandler.IP;
         UsernameField.text = GameStateManager.LocalUsername;
     }
     public void RandomizeUsername()

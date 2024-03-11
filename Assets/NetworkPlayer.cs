@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,6 +24,10 @@ public class NetworkPlayer : NetworkBehaviour
         if(IsOwner)
         {
             MyName.Value = GameStateManager.LocalUsername;
+        }
+        if (SceneManager.GetActiveScene().name == GameStateManager.MultiplayerScene)
+        {
+            transform.position = new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2);
         }
     }
     public override void OnNetworkDespawn()
@@ -80,9 +81,9 @@ public class NetworkPlayer : NetworkBehaviour
                 {
                     MouseControls();
                 }
-                CameraTransform.position = transform.position + Vector3.up * 2f;
                 if (IsOwner)
                 {
+                    CameraTransform.position = transform.position + Vector3.up * 2f;
                     CameraTransform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
                 }
             }
