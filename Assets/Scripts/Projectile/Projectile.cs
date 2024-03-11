@@ -73,11 +73,11 @@ public abstract class Projectile : NetworkBehaviour ///Team members that contrib
         if (NetworkManager.Singleton.IsServer)
         {
             Vector3 velo = rb.velocity;
-            Debug.Log("update velo: " + velo);
+            //Debug.Log("update velo: " + velo);
             velocity.Value = velo;
         }
-        else
-            Debug.Log("client velo: " + velocity.Value);
+        // else
+        //     Debug.Log("client velo: " + velocity.Value);
         rb.velocity = velocity.Value;
         ModifyColors();
         OnFixedUpdate();

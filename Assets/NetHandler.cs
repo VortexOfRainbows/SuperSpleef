@@ -12,7 +12,6 @@ public class NetHandler : MonoBehaviour
     [SerializeField] private Button joinButton;
     private static bool InitClient = false;
     private static bool InitHost = false;
-    public static bool OnNetwork { get; private set; } = false;
     private void Awake()
     {
         hostButton.onClick.AddListener(HostGame);
@@ -20,21 +19,21 @@ public class NetHandler : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (InitHost || InitClient)
+        {
+            NetworkManager.Singleton.OnServerStopped += NetworkStopped;
+            NetworkManager.Singleton.OnClientStopped += NetworkStopped;
+        }
         if (InitHost)
         {
             NetworkManager.Singleton.StartHost();
-            OnNetwork = true;
             InitHost = false;
-            NetworkManager.Singleton.OnServerStopped += NetworkStopped;
-            NetworkManager.Singleton.OnClientStopped += NetworkStopped;
+            GameStateManager.ResetStates();
         }
         if (InitClient)
         {
             NetworkManager.Singleton.StartClient();
-            OnNetwork = true;
             InitClient = false;
-            NetworkManager.Singleton.OnServerStopped += NetworkStopped;
-            NetworkManager.Singleton.OnClientStopped += NetworkStopped;
         }
         for (int i = 0; i < LoggedPlayers.Count; i++)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,7 +9,10 @@ public class ButtonBehaviors : MonoBehaviour ///Team members that contributed to
 {
     public void MainMenu()
     {
-        GameStateManager.MainMenu(); //Loads the SuperSpleef Title Page
+        if (NetworkManager.Singleton != null)
+            MultiplayerUI.LeaveLobby();
+        else
+            GameStateManager.MainMenu(); //Loads the SuperSpleef Title Page
     }
     public void ExitGame()
     {

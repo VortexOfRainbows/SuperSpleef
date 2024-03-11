@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class MultiplayerUI : MonoBehaviour
 {
+    public const string Leave = "Leave Lobby";
+    public const string Close = "Close Lobby";
     private const string WaitingOnServer = "Waiting on Host";
     private const string IAmServer = "You are the Host";
     [SerializeField] private GameObject WorldSizeSettings;
@@ -14,18 +16,21 @@ public class MultiplayerUI : MonoBehaviour
     [SerializeField] private GameObject StartButton;
     [SerializeField] private Text WaitingForServerDisplay;
     [SerializeField] private Text LoggedDisplay;
+    [SerializeField] private Text LeaveLobbyText;
     private void Update()
     {
         if (LoggedDisplay != null)
             LoggedDisplay.text = NetHandler.TotalClients.ToString();
         if (WaitingForServerDisplay != null)
             WaitingForServerDisplay.text = NetworkManager.Singleton.IsServer ? IAmServer : WaitingOnServer;
+        if (LeaveLobbyText != null)
+            LeaveLobbyText.text = NetworkManager.Singleton.IsServer ? Close : Leave;
 
         UCISettings.SetActive(false);
         StartButton.SetActive(NetworkManager.Singleton.IsServer);
         WorldSizeSettings.SetActive(NetworkManager.Singleton.IsServer);
     }
-    public void LeaveLobby()
+    public static void LeaveLobby()
     {
         if(!NetworkManager.Singleton.IsServer)
         {

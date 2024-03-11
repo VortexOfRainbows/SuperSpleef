@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.Netcode;
+using Unity.Networking.Transport;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -71,11 +72,11 @@ public class GameStateManager : NetworkBehaviour
     public void Awake()
     {
         GenSeed = new NetworkVariable<int>(Random.Range(0, int.MaxValue), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        WorldSizeOverride = new NetworkVariable<float>(World.DefaultChunkRadius);
         LocalMultiplayer = false;
         ParticleMultiplier = 1f;
         SensitivityMultiplier = 1f;
         ControllerSensitivityMultiplier = 1f;
-        WorldSizeOverride = new NetworkVariable<float>(World.DefaultChunkRadius);
         Mode = GameModeID.None;
         if(Instance == null)
         {
@@ -88,7 +89,7 @@ public class GameStateManager : NetworkBehaviour
         }
         ResetStates();
     }
-    private static void ResetStates()
+    public static void ResetStates()
     {
         Player = new List<Player>();
         GameOverTextColor = Color.white;
@@ -96,6 +97,20 @@ public class GameStateManager : NetworkBehaviour
         GameEndDelay = GameEndFrameDelay; //This is a arbitrary number set to delay the ending of a game for a bit, so certain functions that need to be run can run.
         GameOver = false;
         Unpause();
+
+        WaitSomeTimeForAssetsToLoad = 0;
+        HasSpawnedPlayers = false;
+        if(NetworkManager.Singleton != null)
+        {
+            ResetServerSyncedStates();
+        }
+    }
+    private static void ResetServerSyncedStates()
+    {
+        if(WorldSizeOverride.Value <= 0)
+            WorldSizeOverride.Value = World.DefaultChunkRadius;
+        if (GenSeed.Value <= 0)
+            GenSeed.Value = Random.Range(0, int.MaxValue);
     }
     public static void SetParticleMultiplier(float mult)
     {
@@ -132,14 +147,14 @@ public class GameStateManager : NetworkBehaviour
         Mode = mode;
         if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.LocalMultiplayerApocalypse)
         {
-            LocalMultiplayer = true; //For now, net and local multiplayer are considered the same (since there is no NET Multiplayer yet)
+            LocalMultiplayer = true;
             Mode = mode == GameModeID.LocalMultiplayerApocalypse ? GameModeID.Apocalypse : GameModeID.None;
             SceneManager.LoadScene(2);
         }
         else
         {
             LocalMultiplayer = false;
-            if(NetHandler.OnNetwork)
+            if(NetworkManager.Singleton != null)
             {
                 NetworkManager.Singleton.SceneManager.LoadScene(MultiplayerScene, LoadSceneMode.Single); 
             }
@@ -150,11 +165,18 @@ public class GameStateManager : NetworkBehaviour
     public static void RestartGame()
     {
         ResetStates();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene(MultiplayerScene, LoadSceneMode.Single);
+        }
+        else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public static void Pause()
     {
         GamePaused = true; // Sets the boolean statement GameIsPaused to true.
+        if (NetworkManager.Singleton != null)
+            return; //Do not pause the game in multiplayer
         Time.timeScale = 0f; // Freezes the state of the game
     }   
     public static void Unpause()
@@ -175,8 +197,8 @@ public class GameStateManager : NetworkBehaviour
         GameOver = true;
         Time.timeScale = 0.5f;
     }
-    private float WaitSomeTimeForAssetsToLoad = 0;
-    private bool HasSpawnedPlayers = false;
+    private static float WaitSomeTimeForAssetsToLoad = 0;
+    private static bool HasSpawnedPlayers = false;
     private void LateUpdate()
     {
         if (NetworkManager.Singleton.IsServer)
@@ -184,10 +206,10 @@ public class GameStateManager : NetworkBehaviour
             if (!HasSpawnedPlayers && SceneManager.GetActiveScene().name == MultiplayerScene)
             {
                 WaitSomeTimeForAssetsToLoad += Time.deltaTime;
-                Debug.Log(WaitSomeTimeForAssetsToLoad);
+                //Debug.Log(WaitSomeTimeForAssetsToLoad);
                 if (WaitSomeTimeForAssetsToLoad > 1)
                 {
-                    Debug.Log("Finished Waiting");
+                    //Debug.Log("Finished Waiting");
                     int i = 0;
                     foreach (NetworkPlayer nPlayer in NetHandler.LoggedPlayers)
                     {
@@ -199,6 +221,10 @@ public class GameStateManager : NetworkBehaviour
                     HasSpawnedPlayers = true;
                 }
             }
+            //if (WorldSizeOverride.Value <= 0)
+            //    WorldSizeOverride.Value = World.DefaultChunkRadius;
+            Debug.Log("World Size: " + WorldSizeOverride.Value);
+            Debug.Log("Gen Rand: " + GenSeed.Value);
         }
     }
     

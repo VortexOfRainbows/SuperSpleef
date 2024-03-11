@@ -100,6 +100,11 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
             BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
         }
+        if (IsOwner || NetworkManager == null)
+        {
+            CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
+            CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+        }
     }
     /// <summary>
     /// This field is only serialized so it can display in the editor. It is not actually meant to be modified
@@ -231,17 +236,8 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         float mouseY = Control.YAxis * Time.deltaTime * Sensitivity;
         Direction.y += mouseX;
         Direction.x -= mouseY;
-
         Direction.x = Mathf.Clamp(Direction.x, -90f, 90f);
-
-        if(IsOwner || NetworkManager == null)
-        {
-            CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
-            CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
-        }
-        //transform.rotation = Quaternion.Euler(0, Direction.y, 0f);
     }
-
     /// <summary>
     /// Manages which item is selected by the player
     /// </summary>

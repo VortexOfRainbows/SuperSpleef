@@ -174,6 +174,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 295653966550670453, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 339036504008493768, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: Owner
       value: 
@@ -182,6 +186,10 @@ PrefabInstance:
       propertyPath: Owner
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 875751446564677268, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -220
+      objectReference: {fileID: 0}
     - target: {fileID: 983702797503785030, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -252,6 +260,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1394386978578373315, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1487694693406431971, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1894735668681930829, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
@@ -362,6 +374,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ClientPackage
       objectReference: {fileID: 0}
+    - target: {fileID: 6064660019875903725, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_Text
+      value: LEAVE LOBBY
+      objectReference: {fileID: 0}
     - target: {fileID: 6269633330428289150, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -384,6 +400,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6269633330428289150, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6917848824378905121, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6982155519244028270, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
@@ -414,6 +434,10 @@ PrefabInstance:
       propertyPath: Owner
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7166985056364492200, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_Text
+      value: LEAVE LOBBY
+      objectReference: {fileID: 0}
     - target: {fileID: 7466538462948697375, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -437,6 +461,26 @@ PrefabInstance:
     - target: {fileID: 7466538462948697375, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687576248754119128, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805607473264787351, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_Text
+      value: The Game Is Not Paused!
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805607473264787351, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805607473264787351, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805607473264787351, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_FontData.m_HorizontalOverflow
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7872050487032066070, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchorMax.y

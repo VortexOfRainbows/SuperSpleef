@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ClientManager : MonoBehaviour
 {
+    [SerializeField] private GameObject RestartButton;
+    [SerializeField] private Text LeaveLobbyText1;
+    [SerializeField] private Text LeaveLobbyText2;
     public static ClientManager Instance { get; private set; }
     public static Camera Camera => Instance.MainCamera;
     public static ScreenBlocker Blocker => Instance.ScreenBlocker;
@@ -32,6 +36,18 @@ public class ClientManager : MonoBehaviour
     }
     public void Update()
     {
-        //Instance = this;
+        if(NetworkManager.Singleton != null)
+        {
+            if(NetworkManager.Singleton.IsServer)
+            {
+                RestartButton.SetActive(true);
+                LeaveLobbyText1.text = LeaveLobbyText2.text = MultiplayerUI.Close;
+            }
+            else
+            {
+                RestartButton.SetActive(false);
+                LeaveLobbyText2.text = LeaveLobbyText2.text = MultiplayerUI.Leave;
+            }
+        }
     }
 }
