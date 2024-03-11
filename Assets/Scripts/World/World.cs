@@ -19,7 +19,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         get
         {
-            return (int)GameStateManager.WorldSizeOverride;
+            return (int)GameStateManager.WorldSizeOverride.Value;
         }
     }
     public const int WorldLayer = 3;

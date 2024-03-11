@@ -7,13 +7,23 @@ using UnityEngine.UI;
 
 public class MultiplayerUI : MonoBehaviour
 {
+    private const string WaitingOnServer = "Waiting on Host";
+    private const string IAmServer = "You are the Host";
+    [SerializeField] private GameObject WorldSizeSettings;
+    [SerializeField] private GameObject UCISettings;
     [SerializeField] private GameObject StartButton;
+    [SerializeField] private Text WaitingForServerDisplay;
     [SerializeField] private Text LoggedDisplay;
     private void Update()
     {
         if (LoggedDisplay != null)
             LoggedDisplay.text = NetHandler.TotalClients.ToString();
+        if (WaitingForServerDisplay != null)
+            WaitingForServerDisplay.text = NetworkManager.Singleton.IsServer ? IAmServer : WaitingOnServer;
+
+        UCISettings.SetActive(false);
         StartButton.SetActive(NetworkManager.Singleton.IsServer);
+        WorldSizeSettings.SetActive(NetworkManager.Singleton.IsServer);
     }
     public void LeaveLobby()
     {

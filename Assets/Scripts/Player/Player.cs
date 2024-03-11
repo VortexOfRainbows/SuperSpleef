@@ -77,7 +77,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
         }
         RB.maxDepenetrationVelocity = 0;
-        transform.position = new Vector3(Chunk.Width * GameStateManager.WorldSizeOverride / 2f, transform.position.y, Chunk.Width * GameStateManager.WorldSizeOverride / 2f); //Centers the player in teh world when they spawn in
+        transform.position = new Vector3(Chunk.Width * GameStateManager.WorldSizeOverride.Value / 2f, transform.position.y, Chunk.Width * GameStateManager.WorldSizeOverride.Value / 2f); //Centers the player in teh world when they spawn in
     }
     public int SelectedItem { get; private set; }
     public Item HeldItem()
@@ -440,6 +440,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         InBlockColliderBottom.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f) - 1, Mathf.FloorToInt(transform.position.z) + 0.5f);
         InBlockColliderTop.GetComponent<BarrierBlock>().UpdateCollision();
         InBlockColliderBottom.GetComponent<BarrierBlock>().UpdateCollision();
-        ScreenBlocker.UpdateUVS(World.Block(topAsInt));
+        if(IsOwner)
+            ScreenBlocker.UpdateUVS(World.Block(topAsInt));
     }
 }

@@ -65,7 +65,7 @@ public class GameStateManager : NetworkBehaviour
     public static float ParticleMultiplier { get; private set; } = 1;
     public static float SensitivityMultiplier { get; private set; } = 1;
     public static float ControllerSensitivityMultiplier { get; private set; } = 1;
-    public static float WorldSizeOverride { get; private set; } = World.DefaultChunkRadius;
+    public static NetworkVariable<float> WorldSizeOverride;
     public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
@@ -75,7 +75,7 @@ public class GameStateManager : NetworkBehaviour
         ParticleMultiplier = 1f;
         SensitivityMultiplier = 1f;
         ControllerSensitivityMultiplier = 1f;
-        WorldSizeOverride = World.DefaultChunkRadius;
+        WorldSizeOverride = new NetworkVariable<float>(World.DefaultChunkRadius);
         Mode = GameModeID.None;
         if(Instance == null)
         {
@@ -111,7 +111,7 @@ public class GameStateManager : NetworkBehaviour
     }
     public static void SetWorldSizeOverride(float size)
     {
-        WorldSizeOverride = Mathf.Clamp(size, 1, 100); //Lowest size is 1 chunk. Biggest is 100x100 chunks
+        WorldSizeOverride.Value = Mathf.Clamp(size, 1, 100); //Lowest size is 1 chunk. Biggest is 100x100 chunks
     }
     public static void GenerateUCI(bool doIGenerate)
     {
