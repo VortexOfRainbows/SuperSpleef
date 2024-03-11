@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 using Unity.Netcode;
-using Unity.Networking.Transport;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,11 +14,13 @@ public static class GameModeID // Assigns an int as a reference to each game mod
     public const int LaserBattle = 4;
     public const int LaserBattleApocalypse = 5;
 }
-public class GameStateManager : NetworkBehaviour
+public class GameStateManager : MonoBehaviour
 {
+    public static NetData NetData;
+    public static GameStateManager Instance;
     public static string LocalUsername { get; set; } = "";
-    public static NetworkVariable<int> GenSeed;
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject netData;
     public const string TitleScreen = "TitleScreen";
     public const string MainScene = "MainScene";
     public const string MultiplayerScene = "MultiplayerScene";
@@ -66,31 +65,68 @@ public class GameStateManager : NetworkBehaviour
             return GameOver || GamePaused; 
         }
     }
-    public static GameStateManager Instance;
-    private static NetworkVariable<int> SyncedMode;
-    public static int Mode { 
+    public static int Mode 
+    { 
         get 
         {
-            return SyncedMode.Value;
+            return NetData.SyncedMode.Value;
         } 
         private set
         {
-            SyncedMode.Value = value;
+            NetData.SyncedMode.Value = value;
         } 
+    }
+    public static bool HasSpawnedPlayers
+    {
+        get
+        {
+            return NetData.HasSpawnedPlayers.Value;
+        }
+        private set
+        {
+            NetData.HasSpawnedPlayers.Value = value;
+        }
+    }
+    public static float WorldSizeOverride
+    {
+        get
+        {
+            return NetData.WorldSizeOverride.Value;
+        }
+        private set
+        {
+            NetData.WorldSizeOverride.Value = value;
+        }
+    }
+    public static int GenSeed
+    {
+        get
+        {
+            return NetData.GenSeed.Value;
+        }
+        private set
+        {
+            NetData.GenSeed.Value = value;
+        }
+    }
+    public static int StartingPlayerCount
+    {
+        get
+        {
+            return NetData.StartingPlayerCount.Value;
+        }
+        private set
+        {
+            NetData.StartingPlayerCount.Value = value;
+        }
     }
     public static float ParticleMultiplier { get; private set; } = 1;
     public static float SensitivityMultiplier { get; private set; } = 1;
     public static float ControllerSensitivityMultiplier { get; private set; } = 1;
-    public static NetworkVariable<float> WorldSizeOverride;
     public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
-    public static NetworkVariable<int> StartingPlayerCount = new NetworkVariable<int>(-1);
     public void Awake()
     {
-        HasSpawnedPlayers = new NetworkVariable<bool>(false);
-        SyncedMode = new NetworkVariable<int>(0);
-        GenSeed = new NetworkVariable<int>(Random.Range(0, int.MaxValue), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        WorldSizeOverride = new NetworkVariable<float>(World.DefaultChunkRadius);
         LocalMultiplayer = false;
         ParticleMultiplier = 1f;
         SensitivityMultiplier = 1f;
@@ -116,19 +152,14 @@ public class GameStateManager : NetworkBehaviour
         Unpause();
 
         WaitSomeTimeForAssetsToLoad = NoPlayersLeftTimer = 0; 
-        if(NetworkManager.Singleton != null && NetworkManager.Singleton.IsServer)
+        if(NetworkManager.Singleton != null && NetData != null && NetworkManager.Singleton.IsServer)
         {
             ResetServerSyncedStates();
         }
     }
     private static void ResetServerSyncedStates()
     {
-        if(WorldSizeOverride.Value <= 0)
-            WorldSizeOverride.Value = World.DefaultChunkRadius;
-        if (GenSeed.Value <= 0)
-            GenSeed.Value = Random.Range(0, int.MaxValue);
-        HasSpawnedPlayers.Value = false;
-        Mode = GameModeID.None;
+        NetData.ResetValues();
     }
     public static void SetParticleMultiplier(float mult)
     {
@@ -144,7 +175,7 @@ public class GameStateManager : NetworkBehaviour
     }
     public static void SetWorldSizeOverride(float size)
     {
-        WorldSizeOverride.Value = Mathf.Clamp(size, 1, 100); //Lowest size is 1 chunk. Biggest is 100x100 chunks
+        WorldSizeOverride = Mathf.Clamp(size, 1, 100); //Lowest size is 1 chunk. Biggest is 100x100 chunks
     }
     public static void GenerateUCI(bool doIGenerate)
     {
@@ -218,7 +249,6 @@ public class GameStateManager : NetworkBehaviour
     }
     private static float WaitSomeTimeForAssetsToLoad = 0;
     private static float NoPlayersLeftTimer = 0;
-    private static NetworkVariable<bool> HasSpawnedPlayers = new NetworkVariable<bool>(false);
     private static bool HasResetStateSinceReload = true;
     private void LateUpdate()
     {
@@ -237,6 +267,12 @@ public class GameStateManager : NetworkBehaviour
                 HasResetStateSinceReload = false;
             }
         }
+        if (NetworkManager.Singleton.IsServer && NetData == null)
+        {
+            //Debug.Log("Initiated Net Data");
+            GameObject data = Instantiate(netData);
+            data.GetComponent<NetworkObject>().Spawn(false);
+        }
         for (int i = 0; i < Players.Count; i++)
         {
             if (Players[i] == null)
@@ -244,15 +280,18 @@ public class GameStateManager : NetworkBehaviour
                 Players.RemoveAt(i);
             }
         }
-        Debug.Log("World Size: " + WorldSizeOverride.Value);
-        Debug.Log("Gen Rand: " + GenSeed.Value);
+        /*if(NetData != null)
+        {
+            Debug.Log("World Size: " + WorldSizeOverride);
+            Debug.Log("Gen Rand: " + GenSeed);
+        }*/
         if (SceneManager.GetActiveScene().name == MultiplayerScene)
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                if (!HasSpawnedPlayers.Value)
+                if (!HasSpawnedPlayers)
                 {
-                    StartingPlayerCount.Value = NetHandler.LoggedPlayers.Count;
+                    StartingPlayerCount = NetHandler.LoggedPlayers.Count;
                     WaitSomeTimeForAssetsToLoad += Time.deltaTime;
                     //Debug.Log(WaitSomeTimeForAssetsToLoad);
                     if (WaitSomeTimeForAssetsToLoad > 0.1)
@@ -266,17 +305,17 @@ public class GameStateManager : NetworkBehaviour
                             go.GetComponent<NetworkObject>().SpawnAsPlayerObject(nPlayer.OwnerClientId, true);
                             //i++;
                         }
-                        HasSpawnedPlayers.Value = true;
+                        HasSpawnedPlayers = true;
                     }
                 }
                 //if (WorldSizeOverride.Value <= 0)
                 //    WorldSizeOverride.Value = World.DefaultChunkRadius;
             }
-            if(HasSpawnedPlayers.Value)
+            if(HasSpawnedPlayers)
             {
                 if (Player.Count == 1)
                 {
-                    if (StartingPlayerCount.Value == 1)
+                    if (StartingPlayerCount == 1)
                     {
                         //Debug.Log("You are alone in a multiplayer lobby..?");
                     }
@@ -314,32 +353,5 @@ public class GameStateManager : NetworkBehaviour
                     NoPlayersLeftTimer = 0;
             }
         }
-    }
-    
-    /// 
-    /// Below this point are netcode Rpc's.
-    /// These must belong in an instanced class, which is why they are in GameStateManager
-    /// Realistically, they should be moved into a new class, but will remain here for now.
-    /// 
-
-    [Rpc(SendTo.SpecifiedInParams)]
-    public void SetBlockRpc(float x, float y, float z, int type, float particleMultiplier, RpcParams rpcParams)
-    {
-        World.SetBlock(x, y, z, type, particleMultiplier, true);
-    }
-    [Rpc(SendTo.SpecifiedInParams)]
-    public void TileFillRpc(int x, int y, int z, int x2, int y2, int z2, int blockID, float particleMultiplier, RpcParams rpcParams)
-    {
-        World.FillBlock(x, y, z, x2, y2, z2, blockID, particleMultiplier, true);
-    }
-    [Rpc(SendTo.Server)]
-    public void SpawnProjectileRpc(int Type, Vector3 pos, Quaternion rot, Vector3 velo)
-    {
-        Projectile.NewProjectile(Type, pos, rot, velo);
-    }
-    [Rpc(SendTo.Server)]
-    public void DespawnNetworkPlayerRpc(int NetworkPlayerIndex)
-    {
-        NetHandler.LoggedPlayers[NetworkPlayerIndex].GetComponent<NetworkObject>().Despawn();
     }
 }

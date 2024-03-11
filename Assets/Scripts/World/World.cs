@@ -19,7 +19,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         get
         {
-            return (int)GameStateManager.WorldSizeOverride.Value;
+            return (int)GameStateManager.WorldSizeOverride;
         }
     }
     public const int WorldLayer = 3;
@@ -40,7 +40,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     }
     private void GenWorld()
     {
-        Random.InitState(GameStateManager.GenSeed.Value);
+        Random.InitState(GameStateManager.GenSeed);
         MaxTiles = new Vector3Int(ChunkRadius * Chunk.Width, Chunk.Height, ChunkRadius * Chunk.Width);
         chunk = new GameObject[ChunkRadius, ChunkRadius];
         for (int i = 0; i < chunk.GetLength(1); i++)
@@ -382,7 +382,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 QueueChunkReload(chunk);
                 if (!DoNotSendPacket)
                 {
-                    GameStateManager.Instance.SetBlockRpc(x, y, z, blockType, particleMultiplier, GameStateManager.Instance.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
+                    GameStateManager.NetData.SetBlockRpc(x, y, z, blockType, particleMultiplier, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
                 }
                 return true;
             }
@@ -440,7 +440,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
         }
         if(!DoNotSendPacket)
         {
-            GameStateManager.Instance.TileFillRpc(x, y, z, x2, y2, z2, blockID, particleMultiplier, GameStateManager.Instance.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
+            GameStateManager.NetData.TileFillRpc(x, y, z, x2, y2, z2, blockID, particleMultiplier, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
         }
         return hasFilledOneBlock;
     }

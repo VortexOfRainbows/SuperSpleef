@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 773409972973817119}
-  - component: {fileID: 2446709603383156531}
   - component: {fileID: 2073345897902180056}
   m_Layer: 0
   m_Name: GameManager
@@ -33,27 +32,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2446709603383156531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367921222881860352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3417098491
-  InScenePlacedSourceGlobalObjectIdHash: 2513921746
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 1
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &2073345897902180056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 5377142725127841264, guid: 52398b591dcfcb745862f464625d635b, type: 3}
+  netData: {fileID: 1835597934121838165, guid: 2658f0e55d9ba8f418f77f946a778c68, type: 3}

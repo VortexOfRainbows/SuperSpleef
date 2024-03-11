@@ -13,7 +13,7 @@ public abstract class Projectile : NetworkBehaviour ///Team members that contrib
             pObject.GetComponent<NetworkObject>().Spawn(true);
             return pObject;
         }
-        GameStateManager.Instance.SpawnProjectileRpc(ProjectileType, position, rotation, velocity);
+        GameStateManager.NetData.SpawnProjectileRpc(ProjectileType, position, rotation, velocity);
         return null;
     }
     protected MeshRenderer mRenderer;

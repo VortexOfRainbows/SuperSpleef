@@ -51,7 +51,7 @@ public class MultiplayerUI : MonoBehaviour
                 }
             }
             if(index != -1)
-                GameStateManager.Instance.DespawnNetworkPlayerRpc(index);
+                GameStateManager.NetData.DespawnNetworkPlayerRpc(index);
         }
         NetworkManager.Singleton.Shutdown();
     }
