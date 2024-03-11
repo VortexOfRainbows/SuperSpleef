@@ -71,6 +71,7 @@ public class GameStateManager : NetworkBehaviour
     public static NetworkVariable<float> WorldSizeOverride;
     public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
+    private static NetworkVariable<int> StartingPlayerCount = new NetworkVariable<int>(-1);
     public void Awake()
     {
         GenSeed = new NetworkVariable<int>(Random.Range(0, int.MaxValue), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -100,8 +101,7 @@ public class GameStateManager : NetworkBehaviour
         GameOver = false;
         Unpause();
 
-        WaitSomeTimeForAssetsToLoad = 0;
-        HasSpawnedPlayers = false;
+        WaitSomeTimeForAssetsToLoad = NoPlayersLeftTimer = 0; 
         if(NetworkManager.Singleton != null)
         {
             ResetServerSyncedStates();
@@ -113,6 +113,7 @@ public class GameStateManager : NetworkBehaviour
             WorldSizeOverride.Value = World.DefaultChunkRadius;
         if (GenSeed.Value <= 0)
             GenSeed.Value = Random.Range(0, int.MaxValue);
+        HasSpawnedPlayers.Value = false;
     }
     public static void SetParticleMultiplier(float mult)
     {
@@ -201,7 +202,8 @@ public class GameStateManager : NetworkBehaviour
         Time.timeScale = 0.5f;
     }
     private static float WaitSomeTimeForAssetsToLoad = 0;
-    private static bool HasSpawnedPlayers = false;
+    private static float NoPlayersLeftTimer = 0;
+    private static NetworkVariable<bool> HasSpawnedPlayers = new NetworkVariable<bool>(false);
     private static bool HasResetStateSinceReload = true;
     private void LateUpdate()
     {
@@ -227,30 +229,70 @@ public class GameStateManager : NetworkBehaviour
                 Players.RemoveAt(i);
             }
         }
-        if (NetworkManager.Singleton.IsServer)
+        if (SceneManager.GetActiveScene().name == MultiplayerScene)
         {
-            if (!HasSpawnedPlayers && SceneManager.GetActiveScene().name == MultiplayerScene)
+            if (NetworkManager.Singleton.IsServer)
             {
-                WaitSomeTimeForAssetsToLoad += Time.deltaTime;
-                //Debug.Log(WaitSomeTimeForAssetsToLoad);
-                if (WaitSomeTimeForAssetsToLoad > 1)
+                if (!HasSpawnedPlayers.Value)
                 {
-                    //Debug.Log("Finished Waiting");
-                    int i = 0;
-                    foreach (NetworkPlayer nPlayer in NetHandler.LoggedPlayers)
+                    StartingPlayerCount.Value = NetHandler.LoggedPlayers.Count;
+                    WaitSomeTimeForAssetsToLoad += Time.deltaTime;
+                    //Debug.Log(WaitSomeTimeForAssetsToLoad);
+                    if (WaitSomeTimeForAssetsToLoad > 1)
                     {
-                        Debug.Log(i);
-                        GameObject go = Instantiate(Instance.player, new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2), Quaternion.identity);
-                        go.GetComponent<NetworkObject>().SpawnAsPlayerObject(nPlayer.OwnerClientId, true);
-                        i++;
+                        //Debug.Log("Finished Waiting");
+                        //int i = 0;
+                        foreach (NetworkPlayer nPlayer in NetHandler.LoggedPlayers)
+                        {
+                            //Debug.Log(i);
+                            GameObject go = Instantiate(Instance.player, new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2), Quaternion.identity);
+                            go.GetComponent<NetworkObject>().SpawnAsPlayerObject(nPlayer.OwnerClientId, true);
+                            //i++;
+                        }
+                        HasSpawnedPlayers.Value = true;
                     }
-                    HasSpawnedPlayers = true;
                 }
+                //if (WorldSizeOverride.Value <= 0)
+                //    WorldSizeOverride.Value = World.DefaultChunkRadius;
+                //Debug.Log("World Size: " + WorldSizeOverride.Value);
+                //Debug.Log("Gen Rand: " + GenSeed.Value);
             }
-            //if (WorldSizeOverride.Value <= 0)
-            //    WorldSizeOverride.Value = World.DefaultChunkRadius;
-            //Debug.Log("World Size: " + WorldSizeOverride.Value);
-            //Debug.Log("Gen Rand: " + GenSeed.Value);
+            if(HasSpawnedPlayers.Value)
+            {
+                if (Player.Count == 1)
+                {
+                    if (StartingPlayerCount.Value == 1)
+                    {
+                        Debug.Log("You are alone in a multiplayer lobby..?");
+                    }
+                    else
+                    {
+                        Player remainingPlayer = Player[0];
+                        string VictoryText = "";
+                        for (int i = 0; i < NetHandler.LoggedPlayers.Count; i++)
+                        {
+                            if(remainingPlayer.OwnerClientId == NetHandler.LoggedPlayers[i].OwnerClientId)
+                            {
+                                if(NetworkManager.Singleton.IsServer && GameEndDelay == GameEndFrameDelay)
+                                    NetHandler.LoggedPlayers[i].WinCount.Value++;
+                                VictoryText += NetHandler.LoggedPlayers[i].Username;
+                                break;
+                            }
+                        }
+                        EndGame(VictoryText + " Wins");
+                    }
+                }
+                if (Player.Count <= 0)
+                {
+                    NoPlayersLeftTimer += Time.deltaTime;
+                    if(NoPlayersLeftTimer > 1)
+                    {
+                        EndGame(DefaultGameOverText);
+                    }
+                }
+                else
+                    NoPlayersLeftTimer = 0;
+            }
         }
     }
     

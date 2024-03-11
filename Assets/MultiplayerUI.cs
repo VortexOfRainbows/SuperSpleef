@@ -24,7 +24,7 @@ public class MultiplayerUI : MonoBehaviour
             LoggedDisplay.text = string.Empty;
             for (int i = 0; i < NetHandler.LoggedPlayers.Count; i++)
             {
-                LoggedDisplay.text += (i + 1) + ": " + NetHandler.LoggedPlayers[i].Username + "\n";
+                LoggedDisplay.text += "(" + NetHandler.LoggedPlayers[i].WinCount.Value + ") " + NetHandler.LoggedPlayers[i].Username + "\n";
             }
         }
         if (WaitingForServerDisplay != null)

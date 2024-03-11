@@ -16,6 +16,7 @@ public class NetworkPlayer : NetworkBehaviour
     private Transform CameraTransform => ClientManager.Camera.transform;
     public string Username => MyName.Value.ToString();
     private NetworkVariable<FixedString512Bytes> MyName = new NetworkVariable<FixedString512Bytes>("Username", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<int> WinCount = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     void Start()
     {
         NetHandler.LoggedPlayers.Add(this);

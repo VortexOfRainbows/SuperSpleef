@@ -368,7 +368,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                         updateBlockOutline = false;
                 }
             }
-            if (updateBlockOutline)
+            if (updateBlockOutline && IsOwner)
             {
                 if (World.Block(TargetPosition) == BlockID.Air)
                 {
@@ -381,7 +381,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 }
             }
         }
-        else
+        else if(IsOwner)
         {
             BlockOutline.SetActive(false);
         }
