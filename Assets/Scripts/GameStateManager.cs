@@ -17,6 +17,7 @@ public class GameStateManager : NetworkBehaviour
 {
     public static NetworkVariable<int> GenSeed;
     [SerializeField] private GameObject player;
+    public const string TitleScreen = "TitleScreen";
     public const string MainScene = "MainScene";
     public const string MultiplayerScene = "MultiplayerScene";
     public static List<Player> Players
@@ -200,6 +201,12 @@ public class GameStateManager : NetworkBehaviour
             }
         }
     }
+    
+    /// 
+    /// Below this point are netcode Rpc's.
+    /// These must belong in an instanced class, which is why they are in GameStateManager
+    /// Realistically, they should be moved into a new class, but will remain here for now.
+    /// 
 
     [Rpc(SendTo.SpecifiedInParams)]
     public void SetBlockRpc(float x, float y, float z, int type, float particleMultiplier, RpcParams rpcParams)
@@ -215,5 +222,10 @@ public class GameStateManager : NetworkBehaviour
     public void SpawnProjectileRpc(int Type, Vector3 pos, Quaternion rot, Vector3 velo)
     {
         Projectile.NewProjectile(Type, pos, rot, velo);
+    }
+    [Rpc(SendTo.Server)]
+    public void DespawnPlayerRpc(int NetworkPlayerIndex)
+    {
+        NetHandler.LoggedPlayers[NetworkPlayerIndex].GetComponent<NetworkObject>().Despawn();
     }
 }

@@ -25,14 +25,18 @@ public class NetHandler : MonoBehaviour
             NetworkManager.Singleton.StartHost();
             OnNetwork = true;
             InitHost = false;
+            NetworkManager.Singleton.OnServerStopped += NetworkStopped;
+            NetworkManager.Singleton.OnClientStopped += NetworkStopped;
         }
         if (InitClient)
         {
             NetworkManager.Singleton.StartClient();
             OnNetwork = true;
             InitClient = false;
+            NetworkManager.Singleton.OnServerStopped += NetworkStopped;
+            NetworkManager.Singleton.OnClientStopped += NetworkStopped;
         }
-        for(int i = 0; i < LoggedPlayers.Count; i++)
+        for (int i = 0; i < LoggedPlayers.Count; i++)
         {
             if (LoggedPlayers[i] == null)
             {
@@ -47,7 +51,11 @@ public class NetHandler : MonoBehaviour
     }
     private static void JoinGame()
     {
-        SceneManager.LoadScene(3);
         InitClient = true;
+    }
+    private static void NetworkStopped(bool IDontKnowWhatThisValueIs)
+    {
+        SceneManager.LoadScene(GameStateManager.TitleScreen);
+        Debug.Log("Server Ended, Returning to Main Menu");
     }
 }
