@@ -20,8 +20,6 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     public PlayerControls ControlManager;
     public PlayerControls.ControlDown Control => ControlManager.Control;
     public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
-
-    [SerializeField] private float Sensitivity = 1;
     public const int EntityLayer = 6;
     [SerializeField] private float BlockRange = 4;
     [SerializeField] private float jumpForce = 10f;
@@ -239,14 +237,18 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 OnTheFloor = true;
         }
     }
+    public Vector2 GetFacingDirection()
+    {
+        return Direction;
+    }
     private Vector2 Direction = Vector2.zero;
     /// <summary>
     /// Updates the rotation of the camera to match with the movement of the mouse
     /// </summary>
     private void MouseControls()
     {
-        float mouseX = Control.XAxis * Time.deltaTime * Sensitivity;
-        float mouseY = Control.YAxis * Time.deltaTime * Sensitivity;
+        float mouseX = Control.XAxis * Time.deltaTime * PlayerControls.DefaultMouseSensitivity;
+        float mouseY = Control.YAxis * Time.deltaTime * PlayerControls.DefaultMouseSensitivity;
         Direction.y += mouseX;
         Direction.x -= mouseY;
         Direction.x = Mathf.Clamp(Direction.x, -90f, 90f);
@@ -487,9 +489,16 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         else
         {
-            Destroy(gameObject);
-            Destroy(InBlockColliderTop);
-            Destroy(InBlockColliderBottom);
+            if(NetworkManager.IsServer)
+            {
+                Destroy(gameObject);
+                Destroy(InBlockColliderTop);
+                Destroy(InBlockColliderBottom);
+            }
+            if(IsOwner)
+            {
+                ClientManager.InventoryInterface.SetActive(false);
+            }
         }
     }
 }

@@ -7,12 +7,14 @@ using UnityEngine.UI;
 public class ClientManager : MonoBehaviour
 {
     [SerializeField] private GameObject RestartButton;
+    [SerializeField] private GameObject InventoryUI;
     [SerializeField] private Text LeaveLobbyText1;
     [SerializeField] private Text LeaveLobbyText2;
     public static ClientManager Instance { get; private set; }
     public static Camera Camera => Instance.MainCamera;
     public static ScreenBlocker Blocker => Instance.ScreenBlocker;
     public static GameObject Outline => Instance.BlockOutline;
+    public static GameObject InventoryInterface => Instance.InventoryUI;
     [SerializeField] private Camera MainCamera;
     [SerializeField] private ScreenBlocker ScreenBlocker;
     [SerializeField] private GameObject BlockOutline;

@@ -179,6 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RestartButton: {fileID: 295653966550670453}
+  InventoryUI: {fileID: 1433125884726313075}
   LeaveLobbyText1: {fileID: 6064660019875903725}
   LeaveLobbyText2: {fileID: 7166985056364492200}
   MainCamera: {fileID: 6873082447999680281}
@@ -879,6 +880,11 @@ PrefabInstance:
 --- !u!1 &295653966550670453 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8789378958777621714, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
+  m_PrefabInstance: {fileID: 9070383992318689447}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1433125884726313075 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7927186680561008852, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
   m_PrefabInstance: {fileID: 9070383992318689447}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &3570043134960630943 stripped

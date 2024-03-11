@@ -1,9 +1,11 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell, David Bu
 {
-    [SerializeField] private Player player;
+    public const float DefaultMouseSensitivity = 400f;
+    [SerializeField] private NetworkBehaviour player;
     private GamepadControls GamepadControls;
     public bool UsingGamepad = false;
     public ControlDown Control = new ControlDown(); //Stores player input for the current frame
