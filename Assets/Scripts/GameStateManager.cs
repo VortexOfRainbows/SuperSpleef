@@ -225,6 +225,10 @@ public class GameStateManager : NetworkBehaviour
         {
             if(SceneManager.GetActiveScene().name == MultiplayerGameLobby)
             {
+                foreach (NetworkPlayer nPlayer in NetHandler.LoggedPlayers)
+                {
+                    nPlayer.transform.position = new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2);
+                }
                 if (!HasResetStateSinceReload)
                 {
                     HasResetStateSinceReload = true;
@@ -252,7 +256,7 @@ public class GameStateManager : NetworkBehaviour
                     StartingPlayerCount.Value = NetHandler.LoggedPlayers.Count;
                     WaitSomeTimeForAssetsToLoad += Time.deltaTime;
                     //Debug.Log(WaitSomeTimeForAssetsToLoad);
-                    if (WaitSomeTimeForAssetsToLoad > 1)
+                    if (WaitSomeTimeForAssetsToLoad > 0.1)
                     {
                         //Debug.Log("Finished Waiting");
                         //int i = 0;
@@ -277,7 +281,7 @@ public class GameStateManager : NetworkBehaviour
                 {
                     if (StartingPlayerCount.Value == 1)
                     {
-                        Debug.Log("You are alone in a multiplayer lobby..?");
+                        //Debug.Log("You are alone in a multiplayer lobby..?");
                     }
                     else
                     {

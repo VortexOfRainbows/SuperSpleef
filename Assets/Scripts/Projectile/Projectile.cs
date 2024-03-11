@@ -136,7 +136,11 @@ public abstract class Projectile : NetworkBehaviour ///Team members that contrib
         if(IsServer)
         {
             OnDeath(OutBoundDeath);
-            GetComponent<NetworkObject>().Despawn();
+            NetworkObject nObject = GetComponent<NetworkObject>();
+            if (nObject.IsSpawned)
+                GetComponent<NetworkObject>().Despawn();
+            else
+                Destroy(gameObject);
         }
     }
 }
