@@ -110,5 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d8a7c7ef98e9cb41af8645b24588311, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnityTransport: {fileID: 8086306937415653813}
   hostButton: {fileID: 0}
   joinButton: {fileID: 0}
