@@ -71,7 +71,7 @@ public class NetworkPlayer : NetworkBehaviour
                         PlayerToWatchID = GameStateManager.Players.Count - 1;
                     }
                 }
-                if(PlayerToWatchID >= 0)
+                if(PlayerToWatchID >= 0 && GameStateManager.Players.Count > 0)
                 {
                     Player toWatch = GameStateManager.Players[PlayerToWatchID];
                     transform.position = toWatch.FacingVector.transform.position;

@@ -269,8 +269,8 @@ public class GameStateManager : NetworkBehaviour
                 }
                 //if (WorldSizeOverride.Value <= 0)
                 //    WorldSizeOverride.Value = World.DefaultChunkRadius;
-                //Debug.Log("World Size: " + WorldSizeOverride.Value);
-                //Debug.Log("Gen Rand: " + GenSeed.Value);
+                Debug.Log("World Size: " + WorldSizeOverride.Value);
+                Debug.Log("Gen Rand: " + GenSeed.Value);
             }
             if(HasSpawnedPlayers.Value)
             {
