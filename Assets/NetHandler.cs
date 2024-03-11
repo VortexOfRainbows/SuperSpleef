@@ -9,33 +9,34 @@ public class NetHandler : MonoBehaviour
 {
     [SerializeField] private UnityTransport UnityTransport;
 
-    public string IP
+    public static string IP
     {
         get
         {
-            return this.UnityTransport.ConnectionData.Address;
+            return Instance.UnityTransport.ConnectionData.Address;
         }
         private set
         {
-            this.UnityTransport.ConnectionData.Address = value;
+            Debug.Log("IP is now: " + value);
+            Instance.UnityTransport.ConnectionData.Address = value;
         }
     }
-    public ushort Port ///Should always be 7777 for now
+    public static ushort Port ///Should always be 7777 for now
     {
         get
         {
-            return this.UnityTransport.ConnectionData.Port;
+            return Instance.UnityTransport.ConnectionData.Port;
         }
         private set
         {
-            this.UnityTransport.ConnectionData.Port = value;
+            Instance.UnityTransport.ConnectionData.Port = value;
         }
     }
     public void SetIP(string newIP)
     {
         IP = newIP;
     }
-
+    public static NetHandler Instance = null;
     public static List<NetworkPlayer> LoggedPlayers = new List<NetworkPlayer>();
     public static int TotalClients => LoggedPlayers.Count;
     [SerializeField] private Button hostButton;
@@ -44,6 +45,15 @@ public class NetHandler : MonoBehaviour
     private static bool InitHost = false;
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else if (this != Instance)
+        {
+            Destroy(gameObject);
+        }
         hostButton.onClick.AddListener(HostGame);
         joinButton.onClick.AddListener(JoinGame);
     }
@@ -72,6 +82,10 @@ public class NetHandler : MonoBehaviour
                 LoggedPlayers.RemoveAt(i);
             }
         }
+        if(GameStateManager.Instance == null)
+        {
+            SceneManager.LoadScene(GameStateManager.TitleScreen);
+        }
     }
     private static void HostGame()
     {
@@ -84,7 +98,8 @@ public class NetHandler : MonoBehaviour
     }
     private static void NetworkStopped(bool IDontKnowWhatThisValueIs)
     {
-        SceneManager.LoadScene(GameStateManager.TitleScreen);
+        if(SceneManager.GetActiveScene().name != GameStateManager.TitleScreen)
+            SceneManager.LoadScene(GameStateManager.TitleScreen);
         Debug.Log("Server Ended, Returning to Main Menu");
     }
 }

@@ -87,6 +87,7 @@ public class GameStateManager : NetworkBehaviour
     public static NetworkVariable<int> StartingPlayerCount = new NetworkVariable<int>(-1);
     public void Awake()
     {
+        HasSpawnedPlayers = new NetworkVariable<bool>(false);
         SyncedMode = new NetworkVariable<int>(0);
         GenSeed = new NetworkVariable<int>(Random.Range(0, int.MaxValue), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         WorldSizeOverride = new NetworkVariable<float>(World.DefaultChunkRadius);
@@ -99,7 +100,7 @@ public class GameStateManager : NetworkBehaviour
             Instance = this;
             DontDestroyOnLoad(this);
         }
-        else
+        else if(this != Instance)
         {
             Destroy(gameObject);
         }
