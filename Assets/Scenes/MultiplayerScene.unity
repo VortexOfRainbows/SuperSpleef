@@ -186,6 +186,10 @@ PrefabInstance:
       propertyPath: Owner
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 617406189547253711, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_Text
+      value: RETURN
+      objectReference: {fileID: 0}
     - target: {fileID: 875751446564677268, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -220
@@ -365,6 +369,10 @@ PrefabInstance:
     - target: {fileID: 4004689634091162490, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: Owner
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4641544289781813692, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4679119328667873397, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: Owner

@@ -1,7 +1,8 @@
 using System.Linq;
 using UnityEngine;
+using Unity.Netcode;
 
-public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo
+public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo, Samuel Gines
 {
     #region public
     ///These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
@@ -46,6 +47,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     }
     private void OnStart()
     {
+        currentPlayerHP = maxPlayerHP;
         Inventory = new Inventory(30);
         int StartingItemCount = 20;
         if(GameStateManager.Mode == GameModeID.Creative)
@@ -104,6 +106,17 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
             CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+        }
+        if (currentPlayerHP <= 0f) // If the player's current HP reaches zero, or if the player falls too far down the world...
+        {
+            OnDeath(); // Trigger the Death Behavior of the character
+        }
+        else
+        {
+            if (transform.position.y < World.OutOfBounds)
+            {
+                currentPlayerHP -= DamageFromVoid * Time.deltaTime;
+            }
         }
     }
     /// <summary>
@@ -438,5 +451,45 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         InBlockColliderBottom.GetComponent<BarrierBlock>().UpdateCollision();
         if(IsOwner)
             ScreenBlocker.UpdateUVS(World.Block(topAsInt));
+    }
+    public const float DamageFromVoid = 200f;
+    private const float maxPlayerHP = 100; // Assigns the Max HP of the player
+    private float currentPlayerHP = maxPlayerHP; // Assigns the current HP of the character
+    private float deathAnimTimer = 0.0f; // Artifical Stopwatch
+    private void OnDeath()
+    {
+        deathAnimTimer += Time.deltaTime; // Start the stopwatch
+        transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 0, 90), deathAnimTimer * deathAnimTimer * 9); // Interpolate the player and Rotate the character 90 degrees
+        if(NetworkManager.Singleton == null)
+        {
+            if (Time.timeScale >= 1)
+            {
+                //Debug.Log(currentPlayerHP);
+                string DeathText = GameStateManager.DefaultGameOverText;
+                Color deathColor = Color.white;
+                if (GameStateManager.LocalMultiplayer)
+                {
+                    if (ControlManager.UsingGamepad)
+                    {
+                        //blue player uses gamepad
+                        DeathText = "Yellow Wins";
+                        deathColor = Color.yellow;
+                    }
+                    else
+                    {
+                        //yellow player uses gamepad
+                        DeathText = "Blue Wins";
+                        deathColor = Color.blue;
+                    }
+                }
+                GameStateManager.EndGame(DeathText, deathColor);
+            }
+        }
+        else
+        {
+            Destroy(gameObject);
+            Destroy(InBlockColliderTop);
+            Destroy(InBlockColliderBottom);
+        }
     }
 }

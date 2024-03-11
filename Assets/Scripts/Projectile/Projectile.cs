@@ -23,7 +23,7 @@ public abstract class Projectile : NetworkBehaviour ///Team members that contrib
         if(NetworkManager.Singleton.IsServer)
         {
             Vector3 velo = GetComponent<Rigidbody>().velocity;
-            Debug.Log("Spawn velo: " + velo);
+            //Debug.Log("Spawn velo: " + velo);
             velocity.Value = velo;
         }
         mRenderer = GetComponent<MeshRenderer>();

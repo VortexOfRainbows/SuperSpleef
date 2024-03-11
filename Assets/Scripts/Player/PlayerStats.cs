@@ -4,7 +4,10 @@ using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
+[Obsolete] 
+///functionality is now part of the player class
 public class PlayerStats : MonoBehaviour ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
 {
     public const float DamageFromVoid = 200f;
@@ -19,12 +22,12 @@ public class PlayerStats : MonoBehaviour ///Team members that contributed to thi
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P) && Time.timeScale == 1) // If the "P" key is pressed, and the game is not forzen (aka paused)...
+        /*if (Input.GetKeyDown(KeyCode.P) && Time.timeScale == 1) // If the "P" key is pressed, and the game is not forzen (aka paused)...
         {
             currentPlayerHP -= maxPlayerHP; // Deal damage equal to the player's max HP to the player
             rb.AddForce(transform.up * 150f); // Add a force to the player in the upwards direction
             //Debug.Log(currentPlayerHP);
-        }
+        }*/
         if (currentPlayerHP <= 0f) // If the player's current HP reaches zero, or if the player falls too far down the world...
         {
             OnDeath(); // Trigger the Death Behavior of the character

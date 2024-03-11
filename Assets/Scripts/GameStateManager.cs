@@ -16,11 +16,13 @@ public static class GameModeID // Assigns an int as a reference to each game mod
 }
 public class GameStateManager : NetworkBehaviour
 {
+    public static string LocalUsername { get; set; } = "";
     public static NetworkVariable<int> GenSeed;
     [SerializeField] private GameObject player;
     public const string TitleScreen = "TitleScreen";
     public const string MainScene = "MainScene";
     public const string MultiplayerScene = "MultiplayerScene";
+    public const string MultiplayerGameLobby = "MultiplayerGameLobby";
     public static List<Player> Players
     {
         get
@@ -132,7 +134,6 @@ public class GameStateManager : NetworkBehaviour
     {
         settingsDoIGenerateUCI = doIGenerate;
     }
-
     public static void MainMenu()
     {
         SceneManager.LoadScene(0); //Loads the SuperSpleef Title Page
@@ -164,13 +165,15 @@ public class GameStateManager : NetworkBehaviour
     }
     public static void RestartGame()
     {
-        ResetStates();
         if (NetworkManager.Singleton != null)
         {
-            NetworkManager.Singleton.SceneManager.LoadScene(MultiplayerScene, LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(MultiplayerGameLobby, LoadSceneMode.Single);
         }
         else
+        {
+            ResetStates();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
     public static void Pause()
     {
@@ -199,8 +202,31 @@ public class GameStateManager : NetworkBehaviour
     }
     private static float WaitSomeTimeForAssetsToLoad = 0;
     private static bool HasSpawnedPlayers = false;
+    private static bool HasResetStateSinceReload = true;
     private void LateUpdate()
     {
+        if(NetworkManager.Singleton != null)
+        {
+            if(SceneManager.GetActiveScene().name == MultiplayerGameLobby)
+            {
+                if (!HasResetStateSinceReload)
+                {
+                    HasResetStateSinceReload = true;
+                    ResetStates();
+                }
+            }
+            else if(SceneManager.GetActiveScene().name == MultiplayerScene)
+            {
+                HasResetStateSinceReload = false;
+            }
+        }
+        for (int i = 0; i < Players.Count; i++)
+        {
+            if (Players[i] == null)
+            {
+                Players.RemoveAt(i);
+            }
+        }
         if (NetworkManager.Singleton.IsServer)
         {
             if (!HasSpawnedPlayers && SceneManager.GetActiveScene().name == MultiplayerScene)
@@ -215,7 +241,7 @@ public class GameStateManager : NetworkBehaviour
                     {
                         Debug.Log(i);
                         GameObject go = Instantiate(Instance.player, new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2), Quaternion.identity);
-                        go.GetComponent<NetworkObject>().SpawnAsPlayerObject(nPlayer.OwnerClientId);
+                        go.GetComponent<NetworkObject>().SpawnAsPlayerObject(nPlayer.OwnerClientId, true);
                         i++;
                     }
                     HasSpawnedPlayers = true;
@@ -223,8 +249,8 @@ public class GameStateManager : NetworkBehaviour
             }
             //if (WorldSizeOverride.Value <= 0)
             //    WorldSizeOverride.Value = World.DefaultChunkRadius;
-            Debug.Log("World Size: " + WorldSizeOverride.Value);
-            Debug.Log("Gen Rand: " + GenSeed.Value);
+            //Debug.Log("World Size: " + WorldSizeOverride.Value);
+            //Debug.Log("Gen Rand: " + GenSeed.Value);
         }
     }
     
@@ -250,7 +276,7 @@ public class GameStateManager : NetworkBehaviour
         Projectile.NewProjectile(Type, pos, rot, velo);
     }
     [Rpc(SendTo.Server)]
-    public void DespawnPlayerRpc(int NetworkPlayerIndex)
+    public void DespawnNetworkPlayerRpc(int NetworkPlayerIndex)
     {
         NetHandler.LoggedPlayers[NetworkPlayerIndex].GetComponent<NetworkObject>().Despawn();
     }

@@ -20,7 +20,13 @@ public class MultiplayerUI : MonoBehaviour
     private void Update()
     {
         if (LoggedDisplay != null)
-            LoggedDisplay.text = NetHandler.TotalClients.ToString();
+        {
+            LoggedDisplay.text = string.Empty;
+            for (int i = 0; i < NetHandler.LoggedPlayers.Count; i++)
+            {
+                LoggedDisplay.text += (i + 1) + ": " + NetHandler.LoggedPlayers[i].Username + "\n";
+            }
+        }
         if (WaitingForServerDisplay != null)
             WaitingForServerDisplay.text = NetworkManager.Singleton.IsServer ? IAmServer : WaitingOnServer;
         if (LeaveLobbyText != null)
@@ -45,7 +51,7 @@ public class MultiplayerUI : MonoBehaviour
                 }
             }
             if(index != -1)
-                GameStateManager.Instance.DespawnPlayerRpc(index);
+                GameStateManager.Instance.DespawnNetworkPlayerRpc(index);
         }
         NetworkManager.Singleton.Shutdown();
     }
