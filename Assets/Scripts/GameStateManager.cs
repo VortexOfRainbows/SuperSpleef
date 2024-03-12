@@ -356,7 +356,7 @@ public class GameStateManager : MonoBehaviour
                     {
                         //Debug.Log("You are alone in a multiplayer lobby..?");
                     }
-                    else
+                    else if (!GameOver)
                     {
                         Player remainingPlayer = Player[0];
                         string VictoryText = "";
@@ -378,7 +378,7 @@ public class GameStateManager : MonoBehaviour
                         EndGame(VictoryText , IAmWinner ? Color.green : Color.red);
                     }
                 }
-                if (Player.Count <= 0)
+                if (Player.Count <= 0 && !GameOver)
                 {
                     NoPlayersLeftTimer += Time.deltaTime;
                     if(NoPlayersLeftTimer > 1)
