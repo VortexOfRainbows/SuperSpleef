@@ -318,9 +318,9 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     /// <param name="pos"></param>
     /// <param name="blockID"></param>
     /// <returns></returns>
-    public static bool SetBlock(Vector3 pos, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false)
+    public static bool SetBlock(Vector3 pos, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false, bool generateSound = false)
     {
-        return SetBlock(pos.x, pos.y, pos.z, blockID, particleMultiplier, DoNotSendPacket);
+        return SetBlock(pos.x, pos.y, pos.z, blockID, particleMultiplier, DoNotSendPacket, generateSound);
     }
     /// <summary>
     /// Sets a block at position xyz to the blockID. Returns true if the block is successfully converted.
@@ -330,7 +330,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     /// <param name="z"></param>
     /// <param name="blockType"></param>
     /// <returns></returns>
-    public static bool SetBlock(float x, float y, float z, int blockType, float particleMultiplier = 1f, bool DoNotSendPacket = false)
+    public static bool SetBlock(float x, float y, float z, int blockType, float particleMultiplier = 1f, bool DoNotSendPacket = false, bool generateSound = false)
     {
         if (!NetHandler.Active)
             DoNotSendPacket = true;
@@ -353,18 +353,33 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 {
                     return true;
                 }
-                if(blockType == BlockID.Air && particleMultiplier > 0) //If we are breaking the block, generate particles
+                Vector3 spawnPos = new Vector3(x, y, z);
+                if (blockType == BlockID.Air && particleMultiplier > 0) //If we are breaking the block, generate particles
                 {
-                    if(typeBeforeBreaking == BlockID.Stone)
-                        AudioManager.PlaySound(SoundID.Stone, new Vector3(x, y, z));
-                    else if(typeBeforeBreaking == BlockID.Wood)
-                        AudioManager.PlaySound(SoundID.Wood, new Vector3(x, y, z));
-                    else if (typeBeforeBreaking == BlockID.Leaves)
-                        AudioManager.PlaySound(SoundID.Grass, new Vector3(x, y, z));
-                    else
-                        AudioManager.PlaySound(SoundID.Dirt, new Vector3(x, y, z));
-                    GenerateBlockBreakingParticles(new Vector3(x, y, z), typeBeforeBreaking, particleMultiplier);
-
+                    GenerateBlockBreakingParticles(spawnPos, typeBeforeBreaking, particleMultiplier);
+                    if(generateSound)
+                    {
+                        if (typeBeforeBreaking == BlockID.Wood)
+                            AudioManager.PlaySound(SoundID.Wood, spawnPos);
+                        else if (typeBeforeBreaking == BlockID.Leaves)
+                            AudioManager.PlaySound(SoundID.Grass, spawnPos);
+                        else
+                            AudioManager.PlaySound(SoundID.Stone, spawnPos);
+                    }
+                }
+                if(typeBeforeBreaking == BlockID.Air)
+                {
+                    if (generateSound)
+                    {
+                        if (blockType == BlockID.Dirt || blockType == BlockID.Grass)
+                            AudioManager.PlaySound(SoundID.Dirt, spawnPos, pitchModifier: 0.1f);
+                        else if (blockType == BlockID.Wood)
+                            AudioManager.PlaySound(SoundID.Wood, spawnPos, pitchModifier: 0.4f);
+                        else if (blockType == BlockID.Leaves)
+                            AudioManager.PlaySound(SoundID.Grass, spawnPos, pitchModifier: 0.25f);
+                        else
+                            AudioManager.PlaySound(SoundID.Stone, spawnPos, pitchModifier: 0.4f);
+                    }
                 }
                 if (blockX <= 0)
                 {
@@ -393,18 +408,18 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 QueueChunkReload(chunk);
                 if (!DoNotSendPacket)
                 {
-                    GameStateManager.NetData.SetBlockRpc(x, y, z, blockType, particleMultiplier, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
+                    GameStateManager.NetData.SetBlockRpc(x, y, z, blockType, particleMultiplier, generateSound, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
                 }
                 return true;
             }
         }
         return false;
     }
-    public static bool FillBlock(Vector3 start, Vector3 end, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false)
+    public static bool FillBlock(Vector3 start, Vector3 end, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false, bool generateSound = false)
     {
         return FillBlock(start.x, start.y, start.z, end.x, end.y, end.z, blockID, particleMultiplier, DoNotSendPacket);
     }
-    public static bool FillBlock(float x, float y, float z, float x2, float y2, float z2, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false)
+    public static bool FillBlock(float x, float y, float z, float x2, float y2, float z2, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false, bool generateSound = false)
     {
         int X = Mathf.FloorToInt(x);
         int Y = Mathf.FloorToInt(y);
@@ -412,7 +427,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
         int X2 = Mathf.FloorToInt(x2);
         int Y2 = Mathf.FloorToInt(y2);
         int Z2 = Mathf.FloorToInt(z2);
-        return FillBlock(X, Y, Z, X2, Y2, Z2, blockID, particleMultiplier, DoNotSendPacket);
+        return FillBlock(X, Y, Z, X2, Y2, Z2, blockID, particleMultiplier, DoNotSendPacket, generateSound);
     }
     /// <summary>
     /// Fills the area from xyz to x2y2z2 with blockID. Returns true if any blocks are converted. Returns false if no blocks are converted.
@@ -425,7 +440,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     /// <param name="z2"></param>
     /// <param name="blockID"></param>
     /// <returns></returns>
-    public static bool FillBlock(int x, int y, int z, int x2, int y2, int z2, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false)
+    public static bool FillBlock(int x, int y, int z, int x2, int y2, int z2, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false, bool generateSound = false)
     {
         if (!NetHandler.Active)
             DoNotSendPacket = true;
@@ -445,7 +460,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             {
                 for (int back = sZ; back <= bZ; back++)
                 {
-                    if(SetBlock(left, bot, back, blockID, particleMultiplier))
+                    if(SetBlock(left, bot, back, blockID, particleMultiplier, true, generateSound))
                         hasFilledOneBlock = true;
                     //Debug.Log(left + ":" + bot + ":" + back);
                 }
@@ -453,7 +468,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
         }
         if(!DoNotSendPacket)
         {
-            GameStateManager.NetData.TileFillRpc(x, y, z, x2, y2, z2, blockID, particleMultiplier, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
+            GameStateManager.NetData.TileFillRpc(x, y, z, x2, y2, z2, blockID, particleMultiplier, generateSound, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
         }
         return hasFilledOneBlock;
     }

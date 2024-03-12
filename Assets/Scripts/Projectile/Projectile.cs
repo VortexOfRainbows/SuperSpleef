@@ -154,5 +154,10 @@ public abstract class Projectile : NetworkBehaviour ///Team members that contrib
             else
                 Destroy(gameObject);
         }
+        PlayDeathSound();
+    }
+    public virtual void PlayDeathSound()
+    {
+        AudioManager.PlaySound(SoundID.Wood, transform.position, 0.75f, pitchModifier: 0.1f);
     }
 }

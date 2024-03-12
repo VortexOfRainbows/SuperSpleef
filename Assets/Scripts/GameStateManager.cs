@@ -191,7 +191,8 @@ public class GameStateManager : MonoBehaviour
         {
             StartingPlayerCount = -1;
             HasSpawnedPlayers = false;
-            Mode = 0;
+            if(Mode <= GameModeID.None)
+                Mode = 0;
             if (GenSeed <= 0)
                 GenSeed = Random.Range(0, int.MaxValue);
             if (WorldSizeOverride <= 0)

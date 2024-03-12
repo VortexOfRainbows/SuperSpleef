@@ -348,7 +348,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             bool updateBlockOutline = true;
             if (left) //Destroy a block with left click
             {
-                blocksWereModified = World.SetBlock(TargetPosition, BlockID.Air);
+                blocksWereModified = World.SetBlock(TargetPosition, BlockID.Air, generateSound: true);
                 updateBlockOutline = blocksWereModified;
             } 
             else if (holdingPlaceableBlock && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air) //Place a block with right click
@@ -359,7 +359,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                     bool NoEntities = inBlockPosition.Count(item => item.gameObject.layer == EntityLayer) <= 0;
                     if (NoEntities)
                     {
-                        bool placedBlocks = World.SetBlock(TargetPosition, blockToPlace);
+                        bool placedBlocks = World.SetBlock(TargetPosition, blockToPlace, generateSound: true);
                         updateBlockOutline = placedBlocks;
                         if (placedBlocks)
                         {
@@ -455,7 +455,9 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         InBlockColliderTop.GetComponent<BarrierBlock>().UpdateCollision();
         InBlockColliderBottom.GetComponent<BarrierBlock>().UpdateCollision();
         if (IsOwner || !NetHandler.Active)
+        {
             ScreenBlocker.UpdateUVS(World.Block(topAsInt));
+        }
     }
     public const float DamageFromVoid = 200f;
     private const float maxPlayerHP = 100; // Assigns the Max HP of the player

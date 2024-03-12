@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class SoundID
@@ -49,25 +47,13 @@ public struct Sound
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-
     [SerializeField]
     private Sound[] sounds;
-
     [SerializeField]
     private GameObject audioPlayer;
-
     private void Awake()
     {
         Instance = this;        
-    }
-    private void Start()
-    {
-        /*for (int i = 0; i < sounds.Length; i++)
-        {
-            GameObject _go = new GameObject("Sound_" + i + "_" + sounds[i].name);
-            _go.transform.SetParent(this.transform);
-            sounds[i].SetSource(_go.AddComponent<AudioSource>());
-        }*/
     }
     public static void PlaySound(int SoundType, Vector3 position, float volumeMult = 1f, float distanceMult = 1f, float pitchModifier = 0f)
     {

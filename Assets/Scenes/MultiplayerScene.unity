@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44824904, g: 0.49827605, b: 0.57558316, a: 1}
+  m_IndirectSpecularColor: {r: 0.44824904, g: 0.498276, b: 0.57558316, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -490,6 +490,10 @@ PrefabInstance:
       propertyPath: Owner
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2145768316594200692, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2341344555669408625, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -597,6 +601,10 @@ PrefabInstance:
     - target: {fileID: 4746357663598293306, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_Name
       value: ClientPackage
+      objectReference: {fileID: 0}
+    - target: {fileID: 4849770091177419614, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6064660019875903725, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_Text

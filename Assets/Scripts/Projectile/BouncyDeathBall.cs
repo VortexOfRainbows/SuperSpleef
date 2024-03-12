@@ -22,7 +22,8 @@ public class BouncyDeathBall : Projectile ///Team members that contributed to th
     }
     public override bool OnCollision(Collision collision)
     {
-        if(NetworkManager.Singleton.IsServer || !NetHandler.Active)
+        AudioManager.PlaySound(SoundID.Wood, transform.position, 0.5f - CurrentCollisions / 10f, pitchModifier: -CurrentCollisions / 10f);
+        if (NetworkManager.Singleton.IsServer || !NetHandler.Active)
         {
             for (int i = 0; i < collision.contacts.Length; i++)
             {
@@ -50,5 +51,9 @@ public class BouncyDeathBall : Projectile ///Team members that contributed to th
             return Color.Lerp(Color.yellow, Color.red, (CurrentCollisions - 1) / (float)(MaxCollisions - 1f));
         }
         return Color.white;
+    }
+    public override void PlayDeathSound()
+    {
+        AudioManager.PlaySound(SoundID.Wood, transform.position, 0.5f, pitchModifier: 0.5f);
     }
 }

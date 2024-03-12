@@ -128,4 +128,10 @@ MonoBehaviour:
     maxDistance: 25
     spacialBlend: 0
     loop: 1
+  - clip: {fileID: 8300000, guid: ef0bdb2b0ea9cf240bb63e19ed409f27, type: 3}
+    volume: 0.5
+    pitch: 0.9
+    maxDistance: 25
+    spacialBlend: 0
+    loop: 0
   audioPlayer: {fileID: 4390255685729763963, guid: 9416ae9b89c16ba4e85309542ca48b3f, type: 3}

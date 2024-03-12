@@ -43,4 +43,8 @@ public class BlockProjectile : Projectile ///Team members that contributed to th
         myEulor += myFunnySpinModifier * SpinSpeed;
         transform.eulerAngles = myEulor;
     }
+    public override void PlayDeathSound()
+    {
+        AudioManager.PlaySound(SoundID.Stone, transform.position, pitchModifier: 0.4f);
+    }
 }

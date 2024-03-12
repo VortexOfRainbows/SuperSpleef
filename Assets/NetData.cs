@@ -42,14 +42,14 @@ public class NetData : NetworkBehaviour
             WorldSizeOverride.Value = World.DefaultChunkRadius;
     }
     [Rpc(SendTo.SpecifiedInParams)]
-    public void SetBlockRpc(float x, float y, float z, int type, float particleMultiplier, RpcParams rpcParams)
+    public void SetBlockRpc(float x, float y, float z, int type, float particleMultiplier, bool generateSound, RpcParams rpcParams)
     {
-        World.SetBlock(x, y, z, type, particleMultiplier, true);
+        World.SetBlock(x, y, z, type, particleMultiplier, true, generateSound);
     }
     [Rpc(SendTo.SpecifiedInParams)]
-    public void TileFillRpc(int x, int y, int z, int x2, int y2, int z2, int blockID, float particleMultiplier, RpcParams rpcParams)
+    public void TileFillRpc(int x, int y, int z, int x2, int y2, int z2, int blockID, float particleMultiplier, bool generateSound, RpcParams rpcParams)
     {
-        World.FillBlock(x, y, z, x2, y2, z2, blockID, particleMultiplier, true);
+        World.FillBlock(x, y, z, x2, y2, z2, blockID, particleMultiplier, true, generateSound);
     }
     [Rpc(SendTo.Server)]
     public void SpawnProjectileRpc(int Type, Vector3 pos, Quaternion rot, Vector3 velo)

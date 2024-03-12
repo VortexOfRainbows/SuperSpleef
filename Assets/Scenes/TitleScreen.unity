@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -552,86 +552,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: audioPlayer
-      value: 
-      objectReference: {fileID: 4390255685729763963, guid: 9416ae9b89c16ba4e85309542ca48b3f, type: 3}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[4].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 3e5b073d000d440e2b5b9caba1ccb5be, type: 3}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[4].loop
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[4].name
-      value: Music
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[5].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 53b942a2a480529408dc60de5102350b, type: 3}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[5].loop
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[5].name
-      value: GameMusic
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[4].pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[5].pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[4].volume
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[5].volume
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[0].maxDistance
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[1].maxDistance
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[2].maxDistance
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[3].maxDistance
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[4].maxDistance
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[5].maxDistance
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[0].spacialBlend
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -3112375166419533833, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[4].spacialBlend
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 773409972973817119, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 704.5
@@ -675,34 +595,6 @@ PrefabInstance:
     - target: {fileID: 1367921222881860352, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
       propertyPath: m_Name
       value: GameManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5442201662127044129, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5442201662127044129, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[0].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: e0a72ba1909250b40851d4198c9e8383, type: 3}
-    - target: {fileID: 5442201662127044129, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[6].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: ef0bdb2b0ea9cf240bb63e19ed409f27, type: 3}
-    - target: {fileID: 5442201662127044129, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[6].loop
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5442201662127044129, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[6].pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5442201662127044129, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[6].volume
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5442201662127044129, guid: aa0c3c8fa9af5a94ab2fbebd3610263d, type: 3}
-      propertyPath: sounds.Array.data[6].maxDistance
-      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
