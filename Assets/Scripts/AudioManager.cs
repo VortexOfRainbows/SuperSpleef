@@ -37,7 +37,7 @@ public struct Sound
         source.rolloffMode = AudioRolloffMode.Linear;
         source.spatialBlend = spacialBlend;
         source.maxDistance = maxDistance;
-        source.volume = volume;
+        source.volume = volume * GameStateManager.VolumeMultiplier;
         source.pitch = pitch;
         source.loop = loop;
     }

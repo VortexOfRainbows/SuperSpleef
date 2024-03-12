@@ -149,6 +149,7 @@ public class GameStateManager : MonoBehaviour
     public static float ParticleMultiplier { get; private set; } = 1;
     public static float SensitivityMultiplier { get; private set; } = 1;
     public static float ControllerSensitivityMultiplier { get; private set; } = 1;
+    public static float VolumeMultiplier { get; private set; } = 1;
     public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
@@ -208,6 +209,10 @@ public class GameStateManager : MonoBehaviour
     public static void SetControllerSensitivityMultiplier(float controlMulti)
     {
         ControllerSensitivityMultiplier = Mathf.Clamp(controlMulti, 0.01f, 10); //Lowest sensitivity we will let you have is 0.01f. Highest is 10
+    }
+    public static void SetVolumeMultiplier(float volumeMulti)
+    {
+        VolumeMultiplier = Mathf.Clamp(volumeMulti, 0f, 10);
     }
     public static void SetWorldSizeOverride(float size)
     {
