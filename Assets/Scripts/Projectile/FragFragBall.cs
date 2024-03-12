@@ -23,8 +23,8 @@ public class FragFragBall : Projectile ///Team members that contributed to this 
             {
                 Vector2 circularSpread = new Vector2(ExplosionSpeedMult, 0).RotatedBy(i * 2 * Mathf.PI / TotalFrags);
                 Vector3 velo = new Vector3(circularSpread.x, 2 * ExplosionSpeedMult, circularSpread.y); //The balls travel up in a circle pattern around the projectile
-                Rigidbody rb = Instantiate(ProjectileManager.GetProjectile(ProjectileID.FragBall), transform.position + velo.normalized, Quaternion.identity).GetComponent<Rigidbody>();
-                rb.velocity = velo + new Vector3(Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread));
+                NewProjectile(ProjectileID.FragBall, transform.position + velo.normalized, Quaternion.identity, 
+                    velo + new Vector3(Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread)));
             }
         }
     }

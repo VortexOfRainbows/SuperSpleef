@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 773409972973817119}
   - component: {fileID: 2073345897902180056}
-  - component: {fileID: -3112375166419533833}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -45,40 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5caef9b28872eea42924745d6ebd3f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-3112375166419533833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367921222881860352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3c78ee8fc919ff46815a368708661f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds:
-  - name: Weapon
-    clip: {fileID: 8300000, guid: 607b08dbb25f4fa46bf395d3bf9a5b74, type: 3}
-    volume: 0.7
-    pitch: 1
-    maxDistance: 100
-    spacialBlend: 0
-  - name: Dirt
-    clip: {fileID: 8300000, guid: e0a72ba1909250b40851d4198c9e8383, type: 3}
-    volume: 0.7
-    pitch: 1
-    maxDistance: 150
-    spacialBlend: 1
-  - name: Stone
-    clip: {fileID: 8300000, guid: ccfd769080935fe4898a865e9eb17a23, type: 3}
-    volume: 0.7
-    pitch: 1
-    maxDistance: 100
-    spacialBlend: 1
-  - name: Wood
-    clip: {fileID: 8300000, guid: 1e07be8ecd79e0649bed6bf320cf14a9, type: 3}
-    volume: 0.7
-    pitch: 1
-    maxDistance: 100
-    spacialBlend: 1
+  player: {fileID: 5377142725127841264, guid: 52398b591dcfcb745862f464625d635b, type: 3}
+  netData: {fileID: 1835597934121838165, guid: 2658f0e55d9ba8f418f77f946a778c68, type: 3}

@@ -178,6 +178,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15554f5b6c2de284abc2062c4184ad40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RestartButton: {fileID: 0}
+  InventoryUI: {fileID: 8189280493413318035}
+  LeaveLobbyText1: {fileID: 0}
+  LeaveLobbyText2: {fileID: 0}
+  MainCamera: {fileID: 8429017646352200273}
+  ScreenBlocker: {fileID: 708922215965859713}
+  BlockOutline: {fileID: 7799735017969424652}
   ApocalypseText: 'OBJECTIVE: SURVIVE'
   CreativeText: 'OBJECTIVE: BUILD'
   MultiplayerText: 'OBJECTIVE: LAST ONE STANDING WINS'
@@ -903,6 +910,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5506544996677712952, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
   m_PrefabInstance: {fileID: 2280278751380225351}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8189280493413318035 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7927186680561008852, guid: cfce10eb21f730d48a1fb7a9edf6bdbd, type: 3}
+  m_PrefabInstance: {fileID: 2280278751380225351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4545697602633129724
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -914,6 +926,10 @@ PrefabInstance:
     - target: {fileID: 1293776585140897611, guid: 52398b591dcfcb745862f464625d635b, type: 3}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2250533076441766739, guid: 52398b591dcfcb745862f464625d635b, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1986337127
       objectReference: {fileID: 0}
     - target: {fileID: 2285934479319385815, guid: 52398b591dcfcb745862f464625d635b, type: 3}
       propertyPath: m_Layer

@@ -1,7 +1,8 @@
 using System.Linq;
 using UnityEngine;
+using Unity.Netcode;
 
-public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo
+public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo, Samuel Gines
 {
     #region public
     ///These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
@@ -9,7 +10,9 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     [SerializeField] private Rigidbody RB;
     [SerializeField] private BoxCollider JumpHitbox;
     #endregion
-
+    private Transform CameraTransform => ClientManager.GetCamera(ControlManager.UsingGamepad).transform;
+    private ScreenBlocker ScreenBlocker => ClientManager.GetBlocker(ControlManager.UsingGamepad);
+    private GameObject BlockOutline => ClientManager.GetOutline(ControlManager.UsingGamepad);
     /// <summary>
     /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls.
     /// This is public because it needs to be accessible by other classes
@@ -17,10 +20,6 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     public PlayerControls ControlManager;
     public PlayerControls.ControlDown Control => ControlManager.Control;
     public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
-
-    [SerializeField] private float Sensitivity = 1;
-    [SerializeField] private Transform CameraTransform;
-    [SerializeField] private ScreenBlocker ScreenBlocker;
     public const int EntityLayer = 6;
     [SerializeField] private float BlockRange = 4;
     [SerializeField] private float jumpForce = 10f;
@@ -35,30 +34,40 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// How long until the player can use an item. 
     /// Public float since it is used inside ITEM.
     /// </summary>
-    public float ItemUseTime { get; private set; } 
-
+    public float ItemUseTime { get; private set; }
+    public override void OnNetworkSpawn()
+    {
+        OnStart();
+    }
     private void Start()
     {
+        OnStart();
+    }
+    private void OnStart()
+    {
+        bool apocalypse = GameStateManager.Mode == GameModeID.Apocalypse || GameStateManager.Mode == GameModeID.LaserBattleApocalypse;
+        bool giveLaser = GameStateManager.LocalMultiplayer || GameStateManager.Mode == GameModeID.LaserBattleApocalypse || GameStateManager.Mode == GameModeID.LaserBattle;
+        currentPlayerHP = maxPlayerHP;
+        Inventory = new Inventory(30);
         int StartingItemCount = 20;
         if(GameStateManager.Mode == GameModeID.Creative)
         {
             StartingItemCount = Item.DefaultMaxCount;
         }
-        if(GameStateManager.LocalMultiplayer)
+        if(giveLaser) //These if statements are very deliberately placed, since i want items to be in the hotbar in a certain order...
         {
             StartingItemCount = 100;
         }
-        Inventory = new Inventory(30);
         Inventory.AddItem(new BasicBlaster());
-        if(GameStateManager.LocalMultiplayer) //These if statements are very deliberately placed, since i want items to be in the hotbar in a certain order...
+        if (giveLaser) 
         {
             Inventory.AddItem(new LaserCannon());
         }
-        if (GameStateManager.Mode == GameModeID.Apocalypse)
+        if (apocalypse)
         {
             Inventory.AddItem(new BlockGun());
         }
-        if (GameStateManager.LocalMultiplayer) //That is why these if statements are seperate, despite involving the same boolean expression.
+        if (giveLaser) //That is why these if statements are seperate, despite involving the same boolean expression.
         {
             Inventory.AddItem(new PlaceableBlock(ControlManager.UsingGamepad ? BlockID.BlueBricks : BlockID.YellowBricks, StartingItemCount));
         }
@@ -92,6 +101,22 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             HotbarControls();
             MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
             BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
+        }
+        if (IsOwner || !NetHandler.Active)
+        {
+            CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
+            CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+        }
+        if (currentPlayerHP <= 0f) // If the player's current HP reaches zero, or if the player falls too far down the world...
+        {
+            OnDeath(); // Trigger the Death Behavior of the character
+        }
+        else
+        {
+            if (transform.position.y < World.OutOfBounds)
+            {
+                currentPlayerHP -= DamageFromVoid * Time.deltaTime;
+            }
         }
     }
     /// <summary>
@@ -214,24 +239,22 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 OnTheFloor = true;
         }
     }
+    public Vector2 GetFacingDirection()
+    {
+        return Direction;
+    }
     private Vector2 Direction = Vector2.zero;
     /// <summary>
     /// Updates the rotation of the camera to match with the movement of the mouse
     /// </summary>
     private void MouseControls()
     {
-        float mouseX = Control.XAxis * Time.deltaTime * Sensitivity;
-        float mouseY = Control.YAxis * Time.deltaTime * Sensitivity;
+        float mouseX = Control.XAxis * Time.deltaTime * PlayerControls.DefaultMouseSensitivity;
+        float mouseY = Control.YAxis * Time.deltaTime * PlayerControls.DefaultMouseSensitivity;
         Direction.y += mouseX;
         Direction.x -= mouseY;
-
         Direction.x = Mathf.Clamp(Direction.x, -90f, 90f);
-
-        CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
-        CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
-        //transform.rotation = Quaternion.Euler(0, Direction.y, 0f);
     }
-
     /// <summary>
     /// Manages which item is selected by the player
     /// </summary>
@@ -263,12 +286,12 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             newSelectedItem = 10 + newSelectedItem;
         SelectedItem = newSelectedItem;
     }
-    [SerializeField] private GameObject BlockOutline;
     /// <summary>
     /// Manages the players item usage
     /// </summary>
     private void HeldItemUpdate()
     {
+        ClientManager.GetInventoryInterface().SetActive(!GameStateManager.GameIsOver); //Turn on the inventory if alive
         Item heldItem = HeldItem();
         bool left = Control.LeftClick;
         bool right = Control.RightClick;
@@ -348,7 +371,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                         updateBlockOutline = false;
                 }
             }
-            if (updateBlockOutline)
+            if (updateBlockOutline && (IsOwner || !NetHandler.Active))
             {
                 if (World.Block(TargetPosition) == BlockID.Air)
                 {
@@ -361,7 +384,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 }
             }
         }
-        else
+        else if (IsOwner || !NetHandler.Active)
         {
             BlockOutline.SetActive(false);
         }
@@ -406,18 +429,79 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
         }
     }
-    [SerializeField] private GameObject InBlockColliderTop;
-    [SerializeField] private GameObject InBlockColliderBottom;
+    [SerializeField] private GameObject InBlockColliderTemplate;
+    private GameObject InBlockColliderTop, InBlockColliderBottom;
+    private void InitializeInBlockColliders()
+    {
+        InBlockColliderBottom = Instantiate(InBlockColliderTemplate, null);
+        InBlockColliderTop = Instantiate(InBlockColliderTemplate, null);
+        InBlockColliderBottom.name = "BottomInBlockCollider";
+        InBlockColliderTop.name = "TopInBlockCollider";
+        InBlockColliderBottom.GetComponent<BarrierBlock>().IgnoreTop = true;
+        InBlockColliderTop.GetComponent<BarrierBlock>().IgnoreBot = true;
+    }
     /// <summary>
     /// Updates the colliders that surround the player to make sure they can't fall out of the world if they clip out of the chunk's mesh
     /// </summary>
     private void BlockCollisionCheck()
     {
+        if(InBlockColliderTop == null && InBlockColliderBottom == null)
+        {
+            InitializeInBlockColliders();
+        }
         Vector3 topAsInt = new Vector3(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y + 0.5f), Mathf.FloorToInt(transform.position.z));
         InBlockColliderTop.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f), Mathf.FloorToInt(transform.position.z) + 0.5f);
         InBlockColliderBottom.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f) - 1, Mathf.FloorToInt(transform.position.z) + 0.5f);
         InBlockColliderTop.GetComponent<BarrierBlock>().UpdateCollision();
         InBlockColliderBottom.GetComponent<BarrierBlock>().UpdateCollision();
-        ScreenBlocker.UpdateUVS(World.Block(topAsInt));
+        if (IsOwner || !NetHandler.Active)
+            ScreenBlocker.UpdateUVS(World.Block(topAsInt));
+    }
+    public const float DamageFromVoid = 200f;
+    private const float maxPlayerHP = 100; // Assigns the Max HP of the player
+    private float currentPlayerHP = maxPlayerHP; // Assigns the current HP of the character
+    private float deathAnimTimer = 0.0f; // Artifical Stopwatch
+    private void OnDeath()
+    {
+        deathAnimTimer += Time.deltaTime; // Start the stopwatch
+        transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 0, 90), deathAnimTimer * deathAnimTimer * 9); // Interpolate the player and Rotate the character 90 degrees
+        if(!NetHandler.Active)
+        {
+            if (Time.timeScale >= 1)
+            {
+                //Debug.Log(currentPlayerHP);
+                string DeathText = GameStateManager.DefaultGameOverText;
+                Color deathColor = Color.white;
+                if (GameStateManager.LocalMultiplayer)
+                {
+                    if (ControlManager.UsingGamepad)
+                    {
+                        //blue player uses gamepad
+                        DeathText = "Yellow Wins";
+                        deathColor = Color.yellow;
+                    }
+                    else
+                    {
+                        //yellow player uses gamepad
+                        DeathText = "Blue Wins";
+                        deathColor = Color.blue;
+                    }
+                }
+                GameStateManager.EndGame(DeathText, deathColor);
+            }
+        }
+        else
+        {
+            if(NetworkManager.IsServer)
+            {
+                Destroy(gameObject);
+                Destroy(InBlockColliderTop);
+                Destroy(InBlockColliderBottom);
+            }
+            if(IsOwner)
+            {
+                ClientManager.GetInventoryInterface().SetActive(false);
+            }
+        }
     }
 }

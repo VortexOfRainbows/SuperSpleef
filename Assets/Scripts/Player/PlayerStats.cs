@@ -4,28 +4,30 @@ using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
+[Obsolete] 
+///functionality is now part of the player class
 public class PlayerStats : MonoBehaviour ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
 {
     public const float DamageFromVoid = 200f;
-    [SerializeField] private float maxPlayerHP; // Assigns the Max HP of the player
-    [SerializeField] private float currentPlayerHP; // Assigns the current HP of the character
+    private const float maxPlayerHP = 100; // Assigns the Max HP of the player
+    private float currentPlayerHP = maxPlayerHP; // Assigns the current HP of the character
     //[SerializeField] private GameObject ClientPackage;
     [SerializeField] private Player player;
     [SerializeField] private Rigidbody rb; // The rigidbody of the player gameobject
-
     private void Start()
     {
         currentPlayerHP = maxPlayerHP; // sets current HP to max HP upon loading the scene
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P) && Time.timeScale == 1) // If the "P" key is pressed, and the game is not forzen (aka paused)...
+        /*if (Input.GetKeyDown(KeyCode.P) && Time.timeScale == 1) // If the "P" key is pressed, and the game is not forzen (aka paused)...
         {
             currentPlayerHP -= maxPlayerHP; // Deal damage equal to the player's max HP to the player
             rb.AddForce(transform.up * 150f); // Add a force to the player in the upwards direction
             //Debug.Log(currentPlayerHP);
-        }
+        }*/
         if (currentPlayerHP <= 0f) // If the player's current HP reaches zero, or if the player falls too far down the world...
         {
             OnDeath(); // Trigger the Death Behavior of the character

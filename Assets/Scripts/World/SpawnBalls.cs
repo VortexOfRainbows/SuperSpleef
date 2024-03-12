@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class SpawnBalls : MonoBehaviour ///Team members that contributed to this script: Samuel Gines, Ian Bunnell
@@ -25,10 +26,12 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
     private float TotalTimePassed;
     private void FixedUpdate() ///Summoning falling balls is only for the apocalypse game mode
     {
-        if(GameStateManager.Mode != GameModeID.Apocalypse)
+        if(GameStateManager.Mode != GameModeID.Apocalypse && GameStateManager.Mode != GameModeID.LaserBattleApocalypse)
         {
             return;
         }
+        if (NetHandler.Active && !NetworkManager.Singleton.IsServer)
+            return;
         float scaleMult = TotalTimePassed / SecondsUntilMaxDifficulty;
         if (scaleMult > MaxDifficultyMultiplier)
             scaleMult = MaxDifficultyMultiplier;
@@ -42,47 +45,52 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
             {
                 for (int i = 0; i < Mathf.Lerp(BallCountMinMax.x, BallCountMinMax.y, scaleMult / MaxDifficultyMultiplier) / pCount; i++)
                 {
-                    GameObject ballType;
+                    int ballType;
                     if (Random.value < FragChance * ballChanceMult)
                     {
-                        ballType = ProjectileManager.GetProjectile(ProjectileID.FragBall);
+                        ballType = ProjectileID.FragBall;
                     }
                     else if (Random.value < SuperFragChance * ballChanceMult)
                     {
-                        ballType = ProjectileManager.GetProjectile(ProjectileID.SuperFragBall);
+                        ballType = ProjectileID.SuperFragBall;
                     }
                     else if (Random.value < TunnelBoreChance * ballChanceMult)
                     {
-                        ballType = ProjectileManager.GetProjectile(ProjectileID.TunnelBore);
+                        ballType = ProjectileID.TunnelBore;
                     }
                     else if (Random.value < FragFragChance * ballChanceMult)
                     {
-                        ballType = ProjectileManager.GetProjectile(ProjectileID.FragFragBall);
+                        ballType = ProjectileID.FragFragBall;
                     }
                     else
                     {
-                        ballType = ProjectileManager.GetProjectile<BouncyDeathBall>();
+                        ballType = ProjectileID.BouncyDeathBall;
                     }
                     float mult = 1;
                     
                     if (i == 0)
                         mult = 0; //Make one ball always guaranteed to spawn right on top of the player.
                     Vector3 spawnPosition = new Vector3(player.transform.position.x + Random.Range(-SpawnSpread, SpawnSpread) * mult, SpawnHeight, player.transform.position.z + Random.Range(-SpawnSpread, SpawnSpread) * mult);
-                    Rigidbody rb = Instantiate(ballType, spawnPosition, Quaternion.identity).GetComponent<Rigidbody>();
+                    Vector3 velo = Vector3.zero;
                     if (i != 0)
-                        rb.velocity = new Vector3(Random.Range(-RandomVelocity, RandomVelocity), Random.Range(-RandomVelocity, RandomVelocity), Random.Range(-RandomVelocity, RandomVelocity));
+                        velo = new Vector3(Random.Range(-RandomVelocity, RandomVelocity), Random.Range(-RandomVelocity, RandomVelocity), Random.Range(-RandomVelocity, RandomVelocity));
+                    Projectile.NewProjectile(ballType, spawnPosition, Quaternion.identity, velo);
                 }
                 timer = 0;
             }
             if(Random.Range(0, 1f) < SlimeChance * (1 + scaleMult * 2))
             {
                 Vector3 randomSpawnPosition = new Vector3(Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding), SpawnHeight, Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding));
-                Instantiate(Slime, randomSpawnPosition, Quaternion.identity);
+                GameObject gObject = Instantiate(Slime, randomSpawnPosition, Quaternion.identity).gameObject;
+                if (NetworkManager.Singleton.IsServer)
+                    gObject.GetComponent<NetworkObject>().Spawn(true);
             }
             if(Random.Range(0, 1f) < FlyChance * (1 + scaleMult * 2))
             {
                 Vector3 randomSpawnPosition = new Vector3(Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding), SpawnHeight, Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding));
-                Instantiate(KillerFly, randomSpawnPosition, Quaternion.identity);
+                GameObject gObject = Instantiate(KillerFly, randomSpawnPosition, Quaternion.identity).gameObject;
+                if (NetworkManager.Singleton.IsServer)
+                    gObject.GetComponent<NetworkObject>().Spawn(true);
             }
         }
     }
