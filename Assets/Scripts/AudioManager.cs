@@ -10,6 +10,7 @@ public static class SoundID
     public const int Weapon = 3;
     public const int BattleMusic = 4;
     public const int MenuMusic = 5;
+    public const int Dirt = 6;
 }
 
 [System.Serializable]

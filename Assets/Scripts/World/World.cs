@@ -359,8 +359,10 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                         AudioManager.PlaySound(SoundID.Stone, new Vector3(x, y, z));
                     else if(typeBeforeBreaking == BlockID.Wood)
                         AudioManager.PlaySound(SoundID.Wood, new Vector3(x, y, z));
-                    else
+                    else if (typeBeforeBreaking == BlockID.Leaves)
                         AudioManager.PlaySound(SoundID.Grass, new Vector3(x, y, z));
+                    else
+                        AudioManager.PlaySound(SoundID.Dirt, new Vector3(x, y, z));
                     GenerateBlockBreakingParticles(new Vector3(x, y, z), typeBeforeBreaking, particleMultiplier);
 
                 }
