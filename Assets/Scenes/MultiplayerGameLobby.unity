@@ -592,6 +592,10 @@ PrefabInstance:
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 990682411143095927, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7e84e0b50629eeb43bea4da96d2ab4ff, type: 3}
     - target: {fileID: 1923900459459410410, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -748,7 +752,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3693232243664095681, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3821236403502772901, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_SizeDelta.x
@@ -768,12 +772,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4009821087597670048, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4300085640617387214, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5024901043601578470, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6bc1bcf379000984ba959808b7b59373, type: 3}
     - target: {fileID: 5394702755464424042, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -833,6 +841,10 @@ PrefabInstance:
     - target: {fileID: 8399253008769803455, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_Name
       value: Multiplayer Lobby UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8399253008769803455, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8459393134706514673, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_Name
