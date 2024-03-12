@@ -63,6 +63,8 @@ public class GameStateManager : MonoBehaviour
     public static float WorldSizeOverride { get; private set; } = World.DefaultChunkRadius;
     public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
+
+
     public void Awake()
     {
         LocalMultiplayer = false;

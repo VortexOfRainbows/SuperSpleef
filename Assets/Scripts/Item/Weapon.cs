@@ -4,7 +4,9 @@ using UnityEngine;
 
 public abstract class Weapon : Item ///Team members that contributed to this script: Ian Bunnell
 {
+    
     public float ShootSpeed { get; protected set; }
+    
     public sealed override void SetDefaults()
     {
         Count = 1;
@@ -23,6 +25,7 @@ public abstract class Weapon : Item ///Team members that contributed to this scr
     }
     public sealed override bool OnSecondaryUse(Player player)
     {
+        AudioManager.instance.PlaySound("Weapon");
         return Shoot(player, player.FacingVector.transform);
     }
     /// <summary>
