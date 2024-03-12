@@ -6,22 +6,22 @@ using UnityEngine.Rendering;
 public class AudioPlayer : MonoBehaviour
 {
     [SerializeField]
-    private AudioSource source;
-    private Sound sound;
-    private float timer;
+    private AudioSource Source;
+    private Sound Sound;
+    private float Timer;
     public static AudioPlayer GenerateAudioPlayer(GameObject prefab, Sound sound, Vector3 position, float volumeMult = 1f, float DistanceMult = 1f, float PitchModifier = 0f)
     {
         AudioPlayer audio = Instantiate(prefab, position,Quaternion.identity).GetComponent<AudioPlayer>();
-        audio.sound = sound;
-        audio.sound.SetSource(audio.source);
-        audio.source.maxDistance *= DistanceMult;
-        audio.source.volume *= volumeMult;
-        audio.source.pitch += PitchModifier;
+        audio.Sound = sound;
+        audio.Sound.SetSource(audio.Source);
+        audio.Source.maxDistance *= DistanceMult;
+        audio.Source.volume *= volumeMult;
+        audio.Source.pitch += PitchModifier;
         return audio;
     }
     public void PlaySound()
     {
-        sound.Play();
+        Sound.Play();
     }
     void Start()
     {
@@ -29,14 +29,14 @@ public class AudioPlayer : MonoBehaviour
     }
     void Update()
     {
-        if(sound == null || sound.clip == null)
+        if(Sound.Clip == null)
         {
             Destroy(gameObject);
         }
         else
         {
-            timer += Time.deltaTime;
-            if (timer > sound.clip.length)
+            Timer += Time.deltaTime;
+            if (Timer > Sound.Clip.length)
             {
                 Destroy(gameObject);
             }
