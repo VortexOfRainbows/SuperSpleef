@@ -10,9 +10,9 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     [SerializeField] private Rigidbody RB;
     [SerializeField] private BoxCollider JumpHitbox;
     #endregion
-    private Transform CameraTransform => ClientManager.Camera.transform;
-    private ScreenBlocker ScreenBlocker => ClientManager.Blocker;
-    private GameObject BlockOutline => ClientManager.Outline;
+    private Transform CameraTransform => ClientManager.GetCamera(ControlManager.UsingGamepad).transform;
+    private ScreenBlocker ScreenBlocker => ClientManager.GetBlocker(ControlManager.UsingGamepad);
+    private GameObject BlockOutline => ClientManager.GetOutline(ControlManager.UsingGamepad);
     /// <summary>
     /// These classes/structs manage the players current control state. This allows us to check for controls more consistently in Fixed Update, and do more precise things with controls.
     /// This is public because it needs to be accessible by other classes
@@ -291,7 +291,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// </summary>
     private void HeldItemUpdate()
     {
-        ClientManager.InventoryInterface.SetActive(true); //Turn on the inventory if alive
+        ClientManager.GetInventoryInterface().SetActive(true); //Turn on the inventory if alive
         Item heldItem = HeldItem();
         bool left = Control.LeftClick;
         bool right = Control.RightClick;
@@ -500,7 +500,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
             if(IsOwner)
             {
-                ClientManager.InventoryInterface.SetActive(false);
+                ClientManager.GetInventoryInterface().SetActive(false);
             }
         }
     }

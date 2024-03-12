@@ -11,7 +11,7 @@ public class NetworkPlayer : NetworkBehaviour
     public PlayerControls.ControlDown Control => ControlManager.Control;
     public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
     private int PlayerToWatchID = -1;
-    private Transform CameraTransform => ClientManager.Camera.transform;
+    private Transform CameraTransform => ClientManager.GetCamera().transform;
     public string Username => MyName.Value.ToString();
     private NetworkVariable<FixedString512Bytes> MyName = new NetworkVariable<FixedString512Bytes>("Username", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public NetworkVariable<int> WinCount = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);

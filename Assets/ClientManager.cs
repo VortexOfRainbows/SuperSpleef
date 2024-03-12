@@ -6,15 +6,36 @@ using UnityEngine.UI;
 
 public class ClientManager : MonoBehaviour
 {
+    [SerializeField] private bool SecondManager = false;
     [SerializeField] private GameObject RestartButton;
     [SerializeField] private GameObject InventoryUI;
     [SerializeField] private Text LeaveLobbyText1;
     [SerializeField] private Text LeaveLobbyText2;
-    public static ClientManager Instance { get; private set; }
-    public static Camera Camera => Instance.MainCamera;
-    public static ScreenBlocker Blocker => Instance.ScreenBlocker;
-    public static GameObject Outline => Instance.BlockOutline;
-    public static GameObject InventoryInterface => Instance.InventoryUI;
+    /// <summary>
+    /// A global accessible instance of client manager for general usage
+    /// </summary>
+    private static ClientManager Instance { get; set; }
+    /// <summary>
+    /// The second  global accessible instance of client manager for general usage
+    /// Only has a value in local multiplayer
+    /// </summary>
+    private static ClientManager SecondInstance { get; set; }
+    public static Camera GetCamera(bool SecondPlayer = false)
+    {
+        return (SecondPlayer ? SecondInstance : Instance).MainCamera;
+    }
+    public static ScreenBlocker GetBlocker(bool SecondPlayer = false)
+    {
+        return (SecondPlayer ? SecondInstance : Instance).ScreenBlocker;
+    }
+    public static GameObject GetOutline(bool SecondPlayer = false)
+    {
+        return (SecondPlayer ? SecondInstance : Instance).BlockOutline;
+    }
+    public static GameObject GetInventoryInterface(bool SecondPlayer = false)
+    {
+        return (SecondPlayer ? SecondInstance : Instance).InventoryUI;
+    }
     [SerializeField] private Camera MainCamera;
     [SerializeField] private ScreenBlocker ScreenBlocker;
     [SerializeField] private GameObject BlockOutline;
@@ -24,7 +45,10 @@ public class ClientManager : MonoBehaviour
     [SerializeField] private Text BelowTimerText;
     public void Awake()
     {
-        Instance = this;
+        if (SecondManager)
+            SecondInstance = this;
+        else
+            Instance = this;
     }
     public void Start()
     {

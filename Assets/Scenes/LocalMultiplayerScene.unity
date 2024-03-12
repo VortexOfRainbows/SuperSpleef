@@ -383,6 +383,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 1683577527296856030, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: SecondManager
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1894192811233869418, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
       propertyPath: GameOverUI
       value: 
@@ -394,6 +398,10 @@ PrefabInstance:
     - target: {fileID: 2005971680570151701, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2319054785726039471, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1055298761
       objectReference: {fileID: 0}
     - target: {fileID: 2336559507622273360, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
       propertyPath: m_Layer
@@ -1100,6 +1108,10 @@ PrefabInstance:
       propertyPath: GameOverUI
       value: 
       objectReference: {fileID: 1352574793}
+    - target: {fileID: 2319054785726039471, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1085065276
+      objectReference: {fileID: 0}
     - target: {fileID: 3801846832656250351, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
       propertyPath: m_Name
       value: LocalClientPackage
