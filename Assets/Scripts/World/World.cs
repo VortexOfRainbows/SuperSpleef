@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Unity.Collections.AllocatorManager;
+using static UnityEditor.PlayerSettings;
 
 public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
@@ -284,7 +285,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     /// </summary>
     /// <param name="pos"></param>
     /// <param name="blockType"></param>
-    public static void GenerateBlockBreakingParticles(Vector3 pos, int blockType, float particleMultiplier = 1f)
+    public static void GenerateBlockBreakingParticles(Vector3 pos, int blockType, Transform parent = null, float particleMultiplier = 1f)
     {
         BlockMesh mesh = BlockMesh.Get(blockType);
         int totalUniqueFaces = mesh.UniqueFaces.Count;
@@ -298,7 +299,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             if(success)
             {
                 float particlesToSpawn = Mathf.Max(1, totalParticles);
-                ParticleSystem p = Instantiate(BlockParticleRef, new Vector3(Mathf.FloorToInt(pos.x) + 0.5f, Mathf.FloorToInt(pos.y) + 0.5f, Mathf.FloorToInt(pos.z) + 0.5f), Quaternion.identity, Instance.transform);
+                ParticleSystem p = Instantiate(BlockParticleRef, pos, Quaternion.identity, parent);
                 p.emission.SetBurst(0, new ParticleSystem.Burst() { count = particlesToSpawn });
 
                 ParticleSystemRenderer r = p.GetComponent<ParticleSystemRenderer>();
@@ -311,6 +312,26 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 Destroy(p.gameObject, p.main.duration);
             }
         }
+    }
+    public static void GenerateBlockBreakSound(Vector3 pos, int blockType)
+    {
+        if (blockType == BlockID.Wood)
+            AudioManager.PlaySound(SoundID.Wood, pos);
+        else if (blockType == BlockID.Leaves)
+            AudioManager.PlaySound(SoundID.Grass, pos);
+        else
+            AudioManager.PlaySound(SoundID.Stone, pos);
+    }
+    public static void GenerateBlockPlacingSound(Vector3 pos, int blockType)
+    {
+        if (blockType == BlockID.Dirt || blockType == BlockID.Grass)
+            AudioManager.PlaySound(SoundID.Dirt, pos, pitchModifier: 0.1f);
+        else if (blockType == BlockID.Wood)
+            AudioManager.PlaySound(SoundID.Wood, pos, pitchModifier: 0.4f);
+        else if (blockType == BlockID.Leaves)
+            AudioManager.PlaySound(SoundID.Grass, pos, pitchModifier: 0.25f);
+        else
+            AudioManager.PlaySound(SoundID.Stone, pos, pitchModifier: 0.4f);
     }
     /// <summary>
     /// Sets a block at position xyz to the blockID. Returns true if the block is successfully converted.
@@ -353,32 +374,20 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 {
                     return true;
                 }
-                Vector3 spawnPos = new Vector3(x, y, z);
+                Vector3 spawnPos = new Vector3(Mathf.FloorToInt(x) + 0.5f, Mathf.FloorToInt(y) + 0.5f, Mathf.FloorToInt(z) + 0.5f);
                 if (blockType == BlockID.Air && particleMultiplier > 0) //If we are breaking the block, generate particles
                 {
-                    GenerateBlockBreakingParticles(spawnPos, typeBeforeBreaking, particleMultiplier);
+                    GenerateBlockBreakingParticles(spawnPos, typeBeforeBreaking, Instance.transform, particleMultiplier);
                     if(generateSound)
                     {
-                        if (typeBeforeBreaking == BlockID.Wood)
-                            AudioManager.PlaySound(SoundID.Wood, spawnPos);
-                        else if (typeBeforeBreaking == BlockID.Leaves)
-                            AudioManager.PlaySound(SoundID.Grass, spawnPos);
-                        else
-                            AudioManager.PlaySound(SoundID.Stone, spawnPos);
+                        GenerateBlockBreakSound(spawnPos, typeBeforeBreaking);
                     }
                 }
                 if(typeBeforeBreaking == BlockID.Air)
                 {
                     if (generateSound)
                     {
-                        if (blockType == BlockID.Dirt || blockType == BlockID.Grass)
-                            AudioManager.PlaySound(SoundID.Dirt, spawnPos, pitchModifier: 0.1f);
-                        else if (blockType == BlockID.Wood)
-                            AudioManager.PlaySound(SoundID.Wood, spawnPos, pitchModifier: 0.4f);
-                        else if (blockType == BlockID.Leaves)
-                            AudioManager.PlaySound(SoundID.Grass, spawnPos, pitchModifier: 0.25f);
-                        else
-                            AudioManager.PlaySound(SoundID.Stone, spawnPos, pitchModifier: 0.4f);
+                        GenerateBlockPlacingSound(spawnPos, blockType);
                     }
                 }
                 if (blockX <= 0)
