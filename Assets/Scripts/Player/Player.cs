@@ -291,7 +291,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// </summary>
     private void HeldItemUpdate()
     {
-        ClientManager.GetInventoryInterface().SetActive(true); //Turn on the inventory if alive
+        ClientManager.GetInventoryInterface().SetActive(!GameStateManager.GameIsOver); //Turn on the inventory if alive
         Item heldItem = HeldItem();
         bool left = Control.LeftClick;
         bool right = Control.RightClick;

@@ -8,6 +8,7 @@ public class ClientManager : MonoBehaviour
 {
     [SerializeField] private bool SecondManager = false;
     [SerializeField] private GameObject RestartButton;
+    [SerializeField] private GameObject RestartButton2;
     [SerializeField] private GameObject InventoryUI;
     [SerializeField] private Text LeaveLobbyText1;
     [SerializeField] private Text LeaveLobbyText2;
@@ -67,11 +68,13 @@ public class ClientManager : MonoBehaviour
             if(NetworkManager.Singleton.IsServer)
             {
                 RestartButton.SetActive(true);
+                RestartButton2.SetActive(true);
                 LeaveLobbyText1.text = LeaveLobbyText2.text = MultiplayerUI.Close;
             }
             else
             {
                 RestartButton.SetActive(false);
+                RestartButton2.SetActive(false);
                 LeaveLobbyText2.text = LeaveLobbyText2.text = MultiplayerUI.Leave;
             }
         }

@@ -263,7 +263,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1506154286
 RectTransform:
   m_ObjectHideFlags: 0
@@ -402,6 +402,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: RETURN
       objectReference: {fileID: 0}
+    - target: {fileID: 871429126660209539, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
+      propertyPath: RestartButton2
+      value: 
+      objectReference: {fileID: 1506154285}
     - target: {fileID: 875751446564677268, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -220
