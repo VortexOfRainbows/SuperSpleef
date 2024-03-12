@@ -332,6 +332,8 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     /// <returns></returns>
     public static bool SetBlock(float x, float y, float z, int blockType, float particleMultiplier = 1f, bool DoNotSendPacket = false)
     {
+        if (!NetHandler.Active)
+            DoNotSendPacket = true;
         GameObject chunkObj = Instance.BoundingChunk(x, z);
         if (chunkObj != null)
         {
@@ -416,6 +418,8 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     /// <returns></returns>
     public static bool FillBlock(int x, int y, int z, int x2, int y2, int z2, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false)
     {
+        if (!NetHandler.Active)
+            DoNotSendPacket = true;
         //Vector3 v = new Vector3(x, y, z);
         //Vector3 v2 = new Vector3(x2, y2, z2);
         //Debug.Log(v + ":" + v2);

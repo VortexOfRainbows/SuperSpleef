@@ -1,15 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ButtonBehaviors : MonoBehaviour ///Team members that contributed to this script: Samuel Gines
 {
     public void MainMenu()
     {
-        if (NetworkManager.Singleton != null)
+        if (NetHandler.Active)
             MultiplayerUI.LeaveLobby();
         else
             GameStateManager.MainMenu(); //Loads the SuperSpleef Title Page

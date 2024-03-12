@@ -3,10 +3,26 @@ using Unity.Netcode;
 public class BouncyDeathBall : Projectile ///Team members that contributed to this script: Ian Bunnell
 {
     private const int MaxCollisions = 4;
-    NetworkVariable<int> TotalCollisions = new NetworkVariable<int>(0);
+    private int m_totalCollisions;
+    private NetworkVariable<int> TotalCollisions = new NetworkVariable<int>(0);
+    private int CurrentCollisions
+    {
+        get
+        {
+            if (NetHandler.Active)
+                return TotalCollisions.Value;
+            return m_totalCollisions;
+        }
+        set
+        {
+            if(NetHandler.Active)
+                TotalCollisions.Value = value;
+            m_totalCollisions = value;
+        }
+    }
     public override bool OnCollision(Collision collision)
     {
-        if(NetworkManager.Singleton.IsServer)
+        if(NetworkManager.Singleton.IsServer || !NetHandler.Active)
         {
             for (int i = 0; i < collision.contacts.Length; i++)
             {
@@ -23,15 +39,15 @@ public class BouncyDeathBall : Projectile ///Team members that contributed to th
                 if (successfullyBrokeABlock)
                     break; //Realistically, there will only be one contact with the projectile (since it has a spherical hitbox)
             }
-            TotalCollisions.Value++;
+            CurrentCollisions++;
         }
-        return TotalCollisions.Value > MaxCollisions;
+        return CurrentCollisions > MaxCollisions;
     }
     public override Color DrawColor()
     {
-        if(TotalCollisions.Value >= 1)
+        if(CurrentCollisions >= 1)
         { 
-            return Color.Lerp(Color.yellow, Color.red, (TotalCollisions.Value - 1) / (float)(MaxCollisions - 1f));
+            return Color.Lerp(Color.yellow, Color.red, (CurrentCollisions - 1) / (float)(MaxCollisions - 1f));
         }
         return Color.white;
     }

@@ -1,19 +1,22 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public abstract class Projectile : NetworkBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
     private NetworkVariable<Vector3> velocity = new NetworkVariable<Vector3>(Vector3.zero);
     public static GameObject NewProjectile(int ProjectileType, Vector3 position, Quaternion rotation, Vector3 velocity)
     {
-        if (NetworkManager.Singleton.IsServer)
+        if (NetworkManager.Singleton.IsServer || !NetHandler.Active)
         {
             GameObject pObject = Instantiate(ProjectileManager.GetProjectile(ProjectileType), position, rotation);
             pObject.GetComponent<Rigidbody>().velocity = velocity;
-            pObject.GetComponent<NetworkObject>().Spawn(true);
+            if(NetworkManager.Singleton.IsServer)
+                pObject.GetComponent<NetworkObject>().Spawn(true);
             return pObject;
         }
-        GameStateManager.NetData.SpawnProjectileRpc(ProjectileType, position, rotation, velocity);
+        if (!NetworkManager.Singleton.IsServer)
+            GameStateManager.NetData.SpawnProjectileRpc(ProjectileType, position, rotation, velocity);
         return null;
     }
     protected MeshRenderer mRenderer;
@@ -64,21 +67,21 @@ public abstract class Projectile : NetworkBehaviour ///Team members that contrib
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(transform.position.y < World.OutOfBounds)
+        if (transform.position.y < World.OutOfBounds)
         {
             Kill(true);
             return;
         }
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (NetworkManager.Singleton.IsServer)
+        if (NetHandler.Active)
         {
-            Vector3 velo = rb.velocity;
-            //Debug.Log("update velo: " + velo);
-            velocity.Value = velo;
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (NetworkManager.Singleton.IsServer)
+            {
+                Vector3 velo = rb.velocity;
+                velocity.Value = velo;
+            }
+            rb.velocity = velocity.Value;
         }
-        // else
-        //     Debug.Log("client velo: " + velocity.Value);
-        rb.velocity = velocity.Value;
         ModifyColors();
         OnFixedUpdate();
     }
@@ -127,18 +130,27 @@ public abstract class Projectile : NetworkBehaviour ///Team members that contrib
     {
 
     }
+    private bool hasBeenKilled = false;
     /// <summary>
     /// Kills the projectile
     /// </summary>
     /// <param name="OutBoundDeath"></param>
     public void Kill(bool OutBoundDeath = false)
     {
-        if(IsServer)
+        if (hasBeenKilled)
+            return;
+        hasBeenKilled = true;
+        if (!NetHandler.Active || IsServer)
         {
             OnDeath(OutBoundDeath);
-            NetworkObject nObject = GetComponent<NetworkObject>();
-            if (nObject.IsSpawned)
-                GetComponent<NetworkObject>().Despawn();
+            if(NetHandler.Active)
+            {
+                NetworkObject nObject = GetComponent<NetworkObject>();
+                if (nObject.IsSpawned)
+                    nObject.Despawn();
+                else
+                    Destroy(gameObject);
+            }
             else
                 Destroy(gameObject);
         }

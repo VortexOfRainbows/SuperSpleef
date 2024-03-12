@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -65,59 +66,84 @@ public class GameStateManager : MonoBehaviour
             return GameOver || GamePaused; 
         }
     }
+    private static int m_mode;
     public static int Mode 
     { 
         get 
         {
-            return NetData.SyncedMode.Value;
+            if(NetHandler.Active)
+                return NetData.SyncedMode.Value;
+            return m_mode;
         } 
         private set
         {
-            NetData.SyncedMode.Value = value;
+            if (NetHandler.Active)
+                NetData.SyncedMode.Value = value;
+            m_mode = value;
         } 
     }
+    private static bool m_hasSpawnedPlayers;
     public static bool HasSpawnedPlayers
     {
         get
         {
-            return NetData.HasSpawnedPlayers.Value;
+            if (NetHandler.Active)
+                return NetData.HasSpawnedPlayers.Value;
+            return m_hasSpawnedPlayers;
         }
         private set
         {
-            NetData.HasSpawnedPlayers.Value = value;
+            if (NetHandler.Active)
+                NetData.HasSpawnedPlayers.Value = value;
+            m_hasSpawnedPlayers = value;
         }
     }
+    private static float m_worldSizeOverride;
     public static float WorldSizeOverride
     {
         get
         {
-            return NetData.WorldSizeOverride.Value;
+            if (NetHandler.Active)
+                return NetData.WorldSizeOverride.Value;
+            return m_worldSizeOverride;
         }
         private set
         {
-            NetData.WorldSizeOverride.Value = value;
+            if (NetHandler.Active)
+                NetData.WorldSizeOverride.Value = value;
+            m_worldSizeOverride = value;
         }
     }
+    private static int m_genSeed;
     public static int GenSeed
     {
         get
         {
-            return NetData.GenSeed.Value;
+            if (NetHandler.Active)
+                return NetData.GenSeed.Value;
+            return m_genSeed;
         }
         private set
         {
-            NetData.GenSeed.Value = value;
+            if (NetHandler.Active)
+                NetData.GenSeed.Value = value;
+            m_genSeed = value;
         }
     }
+    private static int m_startingPlayerCount;
     public static int StartingPlayerCount
     {
         get
         {
-            return NetData.StartingPlayerCount.Value;
+            if (NetHandler.Active)
+                return NetData.StartingPlayerCount.Value;
+            return m_startingPlayerCount;
         }
         private set
         {
-            NetData.StartingPlayerCount.Value = value;
+            if (NetHandler.Active)
+                NetData.StartingPlayerCount.Value = value;
+            m_startingPlayerCount = value;
         }
     }
     public static float ParticleMultiplier { get; private set; } = 1;
@@ -151,15 +177,25 @@ public class GameStateManager : MonoBehaviour
         GameOver = false;
         Unpause();
 
-        WaitSomeTimeForAssetsToLoad = NoPlayersLeftTimer = 0; 
-        if(NetworkManager.Singleton != null && NetData != null && NetworkManager.Singleton.IsServer)
-        {
-            ResetServerSyncedStates();
-        }
+        WaitSomeTimeForAssetsToLoad = NoPlayersLeftTimer = 0;
+        ResetServerSyncedStates();
     }
     private static void ResetServerSyncedStates()
     {
-        NetData.ResetValues();
+        if (NetHandler.Active && NetData != null && NetworkManager.Singleton.IsServer)
+        {
+            NetData.ResetValues();
+        }
+        else if (!NetHandler.Active) //Reset these values manually if not on the server
+        {
+            StartingPlayerCount = -1;
+            HasSpawnedPlayers = false;
+            Mode = 0;
+            if (GenSeed <= 0)
+                GenSeed = Random.Range(0, int.MaxValue);
+            if (WorldSizeOverride <= 0)
+                WorldSizeOverride = World.DefaultChunkRadius;
+        }
     }
     public static void SetParticleMultiplier(float mult)
     {
@@ -183,7 +219,7 @@ public class GameStateManager : MonoBehaviour
     }
     public static void MainMenu()
     {
-        SceneManager.LoadScene(0); //Loads the SuperSpleef Title Page
+        SceneManager.LoadScene(TitleScreen); //Loads the SuperSpleef Title Page
     }
     public static void ExitGame()
     {
@@ -202,7 +238,7 @@ public class GameStateManager : MonoBehaviour
         else
         {
             LocalMultiplayer = false;
-            if(NetworkManager.Singleton != null)
+            if(NetHandler.Active)
             {
                 NetworkManager.Singleton.SceneManager.LoadScene(MultiplayerScene, LoadSceneMode.Single); 
             }
@@ -212,7 +248,7 @@ public class GameStateManager : MonoBehaviour
     }
     public static void RestartGame()
     {
-        if (NetworkManager.Singleton != null)
+        if (NetHandler.Active)
         {
             NetworkManager.Singleton.SceneManager.LoadScene(MultiplayerGameLobby, LoadSceneMode.Single);
         }
@@ -225,7 +261,7 @@ public class GameStateManager : MonoBehaviour
     public static void Pause()
     {
         GamePaused = true; // Sets the boolean statement GameIsPaused to true.
-        if (NetworkManager.Singleton != null)
+        if (NetHandler.Active)
             return; //Do not pause the game in multiplayer
         Time.timeScale = 0f; // Freezes the state of the game
     }   
@@ -252,7 +288,8 @@ public class GameStateManager : MonoBehaviour
     private static bool HasResetStateSinceReload = true;
     private void LateUpdate()
     {
-        if(NetworkManager.Singleton != null)
+        //Debug.Log(NetHandler.Active);
+        if(NetHandler.Active)
         {
             if(SceneManager.GetActiveScene().name == MultiplayerGameLobby)
             {

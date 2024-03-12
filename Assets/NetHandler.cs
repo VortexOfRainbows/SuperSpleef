@@ -8,7 +8,10 @@ using UnityEngine.UI;
 public class NetHandler : MonoBehaviour
 {
     [SerializeField] private UnityTransport UnityTransport;
-
+    /// <summary>
+    /// Returns true if in a multiplayer game scene
+    /// </summary>
+    public static bool Active => NetworkManager.Singleton != null && (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsServer);
     public static string IP
     {
         get
@@ -66,7 +69,7 @@ public class NetHandler : MonoBehaviour
     {
         if(!AddedListeners)
         {
-            if (NetworkManager.Singleton != null)
+            if (NetHandler.Active)
             {
                 AddedListeners = true;
                 NetworkManager.Singleton.OnServerStopped += NetworkStopped;

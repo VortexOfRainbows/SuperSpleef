@@ -102,7 +102,7 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = false;
         }
-        if(!player.IsOwner && player.NetworkManager != null) //Only let the owner of the player move it
+        if(!player.IsOwner && NetHandler.Active) //Only let the owner of the player move it
         {
             return;
         }

@@ -38,7 +38,7 @@ public class ClientManager : MonoBehaviour
     }
     public void Update()
     {
-        if(NetworkManager.Singleton != null)
+        if(NetHandler.Active)
         {
             if(NetworkManager.Singleton.IsServer)
             {

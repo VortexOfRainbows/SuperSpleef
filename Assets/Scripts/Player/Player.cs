@@ -102,7 +102,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
             BlockCollisionCheck(); //Should be updated in here so collision is always up to date.
         }
-        if (IsOwner || NetworkManager == null)
+        if (IsOwner || !NetHandler.Active)
         {
             CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
             CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
@@ -371,7 +371,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                         updateBlockOutline = false;
                 }
             }
-            if (updateBlockOutline && IsOwner)
+            if (updateBlockOutline && (IsOwner || !NetHandler.Active))
             {
                 if (World.Block(TargetPosition) == BlockID.Air)
                 {
@@ -384,7 +384,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 }
             }
         }
-        else if(IsOwner)
+        else if (IsOwner || !NetHandler.Active)
         {
             BlockOutline.SetActive(false);
         }
@@ -454,7 +454,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         InBlockColliderBottom.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f) - 1, Mathf.FloorToInt(transform.position.z) + 0.5f);
         InBlockColliderTop.GetComponent<BarrierBlock>().UpdateCollision();
         InBlockColliderBottom.GetComponent<BarrierBlock>().UpdateCollision();
-        if(IsOwner)
+        if (IsOwner || !NetHandler.Active)
             ScreenBlocker.UpdateUVS(World.Block(topAsInt));
     }
     public const float DamageFromVoid = 200f;
@@ -465,7 +465,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     {
         deathAnimTimer += Time.deltaTime; // Start the stopwatch
         transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 0, 90), deathAnimTimer * deathAnimTimer * 9); // Interpolate the player and Rotate the character 90 degrees
-        if(NetworkManager.Singleton == null)
+        if(!NetHandler.Active)
         {
             if (Time.timeScale >= 1)
             {

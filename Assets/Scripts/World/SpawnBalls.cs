@@ -30,7 +30,7 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
         {
             return;
         }
-        if (NetworkManager.Singleton != null && !NetworkManager.Singleton.IsServer)
+        if (NetHandler.Active && !NetworkManager.Singleton.IsServer)
             return;
         float scaleMult = TotalTimePassed / SecondsUntilMaxDifficulty;
         if (scaleMult > MaxDifficultyMultiplier)
@@ -81,14 +81,16 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
             if(Random.Range(0, 1f) < SlimeChance * (1 + scaleMult * 2))
             {
                 Vector3 randomSpawnPosition = new Vector3(Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding), SpawnHeight, Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding));
-                NetworkObject nObject = Instantiate(Slime, randomSpawnPosition, Quaternion.identity).GetComponent<NetworkObject>();
-                nObject.Spawn(true);
+                GameObject gObject = Instantiate(Slime, randomSpawnPosition, Quaternion.identity).gameObject;
+                if (NetworkManager.Singleton.IsServer)
+                    gObject.GetComponent<NetworkObject>().Spawn(true);
             }
             if(Random.Range(0, 1f) < FlyChance * (1 + scaleMult * 2))
             {
                 Vector3 randomSpawnPosition = new Vector3(Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding), SpawnHeight, Random.Range(EnemySpawnPadding, Chunk.Width * World.ChunkRadius - EnemySpawnPadding));
-                NetworkObject nObject = Instantiate(KillerFly, randomSpawnPosition, Quaternion.identity).GetComponent<NetworkObject>();
-                nObject.Spawn(true);
+                GameObject gObject = Instantiate(KillerFly, randomSpawnPosition, Quaternion.identity).gameObject;
+                if (NetworkManager.Singleton.IsServer)
+                    gObject.GetComponent<NetworkObject>().Spawn(true);
             }
         }
     }
