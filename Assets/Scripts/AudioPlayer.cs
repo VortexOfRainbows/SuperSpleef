@@ -39,4 +39,8 @@ public class AudioPlayer : MonoBehaviour
             }
         }
     }
+    public void SetVolume(float modifier)
+    {
+        Source.volume = modifier;
+    }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class SoundID
 {
@@ -27,17 +28,26 @@ public struct Sound
     private float spacialBlend;
     [SerializeField]
     private bool loop;
+    [SerializeField]
+    private bool music;
     private AudioSource source;
     public void SetSource(AudioSource _source)
     {
         source = _source;
         source.clip = clip;
         source.rolloffMode = AudioRolloffMode.Linear;
-        source.spatialBlend = spacialBlend;
+        if (GameStateManager.LocalMultiplayer)
+            source.spatialBlend = 0f;
+        else
+            source.spatialBlend = spacialBlend;
         source.maxDistance = maxDistance;
-        source.volume = volume * GameStateManager.VolumeMultiplier;
+        source.volume = volume * (music ? GameStateManager.MusicMultiplier : GameStateManager.VolumeMultiplier);
         source.pitch = pitch;
         source.loop = loop;
+    }
+    public float GetVolume()
+    {
+        return volume;
     }
     public void Play()
     {
@@ -55,10 +65,41 @@ public class AudioManager : MonoBehaviour
     {
         Instance = this;        
     }
-    public static void PlaySound(int SoundType, Vector3 position, float volumeMult = 1f, float distanceMult = 1f, float pitchModifier = 0f)
+    public static AudioPlayer PlaySound(int SoundType, Vector3 position, float volumeMult = 1f, float distanceMult = 1f, float pitchModifier = 0f)
     {
-        AudioPlayer.GenerateAudioPlayer(Instance.audioPlayer, Instance.sounds[SoundType], position, volumeMult, distanceMult, pitchModifier);
-        return;
+        return AudioPlayer.GenerateAudioPlayer(Instance.audioPlayer, Instance.sounds[SoundType], position, volumeMult, distanceMult, pitchModifier);
     }
-   
+    private AudioPlayer MusicPlayer = null;
+    private int CurrentMusicType = -1;
+    private void Update()
+    {
+        if(MusicPlayer == null)
+        {
+            SwapMenuMusic(SoundID.MenuMusic);
+        }
+        else
+        {
+            MusicPlayer.SetVolume(sounds[CurrentMusicType].GetVolume() * GameStateManager.MusicMultiplier);
+        }
+        if(SceneManager.GetActiveScene().name == GameStateManager.TitleScreen || SceneManager.GetActiveScene().name == GameStateManager.MultiplayerGameLobby)
+        {
+            ///If we are in a menu
+            if (CurrentMusicType != SoundID.MenuMusic)
+                SwapMenuMusic(SoundID.MenuMusic);
+        }
+        else
+        {
+            ///If we are in a battle scene
+            if(CurrentMusicType != SoundID.BattleMusic)
+                SwapMenuMusic(SoundID.BattleMusic);
+        }
+    }
+    private void SwapMenuMusic(int type)
+    {
+        if (MusicPlayer != null)
+            Destroy(MusicPlayer.gameObject);
+        CurrentMusicType = type;
+        MusicPlayer = PlaySound(type, Vector3.zero);
+        DontDestroyOnLoad(MusicPlayer);
+    }
 }

@@ -150,6 +150,7 @@ public class GameStateManager : MonoBehaviour
     public static float SensitivityMultiplier { get; private set; } = 1;
     public static float ControllerSensitivityMultiplier { get; private set; } = 1;
     public static float VolumeMultiplier { get; private set; } = 1;
+    public static float MusicMultiplier { get; private set; } = 1;
     public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
@@ -213,7 +214,11 @@ public class GameStateManager : MonoBehaviour
     }
     public static void SetVolumeMultiplier(float volumeMulti)
     {
-        VolumeMultiplier = Mathf.Clamp(volumeMulti, 0f, 10);
+        VolumeMultiplier = Mathf.Clamp(volumeMulti, 0f, 1.0f);
+    }
+    public static void SetMusicMultiplier(float volumeMulti)
+    {
+        MusicMultiplier = Mathf.Clamp(volumeMulti, 0f, 1.0f);
     }
     public static void SetWorldSizeOverride(float size)
     {
