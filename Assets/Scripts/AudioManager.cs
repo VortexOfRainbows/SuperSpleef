@@ -19,6 +19,8 @@ public class Sound
     [Range(0f, 1f)]
     public float spacialBlend = 1f;
 
+    public bool loop = false;
+
     public void SetSource(AudioSource _source)
     {
         source = _source;
@@ -28,6 +30,7 @@ public class Sound
         source.maxDistance = maxDistance;
         source.volume = volume;
         source.pitch = pitch;
+        source.loop = loop;
     }
 
     public void Play()
@@ -42,6 +45,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
+    private Player player;
 
     [SerializeField]
     Sound[] sounds;
@@ -51,7 +55,7 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-            instance = this;        
+        instance = this;        
     }
 
     private void Start()
@@ -63,6 +67,7 @@ public class AudioManager : MonoBehaviour
             sounds[i].SetSource(_go.AddComponent<AudioSource>());
         }
     }
+
 
     public void PlaySound(string _name, Vector3 position)
     {

@@ -117,6 +117,7 @@ public class GameStateManager : MonoBehaviour
     public static void MainMenu()
     {
         SceneManager.LoadScene(0); //Loads the SuperSpleef Title Page
+        AudioManager.instance.PlaySound("Music", AudioManager.instance.transform.position);
     }
     public static void ExitGame()
     {
@@ -131,6 +132,7 @@ public class GameStateManager : MonoBehaviour
             LocalMultiplayer = true; //For now, net and local multiplayer are considered the same (since there is no NET Multiplayer yet)
             Mode = mode == GameModeID.LocalMultiplayerApocalypse ? GameModeID.Apocalypse : GameModeID.None;
             SceneManager.LoadScene(2);
+            AudioManager.instance.PlaySound("GameMusic", AudioManager.instance.transform.position);
         }
         else
         {
@@ -138,7 +140,9 @@ public class GameStateManager : MonoBehaviour
             if(NetHandler.OnNetwork)
                 NetworkManager.Singleton.SceneManager.LoadScene(MainScene, LoadSceneMode.Single);
             else
+            {
                 SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
+            }
         }
     }
     public static void RestartGame()
