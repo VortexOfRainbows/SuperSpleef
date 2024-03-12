@@ -25,7 +25,7 @@ public abstract class Weapon : Item ///Team members that contributed to this scr
     }
     public sealed override bool OnSecondaryUse(Player player)
     {
-        AudioManager.instance.PlaySound("Weapon");
+        AudioManager.instance.PlaySound("Weapon", player.transform.position);
         return Shoot(player, player.FacingVector.transform);
     }
     /// <summary>

@@ -350,8 +350,20 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 }
                 if(blockType == BlockID.Air && particleMultiplier > 0) //If we are breaking the block, generate particles
                 {
-                    AudioManager.instance.PlaySound("Dirt");
+                    if(typeBeforeBreaking == BlockID.Stone)
+                    {
+                        AudioManager.instance.PlaySound("Stone", new Vector3(x, y, z));
+                    }
+                    else if(typeBeforeBreaking == BlockID.Wood)
+                    {
+                        AudioManager.instance.PlaySound("Wood", new Vector3(x, y, z));
+                    }
+                    else
+                    {
+                        AudioManager.instance.PlaySound("Dirt", new Vector3(x, y, z));
+                    }
                     GenerateBlockBreakingParticles(new Vector3(x, y, z), typeBeforeBreaking, particleMultiplier);
+
                 }
                 if (blockX <= 0)
                 {

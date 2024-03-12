@@ -46,6 +46,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     Sound[] sounds;
 
+    [SerializeField]
+    private GameObject audioPlayer;
+
     private void Awake()
     {
             instance = this;        
@@ -61,17 +64,18 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlaySound(string _name)
+    public void PlaySound(string _name, Vector3 position)
     {
         for (int i = 0; i < sounds.Length; i++)
         {
             if(sounds[i].name == _name)
             {
-                sounds[i].Play();
+                AudioPlayer.GenerateAudioPlayer(audioPlayer, sounds[i], position);
                 return;
             }
         }
 
         Debug.LogWarning("AudioManager: Sound not found in list:" + _name);
     }
+   
 }
