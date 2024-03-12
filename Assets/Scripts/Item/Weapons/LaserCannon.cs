@@ -8,8 +8,8 @@ public class LaserCannon : Weapon ///Team members that contributed to this scrip
     {
         ShootSpeed = 16;
     }
-    public override GameObject ShootType(Player player)
+    public override int ShootType(Player player)
     {
-        return ProjectileManager.GetProjectile(ProjectileID.LaserCube);
+        return ProjectileID.LaserCube;
     }
 }

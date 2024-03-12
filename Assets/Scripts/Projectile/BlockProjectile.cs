@@ -31,7 +31,7 @@ public class BlockProjectile : Projectile ///Team members that contributed to th
     }
     public override void OnDeath(bool OutBoundDeath)
     {
-        if(!OutBoundDeath)
+        if (!OutBoundDeath)
         {
             Vector3 HitPoint = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y) + 0.5f, Mathf.FloorToInt(transform.position.z) + 0.5f);
             World.SetBlock(HitPoint, MyBlockID); //Spawn a block where I died, of the same type as my MyBlockID

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8086306937415653813}
   - component: {fileID: 4514141844027338931}
   m_Layer: 0
-  m_Name: NetworkHandler
+  m_Name: NetHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,8 @@ MonoBehaviour:
     NetworkTransport: {fileID: 8086306937415653813}
     PlayerPrefab: {fileID: 5336950843653858589, guid: 457d015558193c74997839365a25616e, type: 3}
     Prefabs:
-      NetworkPrefabsLists: []
+      NetworkPrefabsLists:
+      - {fileID: 11400000, guid: aa93799ce2beb984fb9063f7ce057b9d, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -65,11 +66,11 @@ MonoBehaviour:
     NetworkIdRecycleDelay: 120
     RpcHashSize: 0
     LoadSceneTimeOut: 120
-    SpawnTimeout: 1
+    SpawnTimeout: 10
     EnableNetworkLogs: 1
     OldPrefabList: []
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
 --- !u!114 &8086306937415653813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +93,7 @@ MonoBehaviour:
   ConnectionData:
     Address: 127.0.0.1
     Port: 7777
-    ServerListenAddress: 127.0.0.1
+    ServerListenAddress: 0.0.0.0
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0
@@ -109,5 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d8a7c7ef98e9cb41af8645b24588311, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnityTransport: {fileID: 8086306937415653813}
   hostButton: {fileID: 0}
   joinButton: {fileID: 0}

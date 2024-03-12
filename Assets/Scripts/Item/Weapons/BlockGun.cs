@@ -8,8 +8,8 @@ public class BlockGun : Weapon ///Team members that contributed to this script: 
     {
         ShootSpeed = 15;
     }
-    public override GameObject ShootType(Player player)
+    public override int ShootType(Player player)
     {
-        return ProjectileManager.GetProjectile<BlockProjectile>();
+        return ProjectileID.BlockProjectile;
     }
 }

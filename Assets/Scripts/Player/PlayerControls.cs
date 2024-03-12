@@ -1,8 +1,11 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class PlayerControls : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell, David Bu
 {
+    public const float DefaultMouseSensitivity = 400f;
+    [SerializeField] private NetworkBehaviour player;
     private GamepadControls GamepadControls;
     public bool UsingGamepad = false;
     public ControlDown Control = new ControlDown(); //Stores player input for the current frame
@@ -89,6 +92,7 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
         //Debug.Log(GameStateManager.GameIsOver);
         if(GameStateManager.GameIsPausedOrOver) 
         {
+            Control = new ControlDown();
             UnityEngine.Cursor.lockState = CursorLockMode.None; ///This code would be better in a different location, but works here for now.
             UnityEngine.Cursor.visible = true;
             return;
@@ -98,14 +102,10 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = false;
         }
-        /*if(GamepadControls.Input.Start.inProgress)
+        if(!player.IsOwner && NetHandler.Active) //Only let the owner of the player move it
         {
-            UsingGamepad = true;
+            return;
         }
-        else if(Input.GetMouseButton(0))
-        {
-            UsingGamepad = false;
-        }*/
         if (UsingGamepad)
         {
             Control.ScrollDelta = 0;

@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Unity.Collections.AllocatorManager;
 
 public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
@@ -29,15 +31,16 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     private void Awake()
     {
         BlockParticleRef = BlockParticles;
+        Instance = this;
     }
     private void Start()
     {
         WorldGenFinished = false;
-        Instance = this;
         GenWorld();
     }
     private void GenWorld()
     {
+        Random.InitState(GameStateManager.GenSeed);
         MaxTiles = new Vector3Int(ChunkRadius * Chunk.Width, Chunk.Height, ChunkRadius * Chunk.Width);
         chunk = new GameObject[ChunkRadius, ChunkRadius];
         for (int i = 0; i < chunk.GetLength(1); i++)
@@ -262,16 +265,6 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         return Block(pos.x, pos.y, pos.z);
     }
-    /// <summary>
-    /// Sets a block at position xyz to the blockID. Returns true if the block is successfully converted.
-    /// </summary>
-    /// <param name="pos"></param>
-    /// <param name="blockID"></param>
-    /// <returns></returns>
-    public static bool SetBlock(Vector3 pos, int blockID, float particleMultiplier = 1f)
-    {
-        return SetBlock(pos.x, pos.y, pos.z, blockID, particleMultiplier);
-    }
     public static int Block(float x, float y, float z)
     {
         GameObject chunkObj = Instance.BoundingChunk(x, z);
@@ -322,13 +315,25 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     /// <summary>
     /// Sets a block at position xyz to the blockID. Returns true if the block is successfully converted.
     /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="blockID"></param>
+    /// <returns></returns>
+    public static bool SetBlock(Vector3 pos, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false)
+    {
+        return SetBlock(pos.x, pos.y, pos.z, blockID, particleMultiplier, DoNotSendPacket);
+    }
+    /// <summary>
+    /// Sets a block at position xyz to the blockID. Returns true if the block is successfully converted.
+    /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <param name="z"></param>
     /// <param name="blockType"></param>
     /// <returns></returns>
-    public static bool SetBlock(float x, float y, float z, int blockType, float particleMultiplier = 1f)
+    public static bool SetBlock(float x, float y, float z, int blockType, float particleMultiplier = 1f, bool DoNotSendPacket = false)
     {
+        if (!NetHandler.Active)
+            DoNotSendPacket = true;
         GameObject chunkObj = Instance.BoundingChunk(x, z);
         if (chunkObj != null)
         {
@@ -351,17 +356,11 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 if(blockType == BlockID.Air && particleMultiplier > 0) //If we are breaking the block, generate particles
                 {
                     if(typeBeforeBreaking == BlockID.Stone)
-                    {
-                        AudioManager.instance.PlaySound("Stone", new Vector3(x, y, z));
-                    }
+                        AudioManager.PlaySound(SoundID.Stone, new Vector3(x, y, z));
                     else if(typeBeforeBreaking == BlockID.Wood)
-                    {
-                        AudioManager.instance.PlaySound("Wood", new Vector3(x, y, z));
-                    }
+                        AudioManager.PlaySound(SoundID.Wood, new Vector3(x, y, z));
                     else
-                    {
-                        AudioManager.instance.PlaySound("Dirt", new Vector3(x, y, z));
-                    }
+                        AudioManager.PlaySound(SoundID.Grass, new Vector3(x, y, z));
                     GenerateBlockBreakingParticles(new Vector3(x, y, z), typeBeforeBreaking, particleMultiplier);
 
                 }
@@ -390,16 +389,20 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                         QueueChunkReload(adjacentChunk.GetComponent<Chunk>());
                 }
                 QueueChunkReload(chunk);
+                if (!DoNotSendPacket)
+                {
+                    GameStateManager.NetData.SetBlockRpc(x, y, z, blockType, particleMultiplier, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
+                }
                 return true;
             }
         }
         return false;
     }
-    public static bool FillBlock(Vector3 start, Vector3 end, int blockID, float particleMultiplier = 1f)
+    public static bool FillBlock(Vector3 start, Vector3 end, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false)
     {
-        return FillBlock(start.x, start.y, start.z, end.x, end.y, end.z, blockID, particleMultiplier);
+        return FillBlock(start.x, start.y, start.z, end.x, end.y, end.z, blockID, particleMultiplier, DoNotSendPacket);
     }
-    public static bool FillBlock(float x, float y, float z, float x2, float y2, float z2, int blockID, float particleMultiplier = 1f)
+    public static bool FillBlock(float x, float y, float z, float x2, float y2, float z2, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false)
     {
         int X = Mathf.FloorToInt(x);
         int Y = Mathf.FloorToInt(y);
@@ -407,7 +410,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
         int X2 = Mathf.FloorToInt(x2);
         int Y2 = Mathf.FloorToInt(y2);
         int Z2 = Mathf.FloorToInt(z2);
-        return FillBlock(X, Y, Z, X2, Y2, Z2, blockID, particleMultiplier);
+        return FillBlock(X, Y, Z, X2, Y2, Z2, blockID, particleMultiplier, DoNotSendPacket);
     }
     /// <summary>
     /// Fills the area from xyz to x2y2z2 with blockID. Returns true if any blocks are converted. Returns false if no blocks are converted.
@@ -420,8 +423,10 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     /// <param name="z2"></param>
     /// <param name="blockID"></param>
     /// <returns></returns>
-    public static bool FillBlock(int x, int y, int z, int x2, int y2, int z2, int blockID, float particleMultiplier = 1f)
+    public static bool FillBlock(int x, int y, int z, int x2, int y2, int z2, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false)
     {
+        if (!NetHandler.Active)
+            DoNotSendPacket = true;
         //Vector3 v = new Vector3(x, y, z);
         //Vector3 v2 = new Vector3(x2, y2, z2);
         //Debug.Log(v + ":" + v2);
@@ -443,6 +448,10 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                     //Debug.Log(left + ":" + bot + ":" + back);
                 }
             }
+        }
+        if(!DoNotSendPacket)
+        {
+            GameStateManager.NetData.TileFillRpc(x, y, z, x2, y2, z2, blockID, particleMultiplier, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
         }
         return hasFilledOneBlock;
     }

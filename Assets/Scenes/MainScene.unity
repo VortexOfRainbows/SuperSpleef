@@ -123,16 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &170499658 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3521744485288345232, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
-  m_PrefabInstance: {fileID: 2012985373781109746}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &569002207 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5185551015110959775, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
-  m_PrefabInstance: {fileID: 2012985373781109746}
-  m_PrefabAsset: {fileID: 0}
 --- !u!108 &705507994 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 7990855148255319656, guid: 39b2e48cf8b932045b0e541282ee6031, type: 3}
@@ -142,11 +132,6 @@ Light:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5216370964135903738, guid: d8ee2f89fdebd72429832ee7d9d38698, type: 3}
   m_PrefabInstance: {fileID: 7449654519563257648}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1070779343 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4746357663598293306, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
-  m_PrefabInstance: {fileID: 2012985373781109746}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1092651730
 GameObject:
@@ -192,27 +177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f42067016d567741ab87c8c1f39ce52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1831871343 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4827952731808510100, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
-  m_PrefabInstance: {fileID: 2012985373781109746}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b01e7609097677347a0a9ff7ddca5e83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1905523504 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8559100076240031281, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
-  m_PrefabInstance: {fileID: 2012985373781109746}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2046205208 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1463825790314162191, guid: 35c0af34ed9b4b144bc6829eb4be290d, type: 3}
-  m_PrefabInstance: {fileID: 2012985373781109746}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2012985373781109746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -717,33 +681,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1160728964073058998, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
-      propertyPath: GameOverUI
-      value: 
-      objectReference: {fileID: 1905523504}
-    - target: {fileID: 1160728964073058998, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
-      propertyPath: GameplayUI
-      value: 
-      objectReference: {fileID: 569002207}
-    - target: {fileID: 1160728964073058998, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
-      propertyPath: ClientPackage
-      value: 
-      objectReference: {fileID: 1070779343}
-    - target: {fileID: 5992814542612128231, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
-      propertyPath: BlockOutline
-      value: 
-      objectReference: {fileID: 2046205208}
-    - target: {fileID: 5992814542612128231, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
-      propertyPath: ScreenBlocker
-      value: 
-      objectReference: {fileID: 1831871343}
-    - target: {fileID: 5992814542612128231, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
-      propertyPath: CameraTransform
-      value: 
-      objectReference: {fileID: 170499658}
+    - target: {fileID: 3061544561369893235, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2972475244
+      objectReference: {fileID: 0}
     - target: {fileID: 8353989824956141812, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
       propertyPath: m_Name
       value: PlayerPackage
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353989824956141812, guid: ff0e79de118a9cf40a1c0afccaf056ca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -21,6 +22,17 @@ public class ItemSlot : MonoBehaviour ///Team members that contributed to this s
     public bool IsSelected = false;
     private void Update()
     {
+        if(Owner == null)
+        {
+            foreach(Player player in GameStateManager.Players)
+            {
+                if(player.OwnerClientId == NetworkManager.Singleton.LocalClientId)
+                {
+                    Owner = player;
+                }
+            }
+            return;
+        }
         IsSelected = false;
         if (Owner is Player p)
         {

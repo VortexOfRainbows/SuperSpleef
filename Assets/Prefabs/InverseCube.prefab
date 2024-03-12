@@ -434,5 +434,5 @@ MonoBehaviour:
   Right: {fileID: 8362679258654359306}
   Front: {fileID: 7888952182241959571}
   Back: {fileID: 2901254619378136139}
-  IgnoreTop: 1
+  IgnoreTop: 0
   IgnoreBot: 0

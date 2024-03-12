@@ -9,8 +9,6 @@ using Unity.AI.Navigation;
 
 public class Chunk : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
 {
-    public static int Seed = -1;
-    public Vector2Int Index { get; set; }
     public const float StoneLayer = 0.35f;
     public const float TerrainHeightMultiplier = 0.225f; //A multiplier on how much terrain there is until the bottom of the world
     public const float TerrainMinimum = 0.2f;
@@ -20,6 +18,8 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
     public const int Width = 8;
     public const int Height = 64;
     public const int SeedNoiseModifier = 256;
+    private static int Seed { get { return GameStateManager.GenSeed; } }
+    public Vector2Int Index { get; set; }
     public int[,,] blocks = new int[Width, Height, Width];
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
@@ -27,8 +27,6 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
 
     private void Awake()
     {
-        if(Seed == -1)
-            Seed = Random.Range(0, int.MaxValue);
         meshFilter = this.GetComponent<MeshFilter>();
         meshCollider = GetComponent<MeshCollider>();
         GenerateChunk();

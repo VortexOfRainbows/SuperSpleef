@@ -30,6 +30,7 @@ public class ProjectileManager : MonoBehaviour ///Team members that contributed 
     {
         Instance = this;
     }
+    /*
     /// <summary>
     /// Returns the prefab associated with the ProjectileType inputted into the function
     /// If multiple prefabs utilize the same ProjectileType, uses the first one found
@@ -48,7 +49,7 @@ public class ProjectileManager : MonoBehaviour ///Team members that contributed 
                 return prefab;
         }
         return null;
-    }
+    }*/
     public static GameObject GetProjectile(int ProjectileID)
     {
         return Instance.Get(ProjectileID);

@@ -22,13 +22,16 @@ public class LaserCube : Projectile ///Team members that contributed to this scr
         pRB.velocity = rb.velocity;
         rb.velocity -= Physics.gravity * (1 - GravityMultiplier) * Time.fixedDeltaTime;
     }
-    public override void OnDeath(bool OutBoundDeath)
+    public override void OnNetworkDespawn()
     {
         Vector3 scale = pSystem.transform.localScale;
         pSystem.gameObject.transform.parent = null;
         pSystem.transform.localScale = scale; //For some reason, detaching the parent bugs out the scale. This just sets it back to what it is before
         pSystem.Stop(false, ParticleSystemStopBehavior.StopEmitting);
         Destroy(pSystem.gameObject, pSystem.main.startLifetime.constant);
+    }
+    public override void OnDeath(bool OutBoundDeath)
+    {
         if (!OutBoundDeath)
         {
             World.FillBlock(transform.position - Vector3.one, transform.position + Vector3.one, BlockID.Air, 0.75f);

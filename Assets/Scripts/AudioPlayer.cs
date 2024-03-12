@@ -1,42 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class AudioPlayer : MonoBehaviour
 {
     [SerializeField]
-    private AudioSource source;
-
-    private Sound sound;
-
-    private float timer;
-
-    public static AudioPlayer GenerateAudioPlayer(GameObject prefab, Sound sound, Vector3 position)
+    private AudioSource Source;
+    private Sound Sound;
+    private float Timer;
+    public static AudioPlayer GenerateAudioPlayer(GameObject prefab, Sound sound, Vector3 position, float volumeMult = 1f, float DistanceMult = 1f, float PitchModifier = 0f)
     {
-        AudioPlayer something = Instantiate(prefab, position,Quaternion.identity).GetComponent<AudioPlayer>();
-        something.sound = sound;
-        something.sound.SetSource(something.source);
-        return something;
+        AudioPlayer audio = Instantiate(prefab, position,Quaternion.identity).GetComponent<AudioPlayer>();
+        audio.Sound = sound;
+        audio.Sound.SetSource(audio.Source);
+        audio.Source.maxDistance *= DistanceMult;
+        audio.Source.volume *= volumeMult;
+        audio.Source.pitch += PitchModifier;
+        return audio;
     }
-
     public void PlaySound()
     {
-        sound.Play();
+        Sound.Play();
     }
-
-    // Start is called before the first frame update
     void Start()
     {
         PlaySound();
     }
-
-    // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > sound.clip.length)
+        if(Sound.Clip == null)
         {
             Destroy(gameObject);
+        }
+        else
+        {
+            Timer += Time.deltaTime;
+            if (Timer > Sound.Clip.length)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

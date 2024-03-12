@@ -25,7 +25,7 @@ public abstract class Weapon : Item ///Team members that contributed to this scr
     }
     public sealed override bool OnSecondaryUse(Player player)
     {
-        AudioManager.instance.PlaySound("Weapon", player.transform.position);
+        AudioManager.PlaySound(SoundID.Weapon, player.transform.position);
         return Shoot(player, player.FacingVector.transform);
     }
     /// <summary>
@@ -39,8 +39,7 @@ public abstract class Weapon : Item ///Team members that contributed to this scr
     public virtual bool Shoot(Player player, Transform direction)
     {
         Transform shotTransform = player.FacingVector.transform;
-        Rigidbody shotInstance = Instantiate(ShootType(player), shotTransform.position, shotTransform.rotation).GetComponent<Rigidbody>();
-        shotInstance.velocity = ShootSpeed * shotTransform.forward; // + player.RB.velocity;
+        Projectile.NewProjectile(ShootType(player), shotTransform.position, shotTransform.rotation, ShootSpeed * shotTransform.forward);
         return true;
     }
     /// <summary>
@@ -48,8 +47,8 @@ public abstract class Weapon : Item ///Team members that contributed to this scr
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    public virtual GameObject ShootType(Player player)
+    public virtual int ShootType(Player player)
     {
-        return ProjectileManager.GetProjectile<BouncyDeathBall>();
+        return ProjectileID.BouncyDeathBall;
     }
 }
