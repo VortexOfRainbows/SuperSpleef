@@ -855,6 +855,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: MultiplayerUI, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5572088053423115311, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5572439479110804007, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_Camera
       value: 

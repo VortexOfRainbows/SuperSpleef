@@ -1,5 +1,6 @@
 using UnityEngine;
 
+///Team members that contributed to this script: Ian Bunnell, David Bu
 public class AudioPlayer : MonoBehaviour
 {
     [SerializeField]

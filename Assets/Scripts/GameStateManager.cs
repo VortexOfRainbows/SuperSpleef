@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-///Team members that contributed to this script: Ian Bunnell
+///Team members that contributed to this script: Ian Bunnell, David Bu
 public static class GameModeID // Assigns an int as a reference to each game mode.
 {
     public const int None = -1;
