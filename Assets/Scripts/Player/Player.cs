@@ -454,7 +454,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         InBlockColliderBottom.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f) - 1, Mathf.FloorToInt(transform.position.z) + 0.5f);
         InBlockColliderTop.GetComponent<BarrierBlock>().UpdateCollision();
         InBlockColliderBottom.GetComponent<BarrierBlock>().UpdateCollision();
-        if (IsOwner || !NetHandler.Active)
+        if (!NetHandler.Active || IsOwner)
         {
             ScreenBlocker.UpdateUVS(World.Block(topAsInt));
         }
