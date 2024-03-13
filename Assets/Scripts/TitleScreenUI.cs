@@ -24,7 +24,7 @@ public class TitleScreenUI : MonoBehaviour
         "like a record baby", "yellow text", "now with splash text", "how many blocks can you click", "names courtesy of zombified bears", "also try Minecraft", "also try Terraria", "also try SOTS tMod", "life level up", "avoid the void", 
         "now with more chunks", "now with geometry", "dancing with slimes and flies", "cloudy with a chance of spheres", "grass to touch here", "sponsored by gamers", "unlimited bacon but no video games\nor unlimited games but no games", 
         "ants in pants", "let bro cook", "we cooked too much", "a shrimp fried this rice", "multiplier", "plays boom sound effect", "among sus", "gremlin activity", "cooked al dente", "now with 20% more",
-        "buy one for the price of two and get one free", "hi hungry im dad", "s tier", "now with lasers"
+        "buy one for the price of two and get one free", "hi hungry im dad", "s tier", "now with lasers", "bear hill roll"
     };
 
     [SerializeField] private InputField UsernameField;

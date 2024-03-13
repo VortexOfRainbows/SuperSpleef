@@ -265,6 +265,7 @@ public class GameStateManager : MonoBehaviour
         }
         else
         {
+            GenSeed = -1;
             ResetStates();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
@@ -300,20 +301,18 @@ public class GameStateManager : MonoBehaviour
     private void LateUpdate()
     {
         //Debug.Log(NetHandler.Active);
-        if(NetHandler.Active)
+        if (SceneManager.GetActiveScene().name == MultiplayerGameLobby || SceneManager.GetActiveScene().name == TitleScreen)
         {
-            if(SceneManager.GetActiveScene().name == MultiplayerGameLobby)
+            if (!HasResetStateSinceReload)
             {
-                if (!HasResetStateSinceReload)
-                {
-                    HasResetStateSinceReload = true;
-                    ResetStates();
-                }
+                HasResetStateSinceReload = true;
+                GenSeed = -1;
+                ResetStates();
             }
-            else if(SceneManager.GetActiveScene().name == MultiplayerScene)
-            {
-                HasResetStateSinceReload = false;
-            }
+        }
+        else if (SceneManager.GetActiveScene().name == MultiplayerScene || SceneManager.GetActiveScene().name == MainScene)
+        {
+            HasResetStateSinceReload = false;
         }
         if (NetworkManager.Singleton.IsServer && NetData == null)
         {
