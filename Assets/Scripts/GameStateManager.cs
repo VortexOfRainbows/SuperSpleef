@@ -306,7 +306,8 @@ public class GameStateManager : MonoBehaviour
             if (!HasResetStateSinceReload)
             {
                 HasResetStateSinceReload = true;
-                GenSeed = -1;
+                if (NetworkManager.Singleton.IsServer)
+                    GenSeed = -1;
                 ResetStates();
             }
         }
