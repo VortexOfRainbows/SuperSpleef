@@ -8,6 +8,7 @@ TagManager:
   - Item
   - Ground
   - FallingBlock
+  - InverseCubeBottom
   layers:
   - Default
   - TransparentFX

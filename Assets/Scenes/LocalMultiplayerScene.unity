@@ -1113,6 +1113,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1716541546114036217, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716541546114036217, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716541546114036217, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716541546114036217, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716541546114036217, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -60
+      objectReference: {fileID: 0}
     - target: {fileID: 1894192811233869418, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
       propertyPath: GameOverUI
       value: 
@@ -1153,6 +1173,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: f75a5742c5ef2e347997430e9a456b71, type: 2}
+    - target: {fileID: 4139966884575053934, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: m_FontData.m_AlignByGeometry
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4519156197676392012, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4772539250573866641, guid: 6dade94821f35ba4e942dc79f5e19e3b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

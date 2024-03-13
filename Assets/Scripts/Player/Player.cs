@@ -225,15 +225,15 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     private void OnCollision(Collision collision)
     {
         //This method of checking for ground collision sometimes bugs out... Making you unable to jump for some time
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("InverseCube"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("InverseCubeBottom"))
         {
-            if (collision.impulse.y > 0) //This checks if the player is touching the top surface of a block (so the player can't jump off of walls)
+            if (collision.impulse.y > 0 && RB.velocity.y < 0) //This checks if the player is touching the top surface of a block (so the player can't jump off of walls)
                 OnTheFloor = true;
         }
     }
     private void OnTriggerCollision(Collider other)
     {
-        if ((other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("InverseCube"))) //There is a trigger collider on the bottom of the player to check for ground collision. This collider is smaller than the player
+        if ((other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("InverseCubeBottom"))) //There is a trigger collider on the bottom of the player to check for ground collision. This collider is smaller than the player
         {
             if(RB.velocity.y == 0)
                 OnTheFloor = true;

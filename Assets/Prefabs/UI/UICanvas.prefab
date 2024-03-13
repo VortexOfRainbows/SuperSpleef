@@ -191,7 +191,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -228,9 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PauseUI_gobj: {fileID: 7975204064996581473}
-  Player: {fileID: 0}
   GameOverUI: {fileID: 804017898342698646}
-  GameplayUI: {fileID: 4185740726733201976}
   gameOverSubscript: {fileID: 1141291680439763043}
 --- !u!114 &8044152773331101686
 MonoBehaviour:
@@ -427,10 +425,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 610039839272733886}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: -2.000001}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2125906452051554042
 CanvasRenderer:
@@ -465,13 +463,13 @@ MonoBehaviour:
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
+    m_MinSize: 2
+    m_MaxSize: 14
     m_Alignment: 4
-    m_AlignByGeometry: 0
+    m_AlignByGeometry: 1
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 'Objective: Survive'
 --- !u!114 &928962573511602257
@@ -943,10 +941,10 @@ RectTransform:
   - {fileID: 2383083628652536587}
   m_Father: {fileID: 7573447341871083769}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 309.54004, y: -59.869995}
-  m_SizeDelta: {x: -594.29, y: 28.94}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 270, y: -60}
+  m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5737554987900143648
 CanvasRenderer:
@@ -1020,10 +1018,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 600140997019134910}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.000015258578, y: 18.310286}
-  m_SizeDelta: {x: 800, y: 90.6096}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 20}
+  m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4795037021960929956
 CanvasRenderer:
@@ -1061,7 +1059,7 @@ MonoBehaviour:
     m_MinSize: 0
     m_MaxSize: 50
     m_Alignment: 4
-    m_AlignByGeometry: 0
+    m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
@@ -1240,8 +1238,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 278, y: -10}
-  m_SizeDelta: {x: 233.4672, y: 47.00119}
+  m_AnchoredPosition: {x: 280, y: -10}
+  m_SizeDelta: {x: 230, y: 40}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &8391338545879716569
 CanvasRenderer:
@@ -2139,6 +2137,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5506544996677712952}
     m_Modifications:
+    - target: {fileID: 2325030168596696385, guid: 98bac9ee67b31534287e33f321bef8c8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -80
+      objectReference: {fileID: 0}
     - target: {fileID: 3189309191286648403, guid: 98bac9ee67b31534287e33f321bef8c8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2223,6 +2225,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 8044152773331101686}
+    - target: {fileID: 3523540575364204841, guid: 98bac9ee67b31534287e33f321bef8c8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 3839425612814455406, guid: 98bac9ee67b31534287e33f321bef8c8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -120
+      objectReference: {fileID: 0}
     - target: {fileID: 5289494668102631421, guid: 98bac9ee67b31534287e33f321bef8c8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

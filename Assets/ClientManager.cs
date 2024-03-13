@@ -54,7 +54,7 @@ public class ClientManager : MonoBehaviour
     public void Start()
     {
         //Instance = this;
-        if (GameStateManager.LocalMultiplayer)
+        if (GameStateManager.LocalMultiplayer || NetHandler.Active)
             BelowTimerText.text = MultiplayerText;
         else if (GameStateManager.Mode == GameModeID.Apocalypse)
             BelowTimerText.text = ApocalypseText;

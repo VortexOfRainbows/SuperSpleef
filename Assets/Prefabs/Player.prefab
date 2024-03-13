@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &910251393658398682
 Transform:
   m_ObjectHideFlags: 0
@@ -257,7 +257,6 @@ MonoBehaviour:
   RB: {fileID: 1326384001663812332}
   JumpHitbox: {fileID: 2651317863319354778}
   ControlManager: {fileID: 5101752403716287785}
-  Sensitivity: 400
   BlockRange: 4.6
   jumpForce: 10
   WalkSpeed: 4
@@ -338,7 +337,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 0.02, z: 0.5}
+  m_Size: {x: 0.5, y: 0.015, z: 0.5}
   m_Center: {x: 0, y: -1, z: 0}
 --- !u!114 &942549933116168614
 MonoBehaviour:

@@ -1,12 +1,7 @@
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static Unity.Collections.AllocatorManager;
-using static UnityEditor.PlayerSettings;
 
 public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
@@ -315,10 +310,12 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     }
     public static void GenerateBlockBreakSound(Vector3 pos, int blockType)
     {
-        if (blockType == BlockID.Wood)
+        if (blockType == BlockID.Dirt || blockType == BlockID.Grass)
+            AudioManager.PlaySound(SoundID.Dirt, pos, 0.8f, pitchModifier: -0.1f);
+        else if (blockType == BlockID.Wood)
             AudioManager.PlaySound(SoundID.Wood, pos);
         else if (blockType == BlockID.Leaves)
-            AudioManager.PlaySound(SoundID.Grass, pos);
+            AudioManager.PlaySound(SoundID.Grass, pos, 0.8f);
         else
             AudioManager.PlaySound(SoundID.Stone, pos);
     }
@@ -329,7 +326,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
         else if (blockType == BlockID.Wood)
             AudioManager.PlaySound(SoundID.Wood, pos, pitchModifier: 0.4f);
         else if (blockType == BlockID.Leaves)
-            AudioManager.PlaySound(SoundID.Grass, pos, pitchModifier: 0.25f);
+            AudioManager.PlaySound(SoundID.Grass, pos, 0.8f, pitchModifier: 0.25f);
         else
             AudioManager.PlaySound(SoundID.Stone, pos, pitchModifier: 0.4f);
     }
