@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NetworkPlayer : NetworkBehaviour
+public class NetworkPlayer : NetworkBehaviour //Team members that contributed to this script: Ian Bunnel
 {
     private Player myPlayer = null;
     [SerializeField] private Rigidbody RB;

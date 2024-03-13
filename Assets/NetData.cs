@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class NetData : NetworkBehaviour
+public class NetData : NetworkBehaviour //Team members that contributed to this script: Ian Bunnel
 {
     /// 
     /// These variables must be public so they can be accessed by GameStateManager, which will distribute them to other classes

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class NetHandler : MonoBehaviour
+public class NetHandler : MonoBehaviour //Team members that contributed to this script: Ian Bunnel
 {
     [SerializeField] private UnityTransport UnityTransport;
     /// <summary>

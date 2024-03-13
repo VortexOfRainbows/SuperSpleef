@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MultiplayerUI : MonoBehaviour
+public class MultiplayerUI : MonoBehaviour //Team members that contributed to this script: Ian Bunnel
 {
     public const string Leave = "Leave Lobby";
     public const string Close = "Close Lobby";

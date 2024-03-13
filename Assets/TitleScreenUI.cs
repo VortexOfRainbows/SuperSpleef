@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TitleScreenUI : MonoBehaviour
+public class TitleScreenUI : MonoBehaviour //Team members that contributed to this script: Ian Bunnel
 {
     public const int MaxChars = 32;
     public static readonly string[] viableFirstNames = { 
