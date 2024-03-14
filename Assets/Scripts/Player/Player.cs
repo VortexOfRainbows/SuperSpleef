@@ -118,6 +118,9 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 currentPlayerHP -= DamageFromVoid * Time.deltaTime;
             }
         }
+
+        if (IsOwner)
+            ClientManager.GetInventoryInterface().SetActive(true);
     }
     /// <summary>
     /// This field is only serialized so it can display in the editor. It is not actually meant to be modified
@@ -291,7 +294,6 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// </summary>
     private void HeldItemUpdate()
     {
-        ClientManager.GetInventoryInterface().SetActive(!GameStateManager.GameIsOver); //Turn on the inventory if alive
         Item heldItem = HeldItem();
         bool left = Control.LeftClick;
         bool right = Control.RightClick;
@@ -500,10 +502,10 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 Destroy(InBlockColliderTop);
                 Destroy(InBlockColliderBottom);
             }
-            if(IsOwner)
-            {
-                ClientManager.GetInventoryInterface().SetActive(false);
-            }
         }
+    }
+    public override void OnDestroy()
+    {
+        GameStateManager.Players.Remove(this);
     }
 }

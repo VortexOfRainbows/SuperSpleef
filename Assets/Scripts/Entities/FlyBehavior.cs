@@ -26,7 +26,6 @@ public class FlyBehavior : Entity ///Team members that contributed to this scrip
     }
     private void NewWander() //pick a random nearby position to wander to
     {
-        
         wanderTarget = transform.position + new Vector3(Random.Range(-wanderableRange.x, wanderableRange.x), -Random.Range(0, wanderableRange.y), Random.Range(-wanderableRange.z, wanderableRange.z)); //Slowly wanders down and around the map
         wanderTarget.x = Mathf.Clamp(wanderTarget.x, 0, World.ChunkRadius * Chunk.Width);
         wanderTarget.z = Mathf.Clamp(wanderTarget.z, 0, World.ChunkRadius * Chunk.Width); //Make sure it doesn't wander horizontally outside of the world
@@ -119,20 +118,14 @@ public class FlyBehavior : Entity ///Team members that contributed to this scrip
         {
             if (selfDestruct)
             {
-                ///Removed the explosion radius because I believe it interferes with the idea of the game... and because I want to incorporate helper methods for this in the future instead.
-                /*int hitRadius = 5;
-                Vector3 explosionPos = transform.position;
-                Collider[] colliders = Physics.OverlapSphere(explosionPos, hitRadius);
-                foreach (Collider hit in colliders)
-                {
-                    Rigidbody rb = hit.GetComponent<Rigidbody>();
-                    if (rb != null)
-                        rb.AddExplosionForce(100f, explosionPos, hitRadius, 4.0f);
-                }*/
-                World.FillBlock(transform.position + new Vector3(2, 3, 2), transform.position - new Vector3(2, 3, 2), BlockID.Air, 0.1f);
-                Destroy(rb.gameObject);
+                Kill(false);
             }
         }
+    }
+    public override void OnDeath(bool OutBoundDeath)
+    {
+        if(!OutBoundDeath)
+            World.FillBlock(transform.position + new Vector3(2, 3, 2), transform.position - new Vector3(2, 3, 2), BlockID.Air, 0.1f);
     }
     private void OnTriggerStay(Collider other)
     {

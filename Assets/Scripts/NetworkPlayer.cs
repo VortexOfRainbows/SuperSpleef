@@ -55,23 +55,19 @@ public class NetworkPlayer : NetworkBehaviour //Team members that contributed to
             else
             {
                 ControlManager.OnUpdate();
-                if (Input.GetMouseButtonDown(0))
-                {
-                    PlayerToWatchID++;
-                    if (PlayerToWatchID >= GameStateManager.Players.Count)
-                    {
-                        PlayerToWatchID = -1;
-                    }
-                }
                 if (Input.GetMouseButtonDown(1))
                 {
-                    PlayerToWatchID--;
-                    if (PlayerToWatchID < -1)
-                    {
-                        PlayerToWatchID = GameStateManager.Players.Count - 1;
-                    }
+                    PlayerToWatchID++;
                 }
-                if(PlayerToWatchID >= 0 && GameStateManager.Players.Count > 0)
+                if (Input.GetMouseButtonDown(0) || PlayerToWatchID >= GameStateManager.Players.Count)
+                {
+                    PlayerToWatchID = -1;
+                }
+                if (PlayerToWatchID < -1)
+                {
+                    PlayerToWatchID = GameStateManager.Players.Count - 1;
+                }
+                if (PlayerToWatchID >= 0 && GameStateManager.Players.Count > 0)
                 {
                     Player toWatch = GameStateManager.Players[PlayerToWatchID];
                     transform.position = toWatch.FacingVector.transform.position;
@@ -85,6 +81,7 @@ public class NetworkPlayer : NetworkBehaviour //Team members that contributed to
                 {
                     CameraTransform.position = transform.position + Vector3.up * 2f;
                     CameraTransform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
+                    ClientManager.GetInventoryInterface().SetActive(false);
                 }
             }
         }

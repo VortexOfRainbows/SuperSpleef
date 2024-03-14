@@ -117,7 +117,7 @@ MonoBehaviour:
     volume: 0.2
     pitch: 0.9
     maxDistance: 20
-    spacialBlend: 0
+    spacialBlend: 1
     loop: 0
     music: 0
   - clip: {fileID: 8300000, guid: 53b942a2a480529408dc60de5102350b, type: 3}
@@ -138,7 +138,7 @@ MonoBehaviour:
     volume: 0.5
     pitch: 0.9
     maxDistance: 25
-    spacialBlend: 0
+    spacialBlend: 1
     loop: 0
     music: 0
   audioPlayer: {fileID: 4390255685729763963, guid: 9416ae9b89c16ba4e85309542ca48b3f, type: 3}

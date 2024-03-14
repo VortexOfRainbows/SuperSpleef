@@ -37,8 +37,20 @@ public abstract class Entity : NetworkBehaviour //A monobehavior class that poss
     /// <param name="OutBoundDeath"></param>
     public void Kill(bool OutBoundDeath = false)
     {
-        OnDeath(OutBoundDeath);
-        Destroy(gameObject);
+        if (!NetHandler.Active || IsServer)
+        {
+            OnDeath(OutBoundDeath);
+            if (NetHandler.Active)
+            {
+                NetworkObject nObject = GetComponent<NetworkObject>();
+                if (nObject.IsSpawned)
+                    nObject.Despawn();
+                else
+                    Destroy(gameObject);
+            }
+            else
+                Destroy(gameObject);
+        }
     }
     /// <summary>
     /// Finds the closest player in range. 
