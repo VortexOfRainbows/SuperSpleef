@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 ///Team members that contributed to this script: Ian Bunnell
@@ -30,6 +31,8 @@ public class TitleScreenUI : MonoBehaviour
     [SerializeField] private InputField UsernameField;
     [SerializeField] private InputField IPField;
     [SerializeField] private Text SplashText;
+    [SerializeField] private GameObject MultiplayerButton;
+    [SerializeField] private GameObject NoMultButton;
     private const float spinSpeed = 90f;
     private const float wobbleSizeSpeed = 6f;
     private const float growShrinkAmt = 0.015f;
@@ -46,6 +49,24 @@ public class TitleScreenUI : MonoBehaviour
     }
     public void Update()
     {
+        if(SceneManager.GetActiveScene().name == GameStateManager.TitleScreen)
+        {
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+                NoMultButton.SetActive(true);
+                MultiplayerButton.SetActive(false);
+            }
+            else
+            {
+                MultiplayerButton.SetActive(true);
+                NoMultButton.SetActive(false);
+            }
+        }
+        else
+        {
+            NoMultButton.SetActive(false);
+            MultiplayerButton.SetActive(false);
+        }
         if(SplashText.text == SplashTextVariants[0])
         {
             SplashText.gameObject.transform.Rotate(Vector3.up, spinSpeed * Time.deltaTime);

@@ -119,7 +119,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
         }
 
-        if (IsOwner)
+        if (IsOwner || !NetHandler.Active)
             ClientManager.GetInventoryInterface().SetActive(true);
     }
     /// <summary>
