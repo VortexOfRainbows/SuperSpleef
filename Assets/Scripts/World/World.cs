@@ -423,7 +423,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     }
     public static bool FillBlock(Vector3 start, Vector3 end, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false, bool generateSound = false)
     {
-        return FillBlock(start.x, start.y, start.z, end.x, end.y, end.z, blockID, particleMultiplier, DoNotSendPacket);
+        return FillBlock(start.x, start.y, start.z, end.x, end.y, end.z, blockID, particleMultiplier, DoNotSendPacket, generateSound);
     }
     public static bool FillBlock(float x, float y, float z, float x2, float y2, float z2, int blockID, float particleMultiplier = 1f, bool DoNotSendPacket = false, bool generateSound = false)
     {
