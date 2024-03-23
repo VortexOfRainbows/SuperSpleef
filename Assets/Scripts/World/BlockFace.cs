@@ -8,23 +8,26 @@ public class BlockFace ///Team members that contributed to this script: Ian Bunn
     public const float TotalSpritesY = 16;
     public const float Padding = 0;
     public Vector2Int UVPos { get; private set; }
-    public static BlockFace FaceSprite(Tile tile)
+    public static BlockFace FaceSprite(int tile)
     {
         return tiles[tile];
     }
-    private static Dictionary<Tile, BlockFace> tiles = new Dictionary<Tile, BlockFace>()
+    private static Dictionary<int, BlockFace> tiles = new Dictionary<int, BlockFace>()
     {
-        {Tile.Grass, new BlockFace(0,0)},
-        {Tile.GrassSide, new BlockFace(0,1)},
-        {Tile.Dirt, new BlockFace(0,2)},
-        {Tile.Glass, new BlockFace(0,3)},
-        {Tile.Stone, new BlockFace(0,4)},
-        {Tile.LogSide, new BlockFace(0,5)},
-        {Tile.Log, new BlockFace(0,6)},
-        {Tile.Leaves, new BlockFace(0,7)},
-        {Tile.YellowBricks, new BlockFace(0,8)},
-        {Tile.BlueBricks, new BlockFace(0,9)},
-        {Tile.Air, new BlockFace(1,0)},
+        {BlockFaceID.Grass, new BlockFace(0,0)},
+        {BlockFaceID.GrassSide, new BlockFace(0,1)},
+        {BlockFaceID.Dirt, new BlockFace(0,2)},
+        {BlockFaceID.Glass, new BlockFace(0,3)},
+        {BlockFaceID.Stone, new BlockFace(0,4)},
+        {BlockFaceID.LogSide, new BlockFace(0,5)},
+        {BlockFaceID.Log, new BlockFace(0,6)},
+        {BlockFaceID.Leaves, new BlockFace(0,7)},
+        {BlockFaceID.YellowBricks, new BlockFace(0,8)},
+        {BlockFaceID.BlueBricks, new BlockFace(0,9)},
+        {BlockFaceID.Air, new BlockFace(1,0)},
+        {BlockFaceID.Sand, new BlockFace(0,10)},
+        {BlockFaceID.CactusSide, new BlockFace(0,11)},
+        {BlockFaceID.Cactus, new BlockFace(0,12)},
     };
     private readonly Vector2[] uvs;
     private BlockFace(int xPos, int yPos) //yPos is how many tiles up it is from bottom. x is how many tiles to the right
@@ -50,4 +53,3 @@ public class BlockFace ///Team members that contributed to this script: Ian Bunn
         return uvs;
     }
 }
-public enum Tile { Dirt, Grass, GrassSide, Glass, Stone, LogSide, Log, Leaves, Air, YellowBricks, BlueBricks }

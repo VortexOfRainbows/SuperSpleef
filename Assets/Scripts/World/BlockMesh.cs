@@ -5,20 +5,16 @@ public class BlockMesh ///Team members that contributed to this script: Ian Bunn
 {
     public static BlockMesh Get(int blockType)
     {
-        return tiles[blockType];
+        return BlockFaceIDs[blockType];
     }
-    private static Dictionary<int, BlockMesh> tiles = new Dictionary<int, BlockMesh>()
+    private static Dictionary<int, BlockMesh> BlockFaceIDs = InitDictionary();
+    private static Dictionary<int, BlockMesh> InitDictionary()
     {
-        {BlockID.BlueBricks, new BlockMesh(BlockID.BlueBricks)},
-        {BlockID.YellowBricks, new BlockMesh(BlockID.YellowBricks)},
-        {BlockID.Wood, new BlockMesh(BlockID.Wood)},
-        {BlockID.Leaves, new BlockMesh(BlockID.Leaves)},
-        {BlockID.Glass, new BlockMesh(BlockID.Glass)},
-        {BlockID.Stone, new BlockMesh(BlockID.Stone)},
-        {BlockID.Grass, new BlockMesh(BlockID.Grass)},
-        {BlockID.Dirt, new BlockMesh(BlockID.Dirt)},
-        {BlockID.Air, new BlockMesh(BlockID.Air)},
-    };
+        Dictionary<int, BlockMesh> dict = new Dictionary<int, BlockMesh>();
+        for(int i = 0; i < BlockID.Max; i++)
+            dict.Add(i, new BlockMesh(i));
+        return dict;
+    }
     private int Type;
     public BlockFace top, left, right, front, back, bottom;
     public List<BlockFace> UniqueFaces { get; private set; }
@@ -43,48 +39,57 @@ public class BlockMesh ///Team members that contributed to this script: Ian Bunn
     {
         if (Type == BlockID.Air)
         {
-            SetAllFaces(Tile.Air);
+            SetAllFaces(BlockFaceID.Air);
         }
         if (Type == BlockID.Dirt)
         {
-            SetAllFaces(Tile.Dirt);
+            SetAllFaces(BlockFaceID.Dirt);
         }
         if (Type == BlockID.Grass)
         {
-            top = BlockFace.FaceSprite(Tile.Grass);
-            right = front = back = left = BlockFace.FaceSprite(Tile.GrassSide);
-            bottom = BlockFace.FaceSprite(Tile.Dirt);
+            top = BlockFace.FaceSprite(BlockFaceID.Grass);
+            right = front = back = left = BlockFace.FaceSprite(BlockFaceID.GrassSide);
+            bottom = BlockFace.FaceSprite(BlockFaceID.Dirt);
         }
         if (Type == BlockID.Glass)
         {
-            SetAllFaces(Tile.Glass);
+            SetAllFaces(BlockFaceID.Glass);
         }
         if (Type == BlockID.Stone)
         {
-            SetAllFaces(Tile.Stone);
+            SetAllFaces(BlockFaceID.Stone);
         }
         if (Type == BlockID.Wood)
         {
-            top = bottom = BlockFace.FaceSprite(Tile.Log);
-            right = front = back = left = BlockFace.FaceSprite(Tile.LogSide);
+            top = bottom = BlockFace.FaceSprite(BlockFaceID.Log);
+            right = front = back = left = BlockFace.FaceSprite(BlockFaceID.LogSide);
         }
         if (Type == BlockID.Leaves)
         {
-            SetAllFaces(Tile.Leaves);
+            SetAllFaces(BlockFaceID.Leaves);
         }
         if (Type == BlockID.BlueBricks)
         {
-            SetAllFaces(Tile.BlueBricks);
+            SetAllFaces(BlockFaceID.BlueBricks);
         }
         if (Type == BlockID.YellowBricks)
         {
-            SetAllFaces(Tile.YellowBricks);
+            SetAllFaces(BlockFaceID.YellowBricks);
+        }
+        if (Type == BlockID.Sand)
+        {
+            SetAllFaces(BlockFaceID.Sand);
+        }
+        if (Type == BlockID.Cactus)
+        {
+            top = bottom = BlockFace.FaceSprite(BlockFaceID.Cactus);
+            right = front = back = left = BlockFace.FaceSprite(BlockFaceID.CactusSide);
         }
         SetFaceArray();
     }
-    private void SetAllFaces(Tile tile)
+    private void SetAllFaces(int BlockFaceID)
     {
-        top = BlockFace.FaceSprite(tile);
+        top = BlockFace.FaceSprite(BlockFaceID);
         left = top;
         right = top;
         front = top;

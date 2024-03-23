@@ -24,25 +24,34 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
     // Start is called before the first frame update
-
     private void Awake()
     {
         meshFilter = this.GetComponent<MeshFilter>();
         meshCollider = GetComponent<MeshCollider>();
         GenerateChunk();
     }
-
     public void GenerateChunk()
     {
+        float stoneLayer = StoneLayer;
+        float terrainHeightMult = TerrainHeightMultiplier;
+        float terrainMin = TerrainMinimum;
+        float noisePosMult = NoisePosMult;
+        if(World.WorldType == 1)
+        {
+            stoneLayer = 0.05f;
+            terrainMin = 0.2f;
+            terrainHeightMult = 0.1f;
+            noisePosMult = 0.1f;
+        }
         float seedMod = Seed % SeedNoiseModifier;
         seedMod /= (float)SeedNoiseModifier;
         for (int x = 0; x < Width; x++)
         {
             for (int z = 0; z < Width; z++)
             {
-                Vector2 posInNoise = new Vector2(transform.position.x + x, transform.position.z + z) / (float)Width * NoisePosMult;
-                float noise = Mathf.PerlinNoise(seedMod + posInNoise.x, posInNoise.y) * TerrainHeightMultiplier + TerrainMinimum;
-                float stoneLayerNoise = Mathf.Sqrt(Mathf.PerlinNoise(posInNoise.y, seedMod + posInNoise.x)) * TerrainHeightMultiplier * StoneLayer + TerrainMinimum;
+                Vector2 posInNoise = new Vector2(transform.position.x + x, transform.position.z + z) / (float)Width * noisePosMult;
+                float noise = Mathf.PerlinNoise(seedMod + posInNoise.x, posInNoise.y) * terrainHeightMult + terrainMin;
+                float stoneLayerNoise = Mathf.Sqrt(Mathf.PerlinNoise(posInNoise.y, seedMod + posInNoise.x)) * terrainHeightMult * stoneLayer + terrainMin;
                 for (int y = Height - 1; y >= 0; y--)
                 {
                     if (y < (Height + AirBelowMap) * noise && y >= AirBelowMap)
@@ -51,13 +60,20 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
                             blocks[x, y, z] = BlockID.Stone;
                         else
                         {
-                            if (blocks[x, y + 1, z] == BlockID.Air)
+                            if (World.WorldType == 1)
                             {
-                                blocks[x, y, z] = BlockID.Grass;
+                                blocks[x, y, z] = BlockID.Sand;
                             }
                             else
                             {
-                                blocks[x, y, z] = BlockID.Dirt;
+                                if (blocks[x, y + 1, z] == BlockID.Air)
+                                {
+                                    blocks[x, y, z] = BlockID.Grass;
+                                }
+                                else
+                                {
+                                    blocks[x, y, z] = BlockID.Dirt;
+                                }
                             }
                         }
                     }

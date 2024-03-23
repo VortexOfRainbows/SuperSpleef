@@ -6,15 +6,14 @@ public class FlyBehavior : Entity ///Team members that contributed to this scrip
     private bool GroundIsBelow = false;
     private Rigidbody rb;
 
-    [SerializeField] private Vector3 wanderableRange;
+    [SerializeField] private Vector3 wanderableRange = new Vector3(25, 10, 25);
 
-    [SerializeField] private float approachDistance;
+    [SerializeField] private float approachDistance = 24;
     [SerializeField] private float speed = 5;
     [SerializeField] private float selfDestructSpeed = -50;
-    [SerializeField] private float acceleration;
-    [SerializeField] private float rotationSpeed;
-    [SerializeField] private bool selfDestruct;
+    [SerializeField] private float acceleration = 60;
     [SerializeField] private float maxSpeed = 50;
+    private bool selfDestruct;
 
     [SerializeField] private float detonationTimer;
     private Vector3 wanderTarget;

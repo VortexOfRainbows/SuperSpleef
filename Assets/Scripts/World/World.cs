@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
+    public static int WorldType = 1;
     private static HashSet<Chunk> ReloadRequired = new HashSet<Chunk>();
     public const float OutOfBounds = -40f;
     public static World Instance { get; private set; }
@@ -89,6 +90,10 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                             if(blockType == BlockID.Grass)
                             {
                                 GenerateTree(i, j, k);
+                            }
+                            if (blockType == BlockID.Sand)
+                            {
+                                GenerateColumn(i, j, k, 0, Random.Range(2, 6), BlockID.Cactus);
                             }
                             break;
                         }
@@ -312,7 +317,9 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         if (blockType == BlockID.Dirt || blockType == BlockID.Grass)
             AudioManager.PlaySound(SoundID.Dirt, pos, 0.8f, pitchModifier: -0.1f);
-        else if (blockType == BlockID.Wood)
+        else if (blockType == BlockID.Sand)
+            AudioManager.PlaySound(SoundID.Dirt, pos, 0.75f, pitchModifier: 0.2f);
+        else if (blockType == BlockID.Wood || blockType == BlockID.Cactus)
             AudioManager.PlaySound(SoundID.Wood, pos);
         else if (blockType == BlockID.Leaves)
             AudioManager.PlaySound(SoundID.Grass, pos, 0.8f);
@@ -323,7 +330,9 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         if (blockType == BlockID.Dirt || blockType == BlockID.Grass)
             AudioManager.PlaySound(SoundID.Dirt, pos, pitchModifier: 0.1f);
-        else if (blockType == BlockID.Wood)
+        else if (blockType == BlockID.Sand)
+            AudioManager.PlaySound(SoundID.Dirt, pos, pitchModifier: -0.2f);
+        else if (blockType == BlockID.Wood || blockType == BlockID.Cactus)
             AudioManager.PlaySound(SoundID.Wood, pos, pitchModifier: 0.4f);
         else if (blockType == BlockID.Leaves)
             AudioManager.PlaySound(SoundID.Grass, pos, 0.8f, pitchModifier: 0.25f);

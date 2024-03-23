@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 8564716359870220177}
   - component: {fileID: 1245510193954608369}
   - component: {fileID: 6008141551068473101}
-  - component: {fileID: 817726872655957687}
   - component: {fileID: 6133662864455211601}
   - component: {fileID: 2152524990192863285}
+  - component: {fileID: 1300794072328361466}
   m_Layer: 0
   m_Name: KillerFly
   m_TagString: Untagged
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 0
+  GlobalObjectIdHash: 3477364941
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -132,29 +132,6 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &817726872655957687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 653664958243415698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48bbceac85914f649afdcd0a19624a36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inner: {fileID: 3163620506444435559}
-  wanderableRange: {x: 20, y: 5, z: 20}
-  approachDistance: 20
-  speed: 5
-  selfDestructSpeed: -50
-  acceleration: 100
-  rotationSpeed: 0
-  selfDestruct: 0
-  maxSpeed: 50
-  detonationTimer: 0
-  TimeUntilMove: 3
 --- !u!54 &6133662864455211601
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -213,6 +190,27 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &1300794072328361466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653664958243415698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48bbceac85914f649afdcd0a19624a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inner: {fileID: 3163620506444435559}
+  wanderableRange: {x: 25, y: 10, z: 25}
+  approachDistance: 24
+  speed: 5
+  selfDestructSpeed: -50
+  acceleration: 30
+  maxSpeed: 50
+  detonationTimer: 0
+  TimeUntilMove: 3
 --- !u!1 &3163620506444435559
 GameObject:
   m_ObjectHideFlags: 0

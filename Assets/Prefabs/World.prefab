@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d24d7fdb3caf1044b9b539f95043b17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  KillerFly: {fileID: 817726872655957687, guid: 2114677d69e04e84884a974962c41985, type: 3}
+  KillerFly: {fileID: 1300794072328361466, guid: 2114677d69e04e84884a974962c41985, type: 3}
   Slime: {fileID: 5293615958095127334, guid: 646ae6b2f463b1a459e57eda1e085ca3, type: 3}
   BallCountMinMax: {x: 5, y: 20}
   SpawnTime: 3
