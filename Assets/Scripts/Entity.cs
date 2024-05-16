@@ -6,6 +6,9 @@ using static UnityEngine.GraphicsBuffer;
 ///Team members that contributed to this script: Ian Bunnell
 public abstract class Entity : NetworkBehaviour //A monobehavior class that possesses an inventory
 {
+    public bool MovingForward { get; protected set; }
+    public bool MovingLeft { get; protected set; }
+    public bool MovingRight { get; protected set; }
     //This class will be used for Enemies, Players, Chests, etc.
     public Inventory Inventory { get; protected set; } = new Inventory(0);
     private void FixedUpdate()

@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.InputSystem;
 
 public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo, Samuel Gines
 {
@@ -9,8 +10,10 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     public GameObject FacingVector;
     [SerializeField] private Rigidbody RB;
     [SerializeField] private BoxCollider JumpHitbox;
+    [SerializeField] private GameObject PlayerVisual;
     #endregion
-    private Transform CameraTransform => ClientManager.GetCamera(ControlManager.UsingGamepad).transform;
+    private Camera MainCamera => ClientManager.GetCamera(ControlManager.UsingGamepad);
+    private Transform CameraTransform => MainCamera.transform;
     private ScreenBlocker ScreenBlocker => ClientManager.GetBlocker(ControlManager.UsingGamepad);
     private GameObject BlockOutline => ClientManager.GetOutline(ControlManager.UsingGamepad);
     /// <summary>
@@ -88,6 +91,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     }
     private float PreviousYVelocity = 0;
     private bool HasBeenAddedToPlayerList = false;
+    private bool ThirdPersonCamera = true; //Temporarily making the camera always 3rd person for assignment
     private void Update()
     {
         if(!HasBeenAddedToPlayerList && !GameStateManager.Players.Contains(this))
@@ -104,8 +108,29 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (IsOwner || !NetHandler.Active)
         {
-            CameraTransform.rotation = FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
-            CameraTransform.position = FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+            if ((Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.LeftAlt)) || (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.LeftControl)))
+            {
+                ThirdPersonCamera = !ThirdPersonCamera;
+            }
+            bool doNotChangeCamera = ThirdPersonCamera && Input.GetKey(KeyCode.LeftControl);
+            FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
+            FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+            if (!doNotChangeCamera)
+            {
+                CameraTransform.rotation = FacingVector.transform.rotation;
+                CameraTransform.position = FacingVector.transform.position;
+                if (ThirdPersonCamera)
+                {
+                    CameraTransform.position -= FacingVector.transform.forward * 5;
+                }
+            }
+            //Can only see your own player model if in third person camera
+            PlayerVisual.SetActive(ThirdPersonCamera);
+        }
+        else
+        {
+            PlayerVisual.SetActive(true);
+            //Visual is always visible to other players
         }
         if (currentPlayerHP <= 0f) // If the player's current HP reaches zero, or if the player falls too far down the world...
         {
@@ -128,6 +153,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     [SerializeField] private Vector2 perpendicularVelocity;
     public override void OnFixedUpdate()
     {
+        MovingForward = MovingLeft = MovingRight = false;
         //Movement should be updated in fixed update so it works probably on all systems
         perpendicularVelocity = new Vector2(RB.velocity.x, RB.velocity.z).RotatedBy(Direction.y * Mathf.Deg2Rad); //Speed is modified as a perpendicular value to make stopping and switching directions more smooth and consistent. Also allows modifying speed more easily.
         float speed = WalkSpeed * MoveAcceleration;
@@ -138,6 +164,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Forward) 
         {
+            MovingForward = true;
             perpendicularVelocity.y += speed * Mathf.Abs(Control.YMove);
         }
         else
@@ -147,6 +174,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Left)
         {
+            MovingLeft = true;
             perpendicularVelocity.x -= speed * Mathf.Abs(Control.XMove);
         }
         else
@@ -165,6 +193,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Right)
         {
+            MovingRight = true;
             perpendicularVelocity.x += speed * Mathf.Abs(Control.XMove);
         }
         else
@@ -325,7 +354,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         else
         {
-            if (Physics.Raycast(CameraTransform.position, CameraTransform.forward, out hitInfo, BlockRange * 2, -1, QueryTriggerInteraction.Ignore)) //Twice the block range so we can hit all blocks within the range
+            if (Physics.Raycast(FacingVector.transform.position, FacingVector.transform.forward, out hitInfo, BlockRange * 2, -1, QueryTriggerInteraction.Ignore)) //Twice the block range so we can hit all blocks within the range
             {
                 Vector3 hitPoint = hitInfo.point;
                 Vector3 InsideBlock = hitPoint - hitInfo.normal * 0.1f;

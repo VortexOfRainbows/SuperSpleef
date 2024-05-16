@@ -70,6 +70,10 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
         UpdateKey(Input.GetKey(KeyCode.D), LastControl.Right, ref Control.Right);
         UpdateKey(Input.GetKey(KeyCode.W), LastControl.Forward, ref Control.Forward);
         UpdateKey(Input.GetKey(KeyCode.S), LastControl.Back, ref Control.Back);
+        if(Control.Forward && Control.Back)
+            Control.Forward = Control.Back = false;
+        if (Control.Left && Control.Right)
+            Control.Left = Control.Right = false;
         UpdateKey(Input.GetKey(KeyCode.LeftShift), LastControl.Shift, ref Control.Shift);
 
         UpdateKey(Input.GetKey(KeyCode.Space), LastControl.Jump, ref Control.Jump);

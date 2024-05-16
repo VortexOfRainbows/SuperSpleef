@@ -1,0 +1,81 @@
+using UnityEngine;
+
+public class PlayerAnimator : MonoBehaviour
+{
+    [SerializeField]
+    private Entity player;
+    [SerializeField]
+    private Rigidbody ParentRigidBody;
+    [SerializeField]
+    private Transform FacingVector;
+    [SerializeField]
+    private Transform LeftArm, RightArm, LeftLeg, RightLeg, Head;
+
+    private float moveCounter = 0;
+    private float currentBodyTilt = 0;
+    private const float MinSpeedConsideredMoving = 1f;
+    private const float JointSpeedMultiplier = 3f;
+    private const float DegreesOfJointMovementLegs = 60;
+    private const float DegreesOfJointMovementArms = 45;
+    private const float DegreesOfPassiveArmSway = 5;
+    private const float ResetRotationJoints = 0.1f;
+    private const float ResetRotationHead = 0.07f;
+    private void FixedUpdate()
+    {
+        float desiredBodyTilt = FacingVector.eulerAngles.y;
+        if (player.MovingLeft)
+            desiredBodyTilt += -45;
+        if (player.MovingRight)
+            desiredBodyTilt += 45;
+
+        if (desiredBodyTilt < 0)
+        {
+            desiredBodyTilt = 360 + desiredBodyTilt;
+        }
+        desiredBodyTilt %= 360;
+        
+        currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, desiredBodyTilt, ResetRotationHead);
+        transform.eulerAngles = new Vector3(0, currentBodyTilt, 0);
+        Head.eulerAngles = new Vector3(FacingVector.eulerAngles.x, FacingVector.eulerAngles.y, 0);
+
+        float speed = new Vector2(ParentRigidBody.velocity.x, ParentRigidBody.velocity.z).magnitude;
+       
+        bool isMoving = speed > MinSpeedConsideredMoving;
+        if(isMoving)
+        {
+            float direction = (player.MovingForward || player.MovingRight) ? 1 : -1;
+            moveCounter += Mathf.Sqrt(speed) * JointSpeedMultiplier * direction;
+        }
+        if (moveCounter < 0)
+        {
+            moveCounter = 360 + moveCounter;
+        }
+        moveCounter %= 360;
+        if (!isMoving) //Move limbs to a default position when not moving
+        {
+            bool isCloserToZero = moveCounter <= 90 || moveCounter > 270;
+            if(isCloserToZero)
+                moveCounter = Mathf.Lerp(moveCounter, moveCounter <= 90 ? 0 : 360, ResetRotationJoints);
+            else
+                moveCounter = Mathf.Lerp(moveCounter, 180, ResetRotationJoints);
+        }
+
+        float sinusoid = Mathf.Sin(moveCounter * Mathf.Deg2Rad);
+
+        LeftLeg.localEulerAngles = new Vector3(sinusoid * DegreesOfJointMovementLegs, LeftLeg.localEulerAngles.y, LeftLeg.localEulerAngles.z);
+        RightLeg.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementLegs, RightLeg.localEulerAngles.y, RightLeg.localEulerAngles.z);
+
+        RightArm.localEulerAngles = new Vector3(sinusoid * DegreesOfJointMovementArms, RightArm.localEulerAngles.y, RightArm.localEulerAngles.z);
+        LeftArm.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementArms, LeftArm.localEulerAngles.y, LeftArm.localEulerAngles.z);
+
+        IdleArmSwaying();
+    }
+    private float IdleSwayCounter = 0;
+    private void IdleArmSwaying()
+    {
+        IdleSwayCounter++;
+        float sinusoid = Mathf.Sin(IdleSwayCounter * Mathf.Deg2Rad / 2f) * 0.5f + 0.5f; //Multiplying by 0.5f and then adding 0.5f locks the sinusoid to the range [0, 1]
+        RightArm.localEulerAngles = new Vector3(RightArm.localEulerAngles.x, RightArm.localEulerAngles.y, sinusoid * DegreesOfPassiveArmSway);
+        LeftArm.localEulerAngles = new Vector3(LeftArm.localEulerAngles.x, LeftArm.localEulerAngles.y, -sinusoid * DegreesOfPassiveArmSway);
+    }
+}
