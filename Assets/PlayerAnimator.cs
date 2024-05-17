@@ -13,28 +13,31 @@ public class PlayerAnimator : MonoBehaviour
 
     private float moveCounter = 0;
     private float currentBodyTilt = 0;
-    private const float MinSpeedConsideredMoving = 1f;
+    private const float MinSpeedConsideredMoving = 0.2f;
     private const float JointSpeedMultiplier = 3f;
     private const float DegreesOfJointMovementLegs = 60;
     private const float DegreesOfJointMovementArms = 45;
     private const float DegreesOfPassiveArmSway = 5;
     private const float ResetRotationJoints = 0.1f;
-    private const float ResetRotationHead = 0.07f;
+    private const float ResetRotationBody = 0.07f;
     private void FixedUpdate()
     {
         float desiredBodyTilt = FacingVector.eulerAngles.y;
+        float tiltMultiplier = player.MovingBackward ? -1 : 1;
+
         if (player.MovingLeft)
-            desiredBodyTilt += -45;
+            desiredBodyTilt += -45 * tiltMultiplier;
         if (player.MovingRight)
-            desiredBodyTilt += 45;
+            desiredBodyTilt += 45 * tiltMultiplier;
 
         if (desiredBodyTilt < 0)
         {
             desiredBodyTilt = 360 + desiredBodyTilt;
         }
         desiredBodyTilt %= 360;
-        
-        currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, desiredBodyTilt, ResetRotationHead);
+
+        float bonusLerpSpeed = Mathf.Clamp(Mathf.Abs(Mathf.DeltaAngle(currentBodyTilt, desiredBodyTilt)) / 90f, 0, 2) + 1; //Increase head rotation speed the farther away from the facing angle the player model is
+        currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, desiredBodyTilt, ResetRotationBody * bonusLerpSpeed);
         transform.eulerAngles = new Vector3(0, currentBodyTilt, 0);
         Head.eulerAngles = new Vector3(FacingVector.eulerAngles.x, FacingVector.eulerAngles.y, 0);
 

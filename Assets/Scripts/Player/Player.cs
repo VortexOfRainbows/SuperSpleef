@@ -153,7 +153,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     [SerializeField] private Vector2 perpendicularVelocity;
     public override void OnFixedUpdate()
     {
-        MovingForward = MovingLeft = MovingRight = false;
+        MovingForward = MovingLeft = MovingRight = MovingBackward = false;
         //Movement should be updated in fixed update so it works probably on all systems
         perpendicularVelocity = new Vector2(RB.velocity.x, RB.velocity.z).RotatedBy(Direction.y * Mathf.Deg2Rad); //Speed is modified as a perpendicular value to make stopping and switching directions more smooth and consistent. Also allows modifying speed more easily.
         float speed = WalkSpeed * MoveAcceleration;
@@ -184,6 +184,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Back)
         {
+            MovingBackward = true;
             perpendicularVelocity.y -= speed * Mathf.Abs(Control.YMove);
         }
         else
