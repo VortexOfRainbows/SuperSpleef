@@ -9,8 +9,6 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField]
     private Entity player;
     [SerializeField]
-    private Rigidbody ParentRigidBody;
-    [SerializeField]
     private Transform FacingVector;
     [SerializeField]
     private Transform LeftArm, RightArm, LeftLeg, RightLeg, Head;
@@ -26,6 +24,7 @@ public class PlayerAnimator : MonoBehaviour
     private const float ResetRotationBody = 0.07f;
     private void FixedUpdate()
     {
+        Vector3 velo = player.Velocity;
         float desiredBodyTilt = FacingVector.eulerAngles.y;
         float tiltMultiplier = player.MovingBackward ? -1 : 1;
 
@@ -45,7 +44,7 @@ public class PlayerAnimator : MonoBehaviour
         transform.eulerAngles = new Vector3(0, currentBodyTilt, 0);
         Head.eulerAngles = new Vector3(FacingVector.eulerAngles.x, FacingVector.eulerAngles.y, 0);
 
-        float speed = new Vector2(ParentRigidBody.velocity.x, ParentRigidBody.velocity.z).magnitude;
+        float speed = new Vector2(velo.x, velo.z).magnitude;
        
         bool isMoving = speed > MinSpeedConsideredMoving;
         if(isMoving)

@@ -1,11 +1,50 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using Unity.Netcode;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+
+public class SafeNetworkVariable<T>
+{
+    public NetworkVariable<T> NetData;
+    public T LocalData;
+    public SafeNetworkVariable(NetworkVariable<T> defaultValue)
+    {
+        LocalData = defaultValue.Value;
+        NetData = defaultValue;
+    }
+    public T Value
+    {
+        get
+        {
+            if (NetHandler.Active)
+                return NetData.Value;
+            return LocalData;
+        }
+        set
+        {
+            if (NetHandler.Active)
+                NetData.Value = value;
+            LocalData = value;
+        }
+    }
+    public static implicit operator T(SafeNetworkVariable<T> networkVariable)
+    {
+        return networkVariable.Value;
+    }
+    public static implicit operator SafeNetworkVariable<T>(NetworkVariable<T> networkVariable)
+    {
+        return new SafeNetworkVariable<T>(networkVariable);
+    }
+}
+
 ///Team members that contributed to this script: Ian Bunnell
 public abstract class Entity : NetworkBehaviour //A monobehavior class that possesses an inventory
 {
+    public SafeNetworkVariable<Vector3> Velocity;
+    public NetworkVariable<Vector3> n;
+    private void Awake()
+    {
+        Velocity = n = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    }
     public bool MovingForward { get; protected set; }
     public bool MovingBackward { get; protected set; }
     public bool MovingLeft { get; protected set; }

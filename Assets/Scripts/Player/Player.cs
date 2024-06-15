@@ -167,41 +167,29 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             MovingForward = true;
             perpendicularVelocity.y += speed * Mathf.Abs(Control.YMove);
         }
-        else
-        {
-            if (perpendicularVelocity.y > 0)
+        else if (perpendicularVelocity.y > 0)
                 perpendicularVelocity.y *= MoveDeacceleration;
-        }
         if (Control.Left)
         {
             MovingLeft = true;
             perpendicularVelocity.x -= speed * Mathf.Abs(Control.XMove);
         }
-        else
-        {
-            if (perpendicularVelocity.x < 0)
+        else if (perpendicularVelocity.x < 0)
                 perpendicularVelocity.x *= MoveDeacceleration;
-        }
         if (Control.Back)
         {
             MovingBackward = true;
             perpendicularVelocity.y -= speed * Mathf.Abs(Control.YMove);
         }
-        else
-        {
-            if (perpendicularVelocity.y < 0)
+        else if (perpendicularVelocity.y < 0)
                 perpendicularVelocity.y *= MoveDeacceleration;
-        }
         if (Control.Right)
         {
             MovingRight = true;
             perpendicularVelocity.x += speed * Mathf.Abs(Control.XMove);
         }
-        else
-        {
-            if (perpendicularVelocity.x > 0)
+        else if (perpendicularVelocity.x > 0)
                 perpendicularVelocity.x *= MoveDeacceleration;
-        }
         perpendicularVelocity = perpendicularVelocity.RotatedBy(Direction.y * -Mathf.Deg2Rad);
         
         Vector3 velo = new Vector3(perpendicularVelocity.x, RB.velocity.y, perpendicularVelocity.y);
@@ -221,7 +209,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         velo.x = velocityXZ.x;
         velo.z = velocityXZ.y;
         perpendicularVelocity = velocityXZ;
-        RB.velocity = velo;
+        RB.velocity = Velocity.Value = velo;
 
         if (RB.velocity.y > 0)
         {

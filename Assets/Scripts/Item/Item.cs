@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using UnityEngine;
+
 ///Team members that contributed to this script: Ian Bunnell
-public abstract class Item : MonoBehaviour //This might not need to be a monobehavior
+public abstract class Item //This might not need to be a monobehavior
 {
     public const int DefaultItemFirerate = 20;
     public static Item Empty { get; private set; } = new NoItem();

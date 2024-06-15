@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static Unity.Collections.AllocatorManager;
 
 [CreateAssetMenu]
 public class PlayerModel : ScriptableObject
@@ -94,7 +92,12 @@ public class PlayerModel : ScriptableObject
             uvs.AddRange(CreateUVsOutOfCoordinates(rects[i]));
 
         mesh.uv = uvs.ToArray();
-        AssetDatabase.CreateAsset(mesh, "Assets/DataStructures/" + fileName + ".asset");
-        AssetDatabase.SaveAssets();
+        
+        /// This is to make sure that the UVs don't have to be recalculated every time.
+        /// However, this must be commented out for the build version
+        /// When UVs need to be changed, uncomment out this section
+        
+        //AssetDatabase.CreateAsset(mesh, "Assets/DataStructures/" + fileName + ".asset");
+        //AssetDatabase.SaveAssets();
     }
 }
