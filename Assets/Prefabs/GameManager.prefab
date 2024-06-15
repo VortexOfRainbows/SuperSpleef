@@ -121,7 +121,7 @@ MonoBehaviour:
     loop: 0
     music: 0
   - clip: {fileID: 8300000, guid: 53b942a2a480529408dc60de5102350b, type: 3}
-    volume: 0.4
+    volume: 0
     pitch: 1
     maxDistance: 25
     spacialBlend: 0

@@ -7,7 +7,6 @@ public static class Utils ///Team members that contributed to this script: Ian B
 {
     /// <summary>
     /// A CubeMesh that works for the UV maps of tiles in the tile atlas
-    /// Automatically rebaked when assigned to a mesh (so you can modify the mesh elsewhere without changing this helper function)
     /// </summary>
     public static Mesh CubeMesh 
     { 
@@ -105,7 +104,7 @@ public static class Utils ///Team members that contributed to this script: Ian B
         construct += str[str.Length - 1];
         return construct;
     }
-    private static Mesh GenerateCubeMesh() //Generates a basic cube mesh for usage in various areas
+    public static Mesh GenerateCubeMesh() //Generates a basic cube mesh for usage in various areas
     {
         Mesh mesh = new Mesh();
         List<Vector3> vertices = new List<Vector3>();

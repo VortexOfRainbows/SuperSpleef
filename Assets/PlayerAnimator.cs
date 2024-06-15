@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
@@ -80,5 +84,33 @@ public class PlayerAnimator : MonoBehaviour
         float sinusoid = Mathf.Sin(IdleSwayCounter * Mathf.Deg2Rad / 2f) * 0.5f + 0.5f; //Multiplying by 0.5f and then adding 0.5f locks the sinusoid to the range [0, 1]
         RightArm.localEulerAngles = new Vector3(RightArm.localEulerAngles.x, RightArm.localEulerAngles.y, sinusoid * DegreesOfPassiveArmSway);
         LeftArm.localEulerAngles = new Vector3(LeftArm.localEulerAngles.x, LeftArm.localEulerAngles.y, -sinusoid * DegreesOfPassiveArmSway);
+    }
+
+    [SerializeField]
+    private Material Spritesheet;
+
+
+    [SerializeField]
+    private PlayerModel Model;
+    [SerializeField]
+    private MeshFilter HeadMesh, BodyMesh, LeftLegMesh, RightLegMesh, LeftArmMesh, RightArmMesh;
+    private void SetSprite()
+    {
+        MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer r in renderers)
+        {
+            r.material = Spritesheet;
+        }
+    }
+    private void Start()
+    {
+        //Model.Setup();
+        HeadMesh.mesh = Model.HeadMesh;
+        BodyMesh.mesh = Model.BodyMesh;
+        LeftLegMesh.mesh = Model.LeftLegMesh;
+        RightLegMesh.mesh = Model.RightLegMesh;
+        LeftArmMesh.mesh = Model.LeftArmMesh;
+        RightArmMesh.mesh = Model.RightArmMesh;
+        SetSprite();
     }
 }

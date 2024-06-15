@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5ebd87c47aae5b34ca983858892e5d10
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - HeadMesh: {instanceID: 0}
+  - BodyMesh: {fileID: 4300000, guid: 9e79fc1c883c427429ba68aa874057cd, type: 2}
+  - LeftLegMesh: {instanceID: 0}
+  - RightLegMesh: {instanceID: 0}
+  - LeftArmMesh: {instanceID: 0}
+  - RightArmMesh: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
