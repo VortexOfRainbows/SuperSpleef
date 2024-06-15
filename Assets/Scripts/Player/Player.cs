@@ -91,7 +91,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     }
     private float PreviousYVelocity = 0;
     private bool HasBeenAddedToPlayerList = false;
-    private bool ThirdPersonCamera = true; //Temporarily making the camera always 3rd person for assignment
+    private bool ThirdPersonCamera = false;
     private void Update()
     {
         if(!HasBeenAddedToPlayerList && !GameStateManager.Players.Contains(this))
@@ -112,7 +112,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             {
                 ThirdPersonCamera = !ThirdPersonCamera;
             }
-            bool doNotChangeCamera = ThirdPersonCamera && Input.GetKey(KeyCode.LeftControl);
+            bool doNotChangeCamera = false; // ThirdPersonCamera && Input.GetKey(KeyCode.LeftControl);
             FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
             FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
             if (!doNotChangeCamera)

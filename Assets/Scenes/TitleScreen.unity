@@ -405,6 +405,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoStraightToTestingSceneObject
       objectReference: {fileID: 0}
+    - target: {fileID: 5210807040702664304, guid: 5cefac4100dac3a42a17ea37012f5221, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9076095276329419227, guid: 5cefac4100dac3a42a17ea37012f5221, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
