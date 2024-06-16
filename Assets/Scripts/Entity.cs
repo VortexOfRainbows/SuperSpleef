@@ -5,14 +5,62 @@ using UnityEngine;
 public abstract class Entity : NetworkBehaviour //A monobehavior class that possesses an inventory
 {
     public NetworkVariable<Vector3> Velocity;
+    private NetworkVariable<bool> n_MovingForward, n_MovingBackward, n_MovingLeft, n_MovingRight;
     private void Awake()
     {
         Velocity = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        n_MovingForward = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        n_MovingBackward = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        n_MovingLeft = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        n_MovingRight = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     }
-    public bool MovingForward { get; protected set; }
-    public bool MovingBackward { get; protected set; }
-    public bool MovingLeft { get; protected set; }
-    public bool MovingRight { get; protected set; }
+    public bool MovingForward { 
+        get
+        {
+            return n_MovingForward.Value;
+        }
+        protected set
+        {
+            if (IsOwner)
+                n_MovingForward.Value = value;
+        }
+    }
+    public bool MovingBackward
+    {
+        get
+        {
+            return n_MovingBackward.Value;
+        }
+        protected set
+        {
+            if(IsOwner)
+                n_MovingBackward.Value = value;
+        }
+    }
+    public bool MovingLeft
+    {
+        get
+        {
+            return n_MovingLeft.Value;
+        }
+        protected set
+        {
+            if (IsOwner)
+                n_MovingLeft.Value = value;
+        }
+    }
+    public bool MovingRight
+    {
+        get
+        {
+            return n_MovingRight.Value;
+        }
+        protected set
+        {
+            if (IsOwner)
+                n_MovingRight.Value = value;
+        }
+    }
     //This class will be used for Enemies, Players, Chests, etc.
     public Inventory Inventory { get; protected set; } = new Inventory(0);
     private void FixedUpdate()

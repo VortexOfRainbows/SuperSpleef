@@ -209,8 +209,9 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         velo.x = velocityXZ.x;
         velo.z = velocityXZ.y;
         perpendicularVelocity = velocityXZ;
-        RB.velocity = Velocity.Value = velo;
-
+        RB.velocity = velo;
+        if (IsOwner)
+            Velocity.Value = velo;
         if (RB.velocity.y > 0)
         {
             RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y * JumpDrag, RB.velocity.z);
