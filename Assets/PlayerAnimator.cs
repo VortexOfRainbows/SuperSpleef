@@ -24,7 +24,7 @@ public class PlayerAnimator : MonoBehaviour
     private const float ResetRotationBody = 0.07f;
     private void FixedUpdate()
     {
-        Vector3 velo = player.Velocity;
+        Vector3 velo = player.Velocity.Value;
         float desiredBodyTilt = FacingVector.eulerAngles.y;
         float tiltMultiplier = player.MovingBackward ? -1 : 1;
 
