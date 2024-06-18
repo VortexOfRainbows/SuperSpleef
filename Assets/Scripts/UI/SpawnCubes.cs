@@ -33,7 +33,7 @@ public class SpawnCubes : MonoBehaviour
             spawnPositionPixels.z = -Camera.transform.position.z;
             Vector3 spawnPos = Camera.ScreenToWorldPoint(spawnPositionPixels) + Vector3.up * OutOfScreenPadding;
             FallingCube cube = Instantiate(FallingCubePrefab, spawnPos, Quaternion.identity, transform).GetComponent<FallingCube>();
-            cube.SetDeathScreenBound(-spawnPos.y);
+            cube.SetDeathScreenBound(-spawnPos.y + 1);
             CubeTimer -= SpawnTime;
         }
     }

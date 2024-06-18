@@ -98,8 +98,8 @@ public class SlimeBehavior : Entity ///Team members that contributed to this scr
             {
                 Vector2 circularSpread = new Vector2(ExplosionSpeedMult, 0).RotatedBy(i * 2 * Mathf.PI / TotalFrags);
                 Vector3 velo = new Vector3(circularSpread.x, 3 * ExplosionSpeedMult, circularSpread.y); //The balls travel up in a circle pattern around the projectile
-                Rigidbody rb = Instantiate(ProjectileManager.GetProjectile(ProjectileID.BouncyDeathBall), transform.position + velo.normalized, Quaternion.identity).GetComponent<Rigidbody>();
-                rb.velocity = velo + new Vector3(Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread));
+                Projectile.NewProjectile(ProjectileID.BouncyDeathBall, transform.position + velo.normalized, Quaternion.identity,
+                    velo + new Vector3(Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread), Random.Range(-RandomBonusSpread, RandomBonusSpread)));
             }
         }
     }

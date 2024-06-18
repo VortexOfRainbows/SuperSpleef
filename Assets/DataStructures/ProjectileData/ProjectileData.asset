@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75bd6d956fc0d1446bd3188f26194c5e, type: 3}
+  m_Name: ProjectileData
+  m_EditorClassIdentifier: 
+  BouncyDeathBall: {fileID: 2850273201132221861, guid: 5807d350cd0d6694591c612bbf37de5f, type: 3}
+  BlockProjectile: {fileID: 2850273201132221861, guid: 8207062715a8eb8489a5e1cea7c7c1ff, type: 3}
+  FragBall: {fileID: 2850273201132221861, guid: b5684a7000bae3c409a68f21a9745513, type: 3}
+  SuperFragBall: {fileID: 2850273201132221861, guid: 6b12b56a7aa42a046a3693b8788764bf, type: 3}
+  TunnelBore: {fileID: 2850273201132221861, guid: 52ef05b9aa08a794281b58a7ce5a953f, type: 3}
+  FragFragBall: {fileID: 2850273201132221861, guid: da8b74331e8b83a47a4b9d8728b2899a, type: 3}
+  LaserCube: {fileID: 2850273201132221861, guid: 609d7e2675488e04c82c208f5e37f4ea, type: 3}

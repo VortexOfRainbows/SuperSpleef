@@ -631,9 +631,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7136988355529536546, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8399253008769803455, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_Name
       value: Title Screen UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8751295954847204093, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_Text
+      value: PLAY
       objectReference: {fileID: 0}
     - target: {fileID: 8752759816257439809, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
