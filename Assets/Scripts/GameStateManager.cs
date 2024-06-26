@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-///Team members that contributed to this script: Ian Bunnell, David Bu
 public static class GameModeID // Assigns an int as a reference to each game mode.
 {
     public const int None = -1;
@@ -146,19 +144,17 @@ public class GameStateManager : MonoBehaviour
             m_startingPlayerCount = value;
         }
     }
-    public static float ParticleMultiplier { get; private set; } = 1;
-    public static float SensitivityMultiplier { get; private set; } = 1;
-    public static float ControllerSensitivityMultiplier { get; private set; } = 1;
-    public static float VolumeMultiplier { get; private set; } = 1;
-    public static float MusicMultiplier { get; private set; } = 1;
+    public static float ParticleMultiplier => ClientData.ParticleMultiplier.Value;
+    public static float SensitivityMultiplier => ClientData.MouseSensitivity.Value;
+    public static float ControllerSensitivityMultiplier => ClientData.ControllerSensitivity.Value;
+    public static float VolumeMultiplier => ClientData.SoundVolume.Value;
+    public static float MusicMultiplier => ClientData.MusicVolume.Value;
     public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {
+        ClientData.Initialize();
         LocalMultiplayer = false;
-        ParticleMultiplier = 1f;
-        SensitivityMultiplier = 1f;
-        ControllerSensitivityMultiplier = 1f;
         if(Instance == null)
         {
             Instance = this;
@@ -202,23 +198,23 @@ public class GameStateManager : MonoBehaviour
     }
     public static void SetParticleMultiplier(float mult)
     {
-        ParticleMultiplier = Mathf.Clamp01(mult);
+        ClientData.ParticleMultiplier.WriteValue(Mathf.Clamp01(mult));
     }
     public static void SetSensitivityMultiplier(float sensMulti)
     {
-        SensitivityMultiplier = Mathf.Clamp(sensMulti, 0.01f, 10); //Lowest sensitivity we will let you have is 0.01f. Highest is 10
+        ClientData.MouseSensitivity.WriteValue(Mathf.Clamp(sensMulti, 0.01f, 10));
     }
     public static void SetControllerSensitivityMultiplier(float controlMulti)
     {
-        ControllerSensitivityMultiplier = Mathf.Clamp(controlMulti, 0.01f, 10); //Lowest sensitivity we will let you have is 0.01f. Highest is 10
+        ClientData.ControllerSensitivity.WriteValue(Mathf.Clamp(controlMulti, 0.01f, 10));
     }
     public static void SetVolumeMultiplier(float volumeMulti)
     {
-        VolumeMultiplier = Mathf.Clamp(volumeMulti, 0f, 1.0f);
+        ClientData.SoundVolume.WriteValue(Mathf.Clamp(volumeMulti, 0f, 1.0f));
     }
     public static void SetMusicMultiplier(float volumeMulti)
     {
-        MusicMultiplier = Mathf.Clamp(volumeMulti, 0f, 1.0f);
+        ClientData.MusicVolume.WriteValue(Mathf.Clamp(volumeMulti, 0f, 1.0f));
     }
     public static void SetWorldSizeOverride(float size)
     {

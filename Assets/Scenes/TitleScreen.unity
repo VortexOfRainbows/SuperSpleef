@@ -616,9 +616,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1172666746}
     - target: {fileID: 4300085640617387214, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300085640617387214, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300085640617387214, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1172666746}
+    - target: {fileID: 4300085640617387214, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300085640617387214, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: SliderPercent, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5394702755464424042, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -627,21 +643,9 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 468370844}
-    - target: {fileID: 6731208154022244990, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7136988355529536546, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8399253008769803455, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_Name
       value: Title Screen UI
-      objectReference: {fileID: 0}
-    - target: {fileID: 8751295954847204093, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
-      propertyPath: m_Text
-      value: PLAY
       objectReference: {fileID: 0}
     - target: {fileID: 8752759816257439809, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
