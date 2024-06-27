@@ -15,6 +15,6 @@ MonoBehaviour:
   HeadMesh: {fileID: 4300000, guid: 9e417984e1f28f24894aea51d8299055, type: 2}
   BodyMesh: {fileID: 4300000, guid: 9e79fc1c883c427429ba68aa874057cd, type: 2}
   LeftLegMesh: {fileID: 4300000, guid: 865fa029295b56f4c852fd0d2f933ba7, type: 2}
-  RightLegMesh: {fileID: 4300000, guid: 4f35b4d0c911f5540bcd60c51315cc39, type: 2}
+  RightLegMesh: {fileID: 4300000, guid: 0019015dda8ded948a5414f59dd4e72f, type: 2}
   LeftArmMesh: {fileID: 4300000, guid: 3f01be0ac47a5004492ed9acdf6ef0cf, type: 2}
   RightArmMesh: {fileID: 4300000, guid: 4f35b4d0c911f5540bcd60c51315cc39, type: 2}
