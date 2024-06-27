@@ -51,6 +51,14 @@ public class SaveData<T>
     public SaveData(string key, string displayName)
     {
         Value = default;
+        if (Value.GetType() == typeof(int))
+        {
+            Value = (T)(object)((int)(object)Value + 1);
+        }
+        if (Value.GetType() == typeof(float))
+        {
+            Value = (T)(object)((float)(object)Value + 1);
+        }
         Key = key;
         DisplayName = displayName;
     }

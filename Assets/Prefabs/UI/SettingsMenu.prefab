@@ -3593,7 +3593,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4979223858632817889}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SliderPercent, Assembly-CSharp
         m_MethodName: TextUpdate
         m_Mode: 0
@@ -3750,6 +3750,8 @@ MonoBehaviour:
   Key: ParticleMult
   DisplayName: {fileID: 4188528633653473353}
   DisplayNumber: {fileID: 8057138750989454802}
+  Slider: {fileID: 910023998522586051}
+  PercentFormat: 1
 --- !u!1 &8246937551344104244
 GameObject:
   m_ObjectHideFlags: 0
@@ -3923,7 +3925,6 @@ GameObject:
   - component: {fileID: 5835667686206150825}
   - component: {fileID: 6513286560710515825}
   - component: {fileID: 8057138750989454802}
-  - component: {fileID: 4979223858632817889}
   m_Layer: 5
   m_Name: ParticlesPercent
   m_TagString: Untagged
@@ -3992,19 +3993,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 100%
---- !u!114 &4979223858632817889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8284667796567618870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 816cc2ced0fe4f542ae058b1e90f47de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Percent: 1
 --- !u!1 &8409465001920545308
 GameObject:
   m_ObjectHideFlags: 0
