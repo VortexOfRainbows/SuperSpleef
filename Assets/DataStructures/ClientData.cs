@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public static class ClientData
 {
+    public static Dictionary<string, object> Dict;
     public static SaveData<float> MouseSensitivity;
     public static SaveData<float> ControllerSensitivity;
     public static SaveData<float> SoundVolume;
@@ -19,6 +18,15 @@ public static class ClientData
         MusicVolume = new SaveData<float>("Music", "Music Volume");
         ParticleMultiplier = new SaveData<float>("ParticleMult", "Particle Multiplier");
         ReadValues();
+
+        Dict = new Dictionary<string, object>
+        {
+            { MouseSensitivity.Key, MouseSensitivity },
+            { ControllerSensitivity.Key, ControllerSensitivity },
+            { SoundVolume.Key, SoundVolume },
+            { MusicVolume.Key, MusicVolume },
+            { ParticleMultiplier.Key, ParticleMultiplier }
+        };
     }
     public static void ReadValues()
     {
@@ -31,9 +39,9 @@ public static class ClientData
 }
 public class SaveData<T>
 {
-    public T Value;
-    public string Key;
-    public string DisplayName;
+    public T Value { get; private set; }
+    public string Key { get; private set; }
+    public string DisplayName { get; private set; }
     public SaveData(T defaultValue, string key, string displayName)
     {
         Value = defaultValue;
