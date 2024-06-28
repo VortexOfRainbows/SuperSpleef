@@ -5,7 +5,7 @@ public class SettingSlider : MonoBehaviour
 {
     [SerializeField] private string Key;
     [SerializeField] private Text DisplayName;
-    [SerializeField] private Text DisplayNumber;
+    [SerializeField] private InputField DisplayNumber;
     [SerializeField] private Slider Slider;
     [SerializeField] private bool PercentFormat = false;
     private SaveData<float> data => (SaveData<float>)ClientData.Dict[Key];
@@ -20,7 +20,9 @@ public class SettingSlider : MonoBehaviour
         else
         {
             string txt = (data.Value * 100).ToString(format: "0") + "%";
+            DisplayNumber.characterValidation = InputField.CharacterValidation.None;
             DisplayNumber.text = txt;
+            DisplayNumber.characterValidation = InputField.CharacterValidation.Decimal;
         }
         Slider.value = data.Value;
     }
@@ -28,16 +30,34 @@ public class SettingSlider : MonoBehaviour
     {
         LinkToSetting();
     }
-    private void Update()
-    {
-        if(gameObject.activeSelf)
-            LinkToSetting();
-    }
     private float minValue => Slider.minValue;
     private float maxValue => Slider.maxValue;
     public void SetData(float sliderValue)
     {
         sliderValue = Mathf.Round(sliderValue * 100f) / 100f;
         data.WriteValue(Mathf.Clamp(sliderValue, minValue, maxValue));
+        LinkToSetting();
+    }
+    public void OnChangeValueInput(string input)
+    {
+        if (DisplayNumber.characterValidation == InputField.CharacterValidation.Decimal && input.Contains("%"))
+        {
+            input = input.Replace("%", "");
+        }
+        DisplayNumber.text = input;
+    }
+    public void ManualValueInput(string input)
+    {
+        if (DisplayNumber.characterValidation == InputField.CharacterValidation.Decimal && input.Contains("%"))
+        {
+            input = input.Replace("%", "");
+        }
+        float num = float.Parse(input);
+        if(PercentFormat)
+        {
+            num /= 100f;
+        }
+        SetData(num);
+        LinkToSetting();
     }
 }

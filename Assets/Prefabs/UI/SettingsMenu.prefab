@@ -186,10 +186,10 @@ MonoBehaviour:
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Generate UCI Logo?
+  m_Text: Generate UCI Logo
 --- !u!1 &2833339167750831899
 GameObject:
   m_ObjectHideFlags: 0
@@ -1296,7 +1296,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 1
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: X
@@ -1322,7 +1322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1148075826989860759, guid: 068906b1745ebb442bb8a59ac6180d4c, type: 3}
       propertyPath: m_Text
-      value: 1
+      value: error
       objectReference: {fileID: 0}
     - target: {fileID: 4580874248901245056, guid: 068906b1745ebb442bb8a59ac6180d4c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1720,7 +1720,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1148075826989860759, guid: 068906b1745ebb442bb8a59ac6180d4c, type: 3}
       propertyPath: m_Text
-      value: 1
+      value: error
       objectReference: {fileID: 0}
     - target: {fileID: 4580874248901245056, guid: 068906b1745ebb442bb8a59ac6180d4c, type: 3}
       propertyPath: m_AnchorMax.x
