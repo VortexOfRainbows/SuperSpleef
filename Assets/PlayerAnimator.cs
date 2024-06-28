@@ -92,14 +92,37 @@ public class PlayerAnimator : MonoBehaviour
     private Material Spritesheet2;
 
     [SerializeField]
+    private Material Spritesheet3;
+
+    [SerializeField]
+    private Material Spritesheet4;
+
+    [SerializeField]
     private PlayerModel Model;
     [SerializeField]
     private MeshFilter HeadMesh, BodyMesh, LeftLegMesh, RightLegMesh, LeftArmMesh, RightArmMesh;
     private void SetSprite()
     {
+        int duck = 0;
         var sprite = Spritesheet;
-        if (Random.Range(0, 10) <= 4){
-            sprite = Spritesheet2;
+        if (Random.Range(1, 3) == 2)
+        {
+            sprite = Spritesheet3;
+            duck = 1;
+        }
+        if (duck == 0)
+        {
+            if (Random.Range(1, 11) == 10)
+            {
+                sprite = Spritesheet2;
+            }
+        }
+        if (duck == 1)
+        {
+            if (Random.Range (1, 11) == 10)
+            {
+                sprite = Spritesheet4;
+            }
         }
         MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer r in renderers)
