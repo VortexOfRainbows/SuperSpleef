@@ -88,6 +88,8 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField]
     private Material Spritesheet;
 
+    [SerializeField]
+    private Material Spritesheet2;
 
     [SerializeField]
     private PlayerModel Model;
@@ -95,10 +97,14 @@ public class PlayerAnimator : MonoBehaviour
     private MeshFilter HeadMesh, BodyMesh, LeftLegMesh, RightLegMesh, LeftArmMesh, RightArmMesh;
     private void SetSprite()
     {
+        var sprite = Spritesheet;
+        if (Random.Range(0, 10) <= 4){
+            sprite = Spritesheet2;
+        }
         MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer r in renderers)
         {
-            r.material = Spritesheet;
+            r.material = sprite;
         }
     }
     private void Start()

@@ -1052,6 +1052,7 @@ MonoBehaviour:
   RightLeg: {fileID: 6061673121069881100}
   Head: {fileID: 324676500460217969}
   Spritesheet: {fileID: 2100000, guid: ad87f07aae0a12345a71934770b69636, type: 2}
+  Spritesheet2: {fileID: 2100000, guid: e147a34958d73d74dbdf2cacae5f0d8c, type: 2}
   Model: {fileID: 11400000, guid: ec22a2597fada62428548453d6b29cff, type: 2}
   HeadMesh: {fileID: 5170271992181838058}
   BodyMesh: {fileID: 7722571852113488070}
