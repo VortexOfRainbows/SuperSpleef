@@ -61,6 +61,11 @@ public static class Utils ///Team members that contributed to this script: Ian B
         Quaternion relativeRotation = Quaternion.AngleAxis(rotation * Mathf.Rad2Deg, new Vector3(0, 0, 1));
         return relativeRotation;
     }
+    public static Quaternion ToQuaternion(this Vector3 euler)
+    {
+        Quaternion relativeRotation = Quaternion.Euler(euler);
+        return relativeRotation;
+    }
     /// <summary>
     /// Wraps an angle to an equivalent angle between -Pi and Pi
     /// </summary>

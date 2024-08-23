@@ -38,6 +38,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// Public float since it is used inside ITEM.
     /// </summary>
     public float ItemUseTime { get; private set; }
+    public float ItemUseTimeMax { get; private set; }
     public override void OnNetworkSpawn()
     {
         OnStart();
@@ -112,7 +113,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             {
                 ThirdPersonCamera = !ThirdPersonCamera;
             }
-            bool doNotChangeCamera = false; // ThirdPersonCamera && Input.GetKey(KeyCode.LeftControl);
+            bool doNotChangeCamera = ThirdPersonCamera && Input.GetKey(KeyCode.LeftControl);
             FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
             FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
             if (!doNotChangeCamera)
@@ -321,10 +322,13 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             left = right = false; //Do not consider an input if the item timer is up
         }
         bool holdingClick = (Control.LeftClick && LastControl.LeftClick) || (Control.RightClick && LastControl.RightClick);
-        if (holdingClick)
-            ItemUseTime--;
-        else
-            ItemUseTime = -1;
+        if(ItemUseTime > -ItemUseTimeMax)
+        ItemUseTime--;
+        //This is to give the same effect as in minecraft, where you can shoot faster while spamming than while holding...
+        //if (holdingClick)
+        //    ItemUseTime--;
+        //else
+        //    ItemUseTime = -1;
         bool itemUsed = false;
         RaycastHit hitInfo;
         Vector3 TargetPosition = transform.position + new Vector3(0, 0.5f, 0);
@@ -430,7 +434,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             if(left)
             {
-                ItemUseTime = Item.DefaultItemFirerate;
+                ItemUseTime = ItemUseTimeMax = Item.DefaultItemFirerate;
             }
         }
         if(itemUsed)
@@ -443,10 +447,10 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                     Inventory.Set(SelectedItem, Item.Empty);
                 }
             }
-            ItemUseTime = heldItem.Firerate;
+            ItemUseTime = ItemUseTimeMax = heldItem.Firerate;
             if(ItemUseTime <= 0)
             {
-                ItemUseTime = Item.DefaultItemFirerate;
+                ItemUseTime = ItemUseTimeMax = Item.DefaultItemFirerate;
             }
         }
     }

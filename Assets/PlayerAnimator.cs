@@ -1,7 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor;
+using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
@@ -12,9 +10,9 @@ public class PlayerAnimator : MonoBehaviour
     private Transform FacingVector;
     [SerializeField]
     private Transform LeftArm, RightArm, LeftLeg, RightLeg, Head;
-
     private float moveCounter = 0;
     private float currentBodyTilt = 0;
+    private float itemUseAnimationPercent = 0;
     private const float MinSpeedConsideredMoving = 0.2f;
     private const float JointSpeedMultiplier = 3f;
     private const float DegreesOfJointMovementLegs = 60;
@@ -71,9 +69,23 @@ public class PlayerAnimator : MonoBehaviour
         LeftLeg.localEulerAngles = new Vector3(sinusoid * DegreesOfJointMovementLegs, LeftLeg.localEulerAngles.y, LeftLeg.localEulerAngles.z);
         RightLeg.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementLegs, RightLeg.localEulerAngles.y, RightLeg.localEulerAngles.z);
 
-        RightArm.localEulerAngles = new Vector3(sinusoid * DegreesOfJointMovementArms, RightArm.localEulerAngles.y, RightArm.localEulerAngles.z);
-        LeftArm.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementArms, LeftArm.localEulerAngles.y, LeftArm.localEulerAngles.z);
-
+        itemUseAnimationPercent = 0f;
+        Vector3 armUseAnimation = Vector3.zero;
+        if(player is Player p && p.ItemUseTimeMax != 0)
+        {
+            float animationPercent = (1 + p.ItemUseTime / p.ItemUseTimeMax) / 2f;
+            animationPercent = Mathf.Clamp(animationPercent, 0, 1);
+            armUseAnimation = p.FacingVector.transform.rotation.eulerAngles;
+            armUseAnimation.x -= 80;
+            armUseAnimation.x += 25 * MathF.Sin(animationPercent * Mathf.PI * 2f);
+            armUseAnimation.y += 6 * MathF.Cos(animationPercent * Mathf.PI * 4f);
+            itemUseAnimationPercent = animationPercent;
+        }
+        float slerpPoint = Mathf.Sin(Mathf.PI * Mathf.Pow(itemUseAnimationPercent, 2));
+        if(itemUseAnimationPercent < 0.7f)
+            RightArm.localEulerAngles = new Vector3(sinusoid * DegreesOfJointMovementArms, 0, 0);
+        RightArm.rotation = math.slerp(RightArm.rotation, armUseAnimation.ToQuaternion(), slerpPoint); 
+        LeftArm.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementArms, 0, 0);
         IdleArmSwaying();
     }
     private float IdleSwayCounter = 0;
@@ -81,8 +93,8 @@ public class PlayerAnimator : MonoBehaviour
     {
         IdleSwayCounter++;
         float sinusoid = Mathf.Sin(IdleSwayCounter * Mathf.Deg2Rad / 2f) * 0.5f + 0.5f; //Multiplying by 0.5f and then adding 0.5f locks the sinusoid to the range [0, 1]
-        RightArm.localEulerAngles = new Vector3(RightArm.localEulerAngles.x, RightArm.localEulerAngles.y, sinusoid * DegreesOfPassiveArmSway);
-        LeftArm.localEulerAngles = new Vector3(LeftArm.localEulerAngles.x, LeftArm.localEulerAngles.y, -sinusoid * DegreesOfPassiveArmSway);
+        RightArm.Rotate(0, 0, sinusoid * DegreesOfPassiveArmSway);
+        LeftArm.Rotate(0, 0, -sinusoid * DegreesOfPassiveArmSway);
     }
 
     [SerializeField]
@@ -105,21 +117,21 @@ public class PlayerAnimator : MonoBehaviour
     {
         int duck = 0;
         var sprite = Spritesheet;
-        if (Random.Range(1, 3) == 2)
+        if (UnityEngine.Random.Range(1, 3) == 2)
         {
             sprite = Spritesheet3;
             duck = 1;
         }
         if (duck == 0)
         {
-            if (Random.Range(1, 11) == 10)
+            if (UnityEngine.Random.Range(1, 11) == 10)
             {
                 sprite = Spritesheet2;
             }
         }
         if (duck == 1)
         {
-            if (Random.Range (1, 11) == 10)
+            if (UnityEngine.Random.Range (1, 11) == 10)
             {
                 sprite = Spritesheet4;
             }

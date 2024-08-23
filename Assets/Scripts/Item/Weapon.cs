@@ -19,7 +19,7 @@ public abstract class Weapon : Item ///Team members that contributed to this scr
     public sealed override bool OnPrimaryUse(Player player)
     {
         //Code for melee combat should go here
-        return true;
+        return false;
     }
     public sealed override bool OnSecondaryUse(Player player)
     {
