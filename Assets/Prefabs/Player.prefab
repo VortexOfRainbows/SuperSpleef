@@ -1084,7 +1084,10 @@ MonoBehaviour:
   LeftLeg: {fileID: 3425917111455889502}
   RightLeg: {fileID: 6061673121069881100}
   Head: {fileID: 324676500460217969}
+  Body: {fileID: 6014819583574525631}
+  RightArmVisual: {fileID: 2538123381191282214}
   HeldItem: {fileID: 6808382505119741259}
+  IsFirstPerson: 0
   Spritesheet: {fileID: 2100000, guid: e147a34958d73d74dbdf2cacae5f0d8c, type: 2}
   Spritesheet2: {fileID: 2100000, guid: ad87f07aae0a12345a71934770b69636, type: 2}
   Spritesheet3: {fileID: 2100000, guid: 74b29a7afa2955d48abece86f735ee49, type: 2}

@@ -9,7 +9,9 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField]
     private Transform FacingVector;
     [SerializeField]
-    private Transform LeftArm, RightArm, LeftLeg, RightLeg, Head;
+    private Transform LeftArm, RightArm, LeftLeg, RightLeg, Head, Body;
+    [SerializeField]
+    private GameObject RightArmVisual;
     public ItemDisplay HeldItem;
     private float moveCounter = 0;
     private float currentBodyTilt = 0;
@@ -21,25 +23,60 @@ public class PlayerAnimator : MonoBehaviour
     private const float DegreesOfPassiveArmSway = 5;
     private const float ResetRotationJoints = 0.1f;
     private const float ResetRotationBody = 0.07f;
+    public bool IsFirstPerson = false;
+    public void SetActive(bool FirstPerson = true)
+    {
+        IsFirstPerson = FirstPerson;
+        if (FirstPerson)
+        {
+            LeftArm.gameObject.SetActive(false);
+            RightArm.gameObject.SetActive(true);
+            LeftLeg.gameObject.SetActive(false);
+            RightLeg.gameObject.SetActive(false);
+            Head.gameObject.SetActive(false);
+            Body.gameObject.SetActive(false);
+            RightArm.gameObject.layer = HeldItem.gameObject.layer = RightArmVisual.layer = 10;
+            RightArm.transform.localScale = Vector3.one * 0.5f;
+            RightArm.transform.localPosition = new Vector3(0.25f, 0.375f, 0f);
+        }
+        else
+        {
+            LeftArm.gameObject.SetActive(true);
+            RightArm.gameObject.SetActive(true);
+            LeftLeg.gameObject.SetActive(true);
+            RightLeg.gameObject.SetActive(true);
+            Head.gameObject.SetActive(true);
+            Body.gameObject.SetActive(true);
+            RightArm.gameObject.layer = HeldItem.gameObject.layer = RightArmVisual.layer = 6;
+            RightArm.transform.localScale = Vector3.one;
+            RightArm.transform.localPosition = new Vector3(0.25f, 0.375f, 0f);
+        }
+    }
     private void FixedUpdate()
     {
         Vector3 velo = player.Velocity.Value;
         float desiredBodyTilt = FacingVector.eulerAngles.y;
         float tiltMultiplier = player.MovingBackward ? -1 : 1;
 
-        if (player.MovingLeft)
-            desiredBodyTilt += -45 * tiltMultiplier;
-        if (player.MovingRight)
-            desiredBodyTilt += 45 * tiltMultiplier;
-
-        if (desiredBodyTilt < 0)
+        if (!IsFirstPerson)
         {
-            desiredBodyTilt = 360 + desiredBodyTilt;
+            if (player.MovingLeft)
+                desiredBodyTilt += -45 * tiltMultiplier;
+            if (player.MovingRight)
+                desiredBodyTilt += 45 * tiltMultiplier;
+
+            if (desiredBodyTilt < 0)
+            {
+                desiredBodyTilt = 360 + desiredBodyTilt;
+            }
+            desiredBodyTilt %= 360;
         }
-        desiredBodyTilt %= 360;
 
         float bonusLerpSpeed = Mathf.Clamp(Mathf.Abs(Mathf.DeltaAngle(currentBodyTilt, desiredBodyTilt)) / 90f, 0, 2) + 1; //Increase head rotation speed the farther away from the facing angle the player model is
-        currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, desiredBodyTilt, ResetRotationBody * bonusLerpSpeed);
+        float changeSpeed = ResetRotationBody * bonusLerpSpeed;
+        if (IsFirstPerson)
+            changeSpeed = 1;
+        currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, desiredBodyTilt, changeSpeed);
         transform.eulerAngles = new Vector3(0, currentBodyTilt, 0);
         Head.eulerAngles = new Vector3(FacingVector.eulerAngles.x, FacingVector.eulerAngles.y, 0);
 
@@ -91,14 +128,18 @@ public class PlayerAnimator : MonoBehaviour
             itemUseAnimationPercent = animationPercent;
 
             ///This controls how the player holds the item out, rather than when it is used. It might benefit from being moved into ItemDisplay, instead of being here...
-            if (HeldItem.item != null)
+            if (IsFirstPerson)
             {
-                if(HeldItem.item is PlaceableBlock)
+                itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 1f, 1);
+            }
+            else if (HeldItem.item != null)
+            {
+                if (HeldItem.item is PlaceableBlock)
                 {
                     //Debug.Log(p.ItemUseTime);
                     itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 0.3f, 1);
                 }
-                else if(HeldItem.item is Weapon)
+                else if (HeldItem.item is Weapon)
                     itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 0.8f, 1);
             }
         }

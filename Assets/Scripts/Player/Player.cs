@@ -174,11 +174,11 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 }
             }
             //Can only see your own player model if in third person camera
-            PlayerVisual.SetActive(ThirdPersonCamera);
+            PlayerVisual.GetComponent<PlayerAnimator>().SetActive(!ThirdPersonCamera);
         }
         else
         {
-            PlayerVisual.SetActive(true);
+            PlayerVisual.GetComponent<PlayerAnimator>().SetActive(false);
             //Visual is always visible to other players
         }
         if (currentPlayerHP <= 0f) // If the player's current HP reaches zero, or if the player falls too far down the world...
@@ -402,6 +402,8 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         else
         {
+            //For some reason, you need to do a bitshift of the layer mask to get it to work. 
+            int worldLayerMask = 1 << 3;
             if (Physics.Raycast(FacingVector.transform.position, FacingVector.transform.forward, out hitInfo, BlockRange * 2, -1, QueryTriggerInteraction.Ignore)) //Twice the block range so we can hit all blocks within the range
             {
                 Vector3 hitPoint = hitInfo.point;
