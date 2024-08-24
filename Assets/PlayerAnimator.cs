@@ -26,7 +26,7 @@ public class PlayerAnimator : MonoBehaviour
     public bool IsFirstPerson = false;
     public void SetActive(bool FirstPerson = true)
     {
-        IsFirstPerson = FirstPerson;
+        IsFirstPerson = HeldItem.FirstPerson = FirstPerson;
         if (FirstPerson)
         {
             LeftArm.gameObject.SetActive(false);
@@ -36,8 +36,8 @@ public class PlayerAnimator : MonoBehaviour
             Head.gameObject.SetActive(false);
             Body.gameObject.SetActive(false);
             RightArm.gameObject.layer = HeldItem.gameObject.layer = RightArmVisual.layer = 10;
-            RightArm.transform.localScale = Vector3.one * 0.5f;
-            RightArm.transform.localPosition = new Vector3(0.25f, 0.375f, 0f);
+            RightArm.transform.localScale = Vector3.one * 0.45f;
+            RightArm.transform.localPosition = new Vector3(0.15f, 0.51f, 0f);
         }
         else
         {
@@ -52,9 +52,16 @@ public class PlayerAnimator : MonoBehaviour
             RightArm.transform.localPosition = new Vector3(0.25f, 0.375f, 0f);
         }
     }
-    private void FixedUpdate()
+    private void Update()
     {
-        Vector3 velo = player.Velocity.Value;
+        if (IsFirstPerson)
+        {
+            BodyRotationUpdate();
+            MainArmUpdate();
+        }
+    }
+    private void BodyRotationUpdate()
+    {
         float desiredBodyTilt = FacingVector.eulerAngles.y;
         float tiltMultiplier = player.MovingBackward ? -1 : 1;
 
@@ -78,6 +85,13 @@ public class PlayerAnimator : MonoBehaviour
             changeSpeed = 1;
         currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, desiredBodyTilt, changeSpeed);
         transform.eulerAngles = new Vector3(0, currentBodyTilt, 0);
+    }
+    private void FixedUpdate()
+    {
+        Vector3 velo = player.Velocity.Value;
+        if (!IsFirstPerson)
+            BodyRotationUpdate();
+
         Head.eulerAngles = new Vector3(FacingVector.eulerAngles.x, FacingVector.eulerAngles.y, 0);
 
         float speed = new Vector2(velo.x, velo.z).magnitude;
@@ -86,7 +100,11 @@ public class PlayerAnimator : MonoBehaviour
         if(isMoving)
         {
             float direction = (player.MovingForward || player.MovingRight) ? 1 : -1;
-            moveCounter += Mathf.Sqrt(speed) * JointSpeedMultiplier * direction;
+            if (speed < 1)
+                speed = speed * speed;
+            else
+                speed = Mathf.Sqrt(speed);
+            moveCounter += speed * JointSpeedMultiplier * direction;
         }
         if (moveCounter < 0)
         {
@@ -107,9 +125,16 @@ public class PlayerAnimator : MonoBehaviour
         LeftLeg.localEulerAngles = new Vector3(sinusoid * DegreesOfJointMovementLegs, LeftLeg.localEulerAngles.y, LeftLeg.localEulerAngles.z);
         RightLeg.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementLegs, RightLeg.localEulerAngles.y, RightLeg.localEulerAngles.z);
 
+        LeftArm.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementArms, 0, 0);
+        if (!IsFirstPerson)
+            MainArmUpdate();
+    }
+    private void MainArmUpdate()
+    {
+        float sinusoid = Mathf.Sin(moveCounter * Mathf.Deg2Rad);
         itemUseAnimationPercent = 0f;
         Vector3 armUseAnimation = Vector3.zero;
-        if(player is Player p)
+        if (player is Player p)
         {
             //if (!player.IsOwner)
             //    Debug.Log(p.FacingVector.transform.forward);
@@ -123,14 +148,14 @@ public class PlayerAnimator : MonoBehaviour
             animationPercent = Mathf.Clamp(animationPercent, 0, 1);
             armUseAnimation = p.FacingVector.transform.rotation.eulerAngles;
             armUseAnimation.x -= 80;
-            armUseAnimation.x += 25 * MathF.Sin(animationPercent * Mathf.PI * 2f);
+            armUseAnimation.x += 25 * MathF.Sin(animationPercent * Mathf.PI * 2f) * MathF.Sin(animationPercent * Mathf.PI);
             armUseAnimation.y += 12 * MathF.Cos(animationPercent * Mathf.PI);
             itemUseAnimationPercent = animationPercent;
 
             ///This controls how the player holds the item out, rather than when it is used. It might benefit from being moved into ItemDisplay, instead of being here...
             if (IsFirstPerson)
             {
-                itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 1f, 1);
+                itemUseAnimationPercent = 0.707106781f;
             }
             else if (HeldItem.item != null)
             {
@@ -144,19 +169,28 @@ public class PlayerAnimator : MonoBehaviour
             }
         }
         float slerpPoint = Mathf.Sin(Mathf.PI * Mathf.Pow(itemUseAnimationPercent, 2));
-        if(itemUseAnimationPercent < 0.7f)
+        if (itemUseAnimationPercent < 0.7f)
             RightArm.localEulerAngles = new Vector3(sinusoid * DegreesOfJointMovementArms, 0, 0);
-        RightArm.rotation = math.slerp(RightArm.rotation, armUseAnimation.ToQuaternion(), slerpPoint); 
-        LeftArm.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementArms, 0, 0);
+        RightArm.rotation = math.slerp(RightArm.rotation, armUseAnimation.ToQuaternion(), slerpPoint);
+
         IdleArmSwaying();
     }
     private float IdleSwayCounter = 0;
     private void IdleArmSwaying()
     {
-        IdleSwayCounter++;
-        float sinusoid = Mathf.Sin(IdleSwayCounter * Mathf.Deg2Rad / 2f) * 0.5f + 0.5f; //Multiplying by 0.5f and then adding 0.5f locks the sinusoid to the range [0, 1]
-        RightArm.Rotate(0, 0, sinusoid * DegreesOfPassiveArmSway);
-        LeftArm.Rotate(0, 0, -sinusoid * DegreesOfPassiveArmSway);
+        if(!IsFirstPerson)
+        {
+            IdleSwayCounter++;
+            float sinusoid = Mathf.Sin(IdleSwayCounter * Mathf.Deg2Rad / 2f) * 0.5f + 0.5f; //Multiplying by 0.5f and then adding 0.5f locks the sinusoid to the range [0, 1]
+            RightArm.Rotate(0, 0, sinusoid * DegreesOfPassiveArmSway);
+            LeftArm.Rotate(0, 0, -sinusoid * DegreesOfPassiveArmSway);
+        }
+        else
+        {
+            //This creates an ARM BOBBING EFFECT.. Which may be better simulated by adjusting the camera instead (potentially the main camera for a entire VIEW BOBBING effect, or the Arm Camera for ARM BOBBING).
+            float sinusoid = Mathf.Sin(moveCounter * Mathf.Deg2Rad);
+            RightArm.Rotate(sinusoid * 5, 0, sinusoid * 2);
+        }
     }
 
     [SerializeField]

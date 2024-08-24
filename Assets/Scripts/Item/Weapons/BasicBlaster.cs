@@ -6,6 +6,7 @@ public class BasicBlaster : Weapon ///Team members that contributed to this scri
 {
     public override void SetStats()
     {
-        ShootSpeed = 12;
+        ShootSpeed = 13;
+        Firerate = 10;
     }
 }

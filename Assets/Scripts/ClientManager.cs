@@ -21,6 +21,7 @@ public class ClientManager : MonoBehaviour
     /// Only has a value in local multiplayer
     /// </summary>
     private static ClientManager SecondInstance { get; set; }
+    public static Transform UIArmCamera => Instance.FakeCamera;
     public static Camera GetCamera(bool SecondPlayer = false)
     {
         return (SecondPlayer ? SecondInstance : Instance).MainCamera;
@@ -38,6 +39,7 @@ public class ClientManager : MonoBehaviour
         return (SecondPlayer ? SecondInstance : Instance).InventoryUI;
     }
     [SerializeField] private Camera MainCamera;
+    [SerializeField] private Transform FakeCamera;
     [SerializeField] private ScreenBlocker ScreenBlocker;
     [SerializeField] private GameObject BlockOutline;
     [SerializeField] private string ApocalypseText;

@@ -8,6 +8,7 @@ public class ItemDisplay : MonoBehaviour
     public MeshRenderer meshRenderer;
     public MeshFilter meshFilter;
     public bool HasSwappedModels = false;
+    public bool FirstPerson;
     public void SetModelToItemModel()
     {
         bool modelIsBlock = true; //For now, all models are blocks
@@ -22,9 +23,18 @@ public class ItemDisplay : MonoBehaviour
             SetModelToBlock(blockType);
 
             ///Each model will probably need to specify draw related parameters like this
-            transform.localPosition = new Vector3(0, -0.125f, 0.5f);
-            transform.localEulerAngles = new Vector3(0, 45, 0);
-            transform.localScale = Vector3.one * 1.25f;
+            if(FirstPerson)
+            {
+                transform.localPosition = new Vector3(0, -0.25f, 0.5f);
+                transform.localEulerAngles = new Vector3(0, 27, 0);
+                transform.localScale = Vector3.one * 1.45f;
+            }
+            else
+            {
+                transform.localPosition = new Vector3(0, -0.125f, 0.5f);
+                transform.localEulerAngles = new Vector3(0, 45, 0);
+                transform.localScale = Vector3.one * 1.25f;
+            }
         }
     }
     public void SetModelToBlock(int BlockID)

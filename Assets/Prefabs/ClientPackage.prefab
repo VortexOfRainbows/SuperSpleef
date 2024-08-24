@@ -185,6 +185,7 @@ MonoBehaviour:
   LeaveLobbyText1: {fileID: 6064660019875903725}
   LeaveLobbyText2: {fileID: 7166985056364492200}
   MainCamera: {fileID: 6873082447999680281}
+  FakeCamera: {fileID: 0}
   ScreenBlocker: {fileID: 4827952731808510100}
   BlockOutline: {fileID: 1463825790314162191}
   ApocalypseText: 'OBJECTIVE: SURVIVE'

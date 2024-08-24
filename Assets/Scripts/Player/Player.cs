@@ -403,7 +403,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         else
         {
             //For some reason, you need to do a bitshift of the layer mask to get it to work. 
-            int worldLayerMask = 1 << 3;
+            //int worldLayerMask = 1 << 3;
             if (Physics.Raycast(FacingVector.transform.position, FacingVector.transform.forward, out hitInfo, BlockRange * 2, -1, QueryTriggerInteraction.Ignore)) //Twice the block range so we can hit all blocks within the range
             {
                 Vector3 hitPoint = hitInfo.point;
