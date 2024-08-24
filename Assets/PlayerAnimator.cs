@@ -189,7 +189,7 @@ public class PlayerAnimator : MonoBehaviour
         {
             //This creates an ARM BOBBING EFFECT.. Which may be better simulated by adjusting the camera instead (potentially the main camera for a entire VIEW BOBBING effect, or the Arm Camera for ARM BOBBING).
             float sinusoid = Mathf.Sin(moveCounter * Mathf.Deg2Rad);
-            RightArm.Rotate(sinusoid * 5, 0, sinusoid * 2);
+            RightArm.Rotate(sinusoid * 4f, 0, sinusoid * 1.6f);
         }
     }
 

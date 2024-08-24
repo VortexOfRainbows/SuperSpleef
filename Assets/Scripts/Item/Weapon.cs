@@ -2,7 +2,6 @@ using UnityEngine;
 
 public abstract class Weapon : Item ///Team members that contributed to this script: Ian Bunnell
 {
-    
     public float ShootSpeed { get; protected set; }
     
     public sealed override void SetDefaults()

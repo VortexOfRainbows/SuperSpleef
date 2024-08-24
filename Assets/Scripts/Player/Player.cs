@@ -99,6 +99,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         if (giveLaser) 
         {
             Inventory.AddItem(new LaserCannon());
+            Inventory.AddItem(new Shotgun());
         }
         if (apocalypse)
         {
