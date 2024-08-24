@@ -322,6 +322,11 @@ public class GameStateManager : MonoBehaviour
             if (Players[i] == null)
             {
                 Players.RemoveAt(i);
+                i--;
+            }
+            else
+            {
+                Players[i].MyID = i;
             }
         }
         /*if(NetData != null)
@@ -341,13 +346,11 @@ public class GameStateManager : MonoBehaviour
                     if (WaitSomeTimeForAssetsToLoad > 0.1)
                     {
                         //Debug.Log("Finished Waiting");
-                        //int i = 0;
                         foreach (NetworkPlayer nPlayer in NetHandler.LoggedPlayers)
                         {
                             //Debug.Log(i);
                             GameObject go = Instantiate(Instance.player, new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2), Quaternion.identity);
                             go.GetComponent<NetworkObject>().SpawnAsPlayerObject(nPlayer.OwnerClientId, true);
-                            //i++;
                         }
                         HasSpawnedPlayers = true;
                     }

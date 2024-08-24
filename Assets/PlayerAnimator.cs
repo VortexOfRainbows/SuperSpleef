@@ -74,22 +74,30 @@ public class PlayerAnimator : MonoBehaviour
         Vector3 armUseAnimation = Vector3.zero;
         if(player is Player p)
         {
+            //if (!player.IsOwner)
+            //    Debug.Log(p.FacingVector.transform.forward);
+
             HeldItem.item = p.HeldItem();
+            float maxTime = HeldItem.item.Firerate;
             if (p.ItemUseTimeMax != 0)
-            {
-                float animationPercent = (1 + p.ItemUseTime / p.ItemUseTimeMax) / 2f;
-                animationPercent = Mathf.Clamp(animationPercent, 0, 1);
-                armUseAnimation = p.FacingVector.transform.rotation.eulerAngles;
-                armUseAnimation.x -= 80;
-                armUseAnimation.x += 25 * MathF.Sin(animationPercent * Mathf.PI * 2f);
-                armUseAnimation.y += 12 * MathF.Cos(animationPercent * Mathf.PI);
-                itemUseAnimationPercent = animationPercent;
-            }
+                maxTime = p.ItemUseTimeMax;
+
+            float animationPercent = (1 + p.ItemUseTime / maxTime) / 2f;
+            animationPercent = Mathf.Clamp(animationPercent, 0, 1);
+            armUseAnimation = p.FacingVector.transform.rotation.eulerAngles;
+            armUseAnimation.x -= 80;
+            armUseAnimation.x += 25 * MathF.Sin(animationPercent * Mathf.PI * 2f);
+            armUseAnimation.y += 12 * MathF.Cos(animationPercent * Mathf.PI);
+            itemUseAnimationPercent = animationPercent;
+
             ///This controls how the player holds the item out, rather than when it is used. It might benefit from being moved into ItemDisplay, instead of being here...
-            if(HeldItem.item != null)
+            if (HeldItem.item != null)
             {
                 if(HeldItem.item is PlaceableBlock)
+                {
+                    //Debug.Log(p.ItemUseTime);
                     itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 0.3f, 1);
+                }
                 else if(HeldItem.item is Weapon)
                     itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 0.8f, 1);
             }
@@ -126,12 +134,12 @@ public class PlayerAnimator : MonoBehaviour
     private PlayerModel Model;
     [SerializeField]
     private MeshFilter HeadMesh, BodyMesh, LeftLegMesh, RightLegMesh, LeftArmMesh, RightArmMesh;
-    private void SetSprite()
+    public void SetSprite()
     {
         bool duck = UnityEngine.Random.Range(1, 3) == 2;
         bool suit = UnityEngine.Random.Range(1, 11) == 10;
-        var sprite = Spritesheet;
-        if (duck && suit)
+        Material sprite = Spritesheet;
+        if (duck)
         {
             sprite = suit ? Spritesheet4 : Spritesheet3;
         }
@@ -144,7 +152,9 @@ public class PlayerAnimator : MonoBehaviour
         foreach (MeshRenderer r in renderers)
         {
             if(r.GetComponent<ItemDisplay>() == null)
+            {
                 r.material = sprite;
+            }
         }
     }
     private void Start()

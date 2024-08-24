@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public abstract class Item //This might not need to be a monobehavior
 {
     public const int DefaultItemFirerate = 20;
-    public static Item Empty { get; private set; } = new NoItem();
+    public static Item Empty => new NoItem();
     public const int DefaultMaxCount = 9999; //The default max count will be 9999.
     public static Dictionary<int, Item> ItemType;
     public int Count { get; protected set; }
@@ -79,6 +79,16 @@ public abstract class Item //This might not need to be a monobehavior
         if (Count > MaxCount)
             Count = MaxCount;
         if(Count <= 0)
+        {
+            Count = 0;
+        }
+    }
+    public void SetCount(int count)
+    {
+        Count = count;
+        if (Count > MaxCount)
+            Count = MaxCount;
+        if (Count <= 0)
         {
             Count = 0;
         }

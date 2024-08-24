@@ -1,13 +1,13 @@
 using System.Linq;
 using UnityEngine;
 using Unity.Netcode;
-using UnityEngine.InputSystem;
 
 public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo, Samuel Gines
 {
     #region public
     ///These are public because they need to be accessed outside the class, and they cannot be serialized as properties.
     public GameObject FacingVector;
+    public int MyID { get; set; }
     [SerializeField] private Rigidbody RB;
     [SerializeField] private BoxCollider JumpHitbox;
     [SerializeField] private GameObject PlayerVisual;
@@ -37,8 +37,38 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     /// How long until the player can use an item. 
     /// Public float since it is used inside ITEM.
     /// </summary>
-    public float ItemUseTime { get; private set; }
-    public float ItemUseTimeMax { get; private set; }
+    private NetworkVariable<float> useTime = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    private NetworkVariable<float> useTimeMax = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    private float itemTime;
+    private float itemTimeMax;
+    public float ItemUseTime 
+    {
+        get 
+        { 
+            return itemTime; 
+        }
+        set 
+        { 
+            if (IsOwner)
+                useTime.Value = value;
+            else
+                itemTime = value;
+        }
+    }
+    public float ItemUseTimeMax
+    {
+        get
+        {
+            return itemTimeMax;
+        }
+        set
+        {
+            if (IsOwner)
+                useTimeMax.Value = value;
+            else
+                itemTimeMax = value;
+        }
+    }
     public override void OnNetworkSpawn()
     {
         OnStart();
@@ -49,6 +79,9 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     }
     private void OnStart()
     {
+        useTime.OnValueChanged += delegate { itemTime = useTime.Value; };
+        useTimeMax.OnValueChanged += delegate { itemTimeMax = useTimeMax.Value; };
+        ItemUseTimeMax = Item.DefaultItemFirerate;
         bool apocalypse = GameStateManager.Mode == GameModeID.Apocalypse || GameStateManager.Mode == GameModeID.LaserBattleApocalypse;
         bool giveLaser = GameStateManager.LocalMultiplayer || GameStateManager.Mode == GameModeID.LaserBattleApocalypse || GameStateManager.Mode == GameModeID.LaserBattle;
         currentPlayerHP = maxPlayerHP;
@@ -84,8 +117,22 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         RB.maxDepenetrationVelocity = 0;
         transform.position = new Vector3(Chunk.Width * GameStateManager.WorldSizeOverride / 2f, transform.position.y, Chunk.Width * GameStateManager.WorldSizeOverride / 2f); //Centers the player in teh world when they spawn in
+
+        //PlayerVisual.GetComponent<PlayerAnimator>().SetSprite();
     }
-    public int SelectedItem { get; private set; }
+    private NetworkVariable<int> selectedItem = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public int SelectedItem 
+    { 
+        get 
+        {
+            return selectedItem.Value;
+        }
+        set 
+        {
+            if (IsOwner)
+                selectedItem.Value = value;
+        }
+    }
     public Item HeldItem()
     {
         return Inventory.Get(SelectedItem);
@@ -97,6 +144,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     {
         if(!HasBeenAddedToPlayerList && !GameStateManager.Players.Contains(this))
         {
+            MyID = GameStateManager.Players.Count;
             GameStateManager.Players.Add(this);
             HasBeenAddedToPlayerList = true;
         }
@@ -315,6 +363,10 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     private void HeldItemUpdate()
     {
         Item heldItem = HeldItem();
+        if (heldItem.Count <= 0)
+        {
+            Inventory.Set(SelectedItem, Item.Empty);
+        }
         bool left = Control.LeftClick;
         bool right = Control.RightClick;
         if (ItemUseTime > 0)
@@ -322,9 +374,11 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             left = right = false; //Do not consider an input if the item timer is up
         }
         bool holdingClick = (Control.LeftClick && LastControl.LeftClick) || (Control.RightClick && LastControl.RightClick);
+        ///Debug.Log(ItemUseTimeMax);
         if(ItemUseTime > -ItemUseTimeMax)
-        ItemUseTime--;
+            ItemUseTime--;
         //This is to give the same effect as in minecraft, where you can shoot faster while spamming than while holding...
+        //Might have to reimplement this system in a way that does not interfere with animation smoothness
         //if (holdingClick)
         //    ItemUseTime--;
         //else
@@ -442,16 +496,17 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             if(heldItem.IsConsumedOnUse(this))
             {
                 heldItem.ModifyCount(-1);
-                if(heldItem.Count <= 0)
+                if(IsOwner)
                 {
-                    Inventory.Set(SelectedItem, Item.Empty);
+                    GameStateManager.NetData.SyncInventoryItemRpc(MyID, SelectedItem, heldItem.Count);
                 }
             }
-            ItemUseTime = ItemUseTimeMax = heldItem.Firerate;
-            if(ItemUseTime <= 0)
+            if (heldItem.Firerate <= 0)
             {
                 ItemUseTime = ItemUseTimeMax = Item.DefaultItemFirerate;
             }
+            else
+                ItemUseTime = ItemUseTimeMax = heldItem.Firerate;
         }
     }
     [SerializeField] private GameObject InBlockColliderTemplate;

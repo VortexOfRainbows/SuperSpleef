@@ -6,7 +6,7 @@ public abstract class Entity : NetworkBehaviour //A monobehavior class that poss
 {
     public NetworkVariable<Vector3> Velocity;
     private NetworkVariable<bool> n_MovingForward, n_MovingBackward, n_MovingLeft, n_MovingRight;
-    private void Awake()
+    protected void Awake()
     {
         Velocity = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         n_MovingForward = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);

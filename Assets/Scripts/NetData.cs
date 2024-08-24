@@ -61,4 +61,11 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
     {
         NetHandler.LoggedPlayers[NetworkPlayerIndex].GetComponent<NetworkObject>().Despawn();
     }
+    [Rpc(SendTo.NotMe)]
+    public void SyncInventoryItemRpc(int playerID, int itemSlot, int count)
+    {
+        Player player = GameStateManager.Players[playerID];
+        Item item = player.Inventory.Get(itemSlot);
+        item.SetCount(count);
+    }
 }

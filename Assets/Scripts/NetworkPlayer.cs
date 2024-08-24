@@ -3,6 +3,9 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// This class should be merged with Player in the future, as there is no need to keep them separated anymore...
+/// </summary>
 public class NetworkPlayer : NetworkBehaviour //Team members that contributed to this script: Ian Bunnel
 {
     private Player myPlayer = null;
