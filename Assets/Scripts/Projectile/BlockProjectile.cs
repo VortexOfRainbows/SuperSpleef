@@ -10,9 +10,7 @@ public class BlockProjectile : Projectile ///Team members that contributed to th
     private Vector3 myFunnySpinModifier;
     public override void OnSpawn()
     {
-        MyBlockID = BlockID.Stone;
-        if (Random.value < 0.5f)
-            MyBlockID = BlockID.Dirt;
+        MyBlockID = Random.Range(1, BlockID.Max);
         SetModelToBlock(MyBlockID);
         myFunnySpinModifier = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1));
     }
