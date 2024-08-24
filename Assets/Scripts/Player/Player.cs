@@ -369,7 +369,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             Inventory.Set(SelectedItem, Item.Empty);
         }
         bool left = Control.LeftClick;
-        bool right = Control.RightClick;
+        bool right = Control.RightClick && !left;
         if (ItemUseTime > 0)
         {
             left = right = false; //Do not consider an input if the item timer is up
@@ -479,7 +479,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                     itemUsed = true;
                 }
             }
-            if(right && !holdingPlaceableBlock)
+            else if(right && !holdingPlaceableBlock)
             {
                 if (heldItem.UseSecondary(this))
                 {
