@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
-    public static int WorldType = 1;
+    public static int WorldType => GameStateManager.WorldType;
     private static HashSet<Chunk> ReloadRequired = new HashSet<Chunk>();
     public const float OutOfBounds = -40f;
     public static World Instance { get; private set; }

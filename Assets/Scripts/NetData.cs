@@ -7,6 +7,7 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
     /// 
     /// These variables must be public so they can be accessed by GameStateManager, which will distribute them to other classes
     /// 
+    public NetworkVariable<int> WorldType;
     public NetworkVariable<int> SyncedMode;
     public NetworkVariable<int> GenSeed;
     public NetworkVariable<bool> HasSpawnedPlayers;
@@ -19,6 +20,7 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
         HasSpawnedPlayers = new NetworkVariable<bool>(false);
         SyncedMode = new NetworkVariable<int>(0);
         GenSeed = new NetworkVariable<int>(Random.Range(0, int.MaxValue), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        WorldType = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         WorldSizeOverride = new NetworkVariable<float>(World.DefaultChunkRadius);
     }
     private void LateUpdate()

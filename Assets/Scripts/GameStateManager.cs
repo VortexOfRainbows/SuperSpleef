@@ -97,6 +97,24 @@ public class GameStateManager : MonoBehaviour
         }
     }
     private static float m_worldSizeOverride;
+    public static void SetWorldDesert(bool desert)
+    {
+        if (desert)
+            WorldType = 1;
+        else
+            WorldType = 0;
+    }
+    public static int WorldType
+    {
+        get
+        {
+            return NetData.WorldType.Value;
+        }
+        private set
+        {
+            NetData.WorldType.Value = value;
+        }
+    }
     public static float WorldSizeOverride
     {
         get

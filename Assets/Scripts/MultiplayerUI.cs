@@ -32,7 +32,7 @@ public class MultiplayerUI : MonoBehaviour //Team members that contributed to th
         if (LeaveLobbyText != null)
             LeaveLobbyText.text = NetworkManager.Singleton.IsServer ? Close : Leave;
 
-        UCISettings.SetActive(false);
+        UCISettings.SetActive(NetworkManager.Singleton.IsServer);
         StartButton.SetActive(NetworkManager.Singleton.IsServer);
         WorldSizeSettings.SetActive(NetworkManager.Singleton.IsServer);
     }
