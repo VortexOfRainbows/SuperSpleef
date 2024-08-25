@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Trophies
   m_EditorClassIdentifier: 
   hashCode: -622895186
-  material: {fileID: 2410513786867922729}
+  material: {fileID: 2856609046860141380}
   materialHashCode: 0
   m_Version: 1.1.0
   m_FaceInfo:
@@ -52,20 +52,26 @@ MonoBehaviour:
     m_Scale: 1
     m_Name: Trophies_1
     m_HashCode: 271973216
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 2
+    m_Scale: 1
+    m_Name: Trophies_2
+    m_HashCode: 271973219
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
       m_Width: 128
       m_Height: 128
       m_HorizontalBearingX: -28
-      m_HorizontalBearingY: 82
+      m_HorizontalBearingY: 72
       m_HorizontalAdvance: 70
     m_GlyphRect:
       m_X: 0
       m_Y: 0
       m_Width: 128
       m_Height: 128
-    m_Scale: 3
+    m_Scale: 4
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
     sprite: {fileID: -833594009, guid: 50849a7fa423b114a961c0d5e7d16339, type: 3}
@@ -74,20 +80,36 @@ MonoBehaviour:
       m_Width: 128
       m_Height: 128
       m_HorizontalBearingX: -28
-      m_HorizontalBearingY: 82
+      m_HorizontalBearingY: 72
       m_HorizontalAdvance: 70
     m_GlyphRect:
       m_X: 128
       m_Y: 0
       m_Width: 128
       m_Height: 128
-    m_Scale: 3
+    m_Scale: 4
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
     sprite: {fileID: 1113270051, guid: 50849a7fa423b114a961c0d5e7d16339, type: 3}
+  - m_Index: 2
+    m_Metrics:
+      m_Width: 128
+      m_Height: 128
+      m_HorizontalBearingX: -28
+      m_HorizontalBearingY: 82
+      m_HorizontalAdvance: 70
+    m_GlyphRect:
+      m_X: 256
+      m_Y: 0
+      m_Width: 128
+      m_Height: 128
+    m_Scale: 4
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: -659769171, guid: 50849a7fa423b114a961c0d5e7d16339, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []
---- !u!21 &2410513786867922729
+--- !u!21 &2856609046860141380
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 1

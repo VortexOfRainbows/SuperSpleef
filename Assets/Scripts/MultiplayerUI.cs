@@ -32,7 +32,12 @@ public class MultiplayerUI : MonoBehaviour //Team members that contributed to th
             {
                 int value = NetHandler.LoggedPlayers[i].WinCount.Value;
                 string spriteToUse = value == highestScorer ? " <sprite index=0> " : " <sprite index=1> ";
-                LoggedDisplay.text += value + spriteToUse + NetHandler.LoggedPlayers[i].Username + "\n";
+                string blockGameString = "";
+                if (NetHandler.LoggedPlayers[i].BlockGameCount.Value > 0)
+                {
+                    blockGameString = NetHandler.LoggedPlayers[i].BlockGameCount.Value + " <sprite index=2> ";
+                }
+                LoggedDisplay.text += value + spriteToUse + NetHandler.LoggedPlayers[i].Username + $"     {blockGameString}" + "\n";
             }
         }
         if (WaitingForServerDisplay != null)

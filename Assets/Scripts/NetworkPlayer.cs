@@ -18,6 +18,7 @@ public class NetworkPlayer : NetworkBehaviour //Team members that contributed to
     public string Username => MyName.Value.ToString();
     private NetworkVariable<FixedString512Bytes> MyName = new NetworkVariable<FixedString512Bytes>("Username", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public NetworkVariable<int> WinCount = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<int> BlockGameCount = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     void Start()
     {
         NetHandler.LoggedPlayers.Add(this);
@@ -39,6 +40,10 @@ public class NetworkPlayer : NetworkBehaviour //Team members that contributed to
     }
     private void Update()
     {
+        if(FallingCube.BlocksBrokenInARow > BlockGameCount.Value && IsOwner)
+        {
+            BlockGameCount.Value = FallingCube.BlocksBrokenInARow;
+        }
         if(SceneManager.GetActiveScene().name == GameStateManager.MultiplayerScene && GameStateManager.StartingPlayerCount > 0)
         {
             myPlayer = null;
