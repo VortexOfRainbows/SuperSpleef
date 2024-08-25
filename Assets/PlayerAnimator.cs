@@ -206,15 +206,27 @@ public class PlayerAnimator : MonoBehaviour
     private Material Spritesheet4;
 
     [SerializeField]
+    private Material Spritesheet5;
+
+    [SerializeField]
+    private Material Spritesheet6;
+
+    [SerializeField]
     private PlayerModel Model;
     [SerializeField]
     private MeshFilter HeadMesh, BodyMesh, LeftLegMesh, RightLegMesh, LeftArmMesh, RightArmMesh;
     public void SetSprite()
     {
-        bool duck = UnityEngine.Random.Range(1, 3) == 2;
+        int rand = UnityEngine.Random.Range(0, 3);
+        bool mario = rand == 1;
+        bool duck = rand == 2;
         bool suit = UnityEngine.Random.Range(1, 11) == 10;
         Material sprite = Spritesheet;
-        if (duck)
+        if(mario)
+        {
+            sprite = suit ? Spritesheet6 : Spritesheet5;
+        }
+        else if(duck)
         {
             sprite = suit ? Spritesheet4 : Spritesheet3;
         }
