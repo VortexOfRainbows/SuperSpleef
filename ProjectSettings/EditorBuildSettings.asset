@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/LocalMultiplayerScene.unity
+    path: Assets/Scenes/Depricated/LocalMultiplayerScene.unity
     guid: 66ddc2c0ee7e6934c8a51c2f8314c96c
   - enabled: 1
     path: Assets/Scenes/MultiplayerGameLobby.unity

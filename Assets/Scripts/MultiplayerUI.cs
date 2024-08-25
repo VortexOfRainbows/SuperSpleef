@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MultiplayerUI : MonoBehaviour //Team members that contributed to this script: Ian Bunnel
@@ -15,16 +13,26 @@ public class MultiplayerUI : MonoBehaviour //Team members that contributed to th
     [SerializeField] private GameObject UCISettings;
     [SerializeField] private GameObject StartButton;
     [SerializeField] private Text WaitingForServerDisplay;
-    [SerializeField] private Text LoggedDisplay;
+    [SerializeField] private TextMeshProUGUI LoggedDisplay;
     [SerializeField] private Text LeaveLobbyText;
     private void Update()
     {
         if (LoggedDisplay != null)
         {
             LoggedDisplay.text = string.Empty;
+            int highestScorer = 1;
             for (int i = 0; i < NetHandler.LoggedPlayers.Count; i++)
             {
-                LoggedDisplay.text += "(" + NetHandler.LoggedPlayers[i].WinCount.Value + ") " + NetHandler.LoggedPlayers[i].Username + "\n";
+                if (NetHandler.LoggedPlayers[i].WinCount.Value > highestScorer)
+                {
+                    highestScorer = NetHandler.LoggedPlayers[i].WinCount.Value;
+                }
+            }
+            for (int i = 0; i < NetHandler.LoggedPlayers.Count; i++)
+            {
+                int value = NetHandler.LoggedPlayers[i].WinCount.Value;
+                string spriteToUse = value == highestScorer ? " <sprite index=0> " : " <sprite index=1> ";
+                LoggedDisplay.text += value + spriteToUse + NetHandler.LoggedPlayers[i].Username + "\n";
             }
         }
         if (WaitingForServerDisplay != null)
