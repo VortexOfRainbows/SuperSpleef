@@ -1,3 +1,5 @@
+using System.Collections;
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -209,7 +211,7 @@ public class GameStateManager : MonoBehaviour
             if(Mode <= GameModeID.None)
                 Mode = 0;
             if (GenSeed <= 0)
-                GenSeed = Random.Range(0, int.MaxValue);
+                GenSeed = UnityEngine.Random.Range(0, int.MaxValue);
             if (WorldSizeOverride <= 0)
                 WorldSizeOverride = World.DefaultChunkRadius;
         }
@@ -248,7 +250,7 @@ public class GameStateManager : MonoBehaviour
     }
     public static void ExitGame()
     {
-        Application.Quit(); // Quits the Game
+        SceneManager.LoadScene("ExitGameScene");
     }
     public static void StartGame(int mode)
     {

@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MultiplayerScene.unity
     guid: 6ded151a01ffdd84c970e10d2d1f819f
+  - enabled: 1
+    path: Assets/Scenes/ExitGameScene.unity
+    guid: aab1e3e0523a4684cb7a20b0da7a71fa
   m_configObjects: {}
