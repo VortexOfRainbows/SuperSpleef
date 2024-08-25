@@ -97,14 +97,7 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
         if(GameStateManager.GameIsPausedOrOver) 
         {
             Control = new ControlDown();
-            UnityEngine.Cursor.lockState = CursorLockMode.None; ///This code would be better in a different location, but works here for now.
-            UnityEngine.Cursor.visible = true;
             return;
-        }
-        else
-        {
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            UnityEngine.Cursor.visible = false;
         }
         if(!player.IsOwner && NetHandler.Active) //Only let the owner of the player move it
         {

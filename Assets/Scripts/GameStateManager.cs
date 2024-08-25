@@ -63,7 +63,7 @@ public class GameStateManager : MonoBehaviour
     { 
         get 
         { 
-            return GameOver || GamePaused; 
+            return GameOver || GamePaused || SceneManager.GetActiveScene().name != "MultiplayerScene"; 
         }
     }
     private static int m_mode;
@@ -121,7 +121,7 @@ public class GameStateManager : MonoBehaviour
     {
         get
         {
-            if (NetHandler.Active)
+            if (NetHandler.Active && NetData.WorldSizeOverride != null)
                 return NetData.WorldSizeOverride.Value;
             return m_worldSizeOverride;
         }
@@ -316,6 +316,16 @@ public class GameStateManager : MonoBehaviour
     private static bool HasResetStateSinceReload = true;
     private void LateUpdate()
     {
+        if (GameIsPausedOrOver)
+        {
+            Cursor.lockState = CursorLockMode.None; 
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
         //Debug.Log(NetHandler.Active);
         if (SceneManager.GetActiveScene().name == MultiplayerGameLobby || SceneManager.GetActiveScene().name == TitleScreen)
         {

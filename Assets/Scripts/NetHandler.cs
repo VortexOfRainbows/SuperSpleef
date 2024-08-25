@@ -20,7 +20,7 @@ public class NetHandler : MonoBehaviour //Team members that contributed to this 
         }
         private set
         {
-            Debug.Log("IP is now: " + value);
+            //Debug.Log("IP is now: " + value);
             Instance.UnityTransport.ConnectionData.Address = value;
         }
     }
