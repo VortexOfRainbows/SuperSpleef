@@ -28,6 +28,9 @@ public class BlockFace ///Team members that contributed to this script: Ian Bunn
         {BlockFaceID.Sand, new BlockFace(0,10)},
         {BlockFaceID.CactusSide, new BlockFace(0,11)},
         {BlockFaceID.Cactus, new BlockFace(0,12)},
+        {BlockFaceID.EyeTop, new BlockFace(0,13)},
+        {BlockFaceID.EyeSide, new BlockFace(0,14)},
+        {BlockFaceID.EyeBottom, new BlockFace(0,15)},
     };
     private readonly Vector2[] uvs;
     private BlockFace(int xPos, int yPos) //yPos is how many tiles up it is from bottom. x is how many tiles to the right

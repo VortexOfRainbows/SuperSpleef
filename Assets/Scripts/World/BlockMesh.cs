@@ -85,6 +85,12 @@ public class BlockMesh ///Team members that contributed to this script: Ian Bunn
             top = bottom = BlockFace.FaceSprite(BlockFaceID.Cactus);
             right = front = back = left = BlockFace.FaceSprite(BlockFaceID.CactusSide);
         }
+        if (Type == BlockID.Eye)
+        {
+            top = BlockFace.FaceSprite(BlockFaceID.EyeTop);
+            right = front = back = left = BlockFace.FaceSprite(BlockFaceID.EyeSide);
+            bottom = BlockFace.FaceSprite(BlockFaceID.EyeBottom);
+        }
         SetFaceArray();
     }
     private void SetAllFaces(int BlockFaceID)

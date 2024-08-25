@@ -16,6 +16,7 @@ public class ItemSlot : MonoBehaviour ///Team members that contributed to this s
     [SerializeField] private Text TextElement;
     [SerializeField] private Image ImageElement;
     private Inventory Inventory => Owner.Inventory; //In case the owners inventory is changed, this will be using a function instead of a reference.
+    public bool CanGetItem => Owner != null && Inventory != null && Item != null;
     public Item Item => Inventory.Get(Index);
     private System.Type lastType = null;
     private int lastCount = -1;
@@ -75,7 +76,14 @@ public class ItemSlot : MonoBehaviour ///Team members that contributed to this s
                 Model.gameObject.SetActive(false);
             }
             else
-                Model.SetModelToBlock(BlockID.Air);
+            {
+                int blockID = BlockID.Air;
+                if(Item is LaserCannon)
+                {
+                    blockID = BlockID.Eye;
+                }
+                Model.SetModelToBlock(blockID);
+            }
         }
     }
 }

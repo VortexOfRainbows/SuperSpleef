@@ -44,6 +44,10 @@ public class InventoryModel : MonoBehaviour ///Team members that contributed to 
         rotations.y += rotationSpeedY;
         rotations.z += rotationSpeedZ;
         Vector3 euler = new Vector3(Mathf.Sin(rotations.x) * MaxVariationTiltXZ, rotations.y, Mathf.Cos(rotations.z) * MaxVariationTiltXZ);
+        if(parentSlot != null && parentSlot.CanGetItem && parentSlot.Item is LaserCannon)
+        {
+            euler.x += 90;
+        }
         transform.localEulerAngles = euler;
     }
 }

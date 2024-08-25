@@ -15,10 +15,11 @@ public static class BlockID ///Team members that contributed to this script: Ian
     public const int BlueBricks = 8;
     public const int Sand = 9;
     public const int Cactus = 10;
+    public const int Eye = 11;
     /// <summary>
     /// Whenever a new block is added, this number should be increased to the highest one + 1
     /// </summary>
-    public const int Max = 11;
+    public const int Max = 12;
 }
 public static class BlockFaceID
 {
@@ -36,4 +37,7 @@ public static class BlockFaceID
     public const int Sand = 11;
     public const int CactusSide = 12;
     public const int Cactus = 13;
+    public const int EyeTop = 14;
+    public const int EyeSide = 15;
+    public const int EyeBottom = 16;
 }
