@@ -1092,6 +1092,8 @@ MonoBehaviour:
   Spritesheet2: {fileID: 2100000, guid: ad87f07aae0a12345a71934770b69636, type: 2}
   Spritesheet3: {fileID: 2100000, guid: 74b29a7afa2955d48abece86f735ee49, type: 2}
   Spritesheet4: {fileID: 2100000, guid: d091c3e0f72e0f84bb1a021de7ea9e92, type: 2}
+  Spritesheet5: {fileID: 2100000, guid: 4fcb630e223c916419f07f7d9ab0d3c3, type: 2}
+  Spritesheet6: {fileID: 2100000, guid: b1854d8d09939c444b4f7fb5c0db2eb5, type: 2}
   Model: {fileID: 11400000, guid: ec22a2597fada62428548453d6b29cff, type: 2}
   HeadMesh: {fileID: 5170271992181838058}
   BodyMesh: {fileID: 7722571852113488070}
