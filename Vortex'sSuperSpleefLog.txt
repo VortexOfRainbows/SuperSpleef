@@ -12,6 +12,11 @@ Stuff to do:
 
 
 8/26/24
+1. Changed base world size 15 -> 6
+2. Shift now slows down the player, instead of causing a sprint. Base move speed/max speed increased 2.0 -> 2.4, 5 -> 5.5
+3. New UI Sprites!
+
+8/25/24
 1. First day of logging. Stuff complete before logging can be seen better on GitHub. But includes:
 	1. Framework for Worldgen, Items, Inventory, and Multiplayer
 	2. Much, much, more!

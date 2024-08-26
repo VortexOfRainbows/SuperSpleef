@@ -24,14 +24,14 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     public PlayerControls.ControlDown Control => ControlManager.Control;
     public PlayerControls.ControlDown LastControl => ControlManager.LastControl;
     public const int EntityLayer = 6;
-    [SerializeField] private float BlockRange = 4;
-    [SerializeField] private float jumpForce = 10f;
-    [SerializeField] private float WalkSpeed = 2f;
-    [SerializeField] private float WalkSpeedMax = 5;
-    [SerializeField] private float SprintMult = 2;
-    [SerializeField] private float MoveDeacceleration = 0.5f;
-    [SerializeField] private float MoveAcceleration = 0.1f;
-    [SerializeField] private float JumpDrag = 0.95f;
+    private float BlockRange = 4.6f;
+    private float jumpForce = 10f;
+    private float WalkSpeed = 2.4f;
+    private float WalkSpeedMax = 5.5f;
+    private float SprintMult = 0.5f;
+    private float MoveDeacceleration = 0.65f;
+    private float MoveAcceleration = 0.09f;
+    private float JumpDrag = 0.95f;
     [SerializeField] private bool OnTheFloor = false;
     /// <summary>
     /// How long until the player can use an item. 

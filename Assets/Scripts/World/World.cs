@@ -11,7 +11,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     public static World Instance { get; private set; }
     public GameObject chunkObj;
     private GameObject[,] chunk;
-    public const int DefaultChunkRadius = 15;
+    public const int DefaultChunkRadius = 6;
     public static int ChunkRadius
     {
         get
