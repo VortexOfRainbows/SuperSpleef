@@ -1,5 +1,3 @@
-using System.Collections;
-using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -45,27 +43,9 @@ public class GameStateManager : MonoBehaviour
     private static float GameEndDelay;
     private static bool GameOver;
     private static bool GamePaused;
-    public static bool GameIsOver
-    {
-        get
-        {
-            return GameOver;
-        }
-    }
-    public static bool GameIsPaused
-    {
-        get
-        {
-            return GamePaused;
-        }
-    }
-    public static bool GameIsPausedOrOver
-    { 
-        get 
-        { 
-            return GameOver || GamePaused || SceneManager.GetActiveScene().name != "MultiplayerScene"; 
-        }
-    }
+    public static bool GameIsOver => GameOver;
+    public static bool GameIsPaused => GamePaused;
+    public static bool GameIsPausedOrOver => GameOver || GamePaused || SceneManager.GetActiveScene().name != MultiplayerScene; 
     private static int m_mode;
     public static int Mode 
     { 

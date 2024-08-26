@@ -47,6 +47,7 @@ public class InventoryModel : MonoBehaviour ///Team members that contributed to 
         if(parentSlot != null && parentSlot.CanGetItem && parentSlot.Item is LaserCannon)
         {
             euler.x += 90;
+            euler.y += 90;
         }
         transform.localEulerAngles = euler;
     }
