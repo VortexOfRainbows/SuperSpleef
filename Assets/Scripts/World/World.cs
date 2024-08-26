@@ -33,7 +33,17 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     private void Start()
     {
         WorldGenFinished = false;
-        GenWorld();
+    }
+    private void FixedUpdate()
+    {
+        if(NetworkManager.Singleton.IsServer)
+        {
+            GameStateManager.NetData.DataSentToClients.Value = true;
+        }
+        if(!WorldGenFinished && GameStateManager.HasReceivedWorldDataFromHost)
+        {
+            GenWorld();
+        }
     }
     private void GenWorld()
     {
@@ -234,7 +244,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     }
     public GameObject GetChunk(int i, int j)
     {
-        if (i >= ChunkRadius || j >= ChunkRadius || i < 0 || j < 0)
+        if (i >= ChunkRadius || j >= ChunkRadius || i < 0 || j < 0 || chunk == null)
         {
             return null;
         }

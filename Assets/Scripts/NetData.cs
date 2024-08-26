@@ -12,6 +12,7 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
     public NetworkVariable<int> GenSeed;
     public NetworkVariable<bool> HasSpawnedPlayers;
     public NetworkVariable<int> StartingPlayerCount;
+    public NetworkVariable<bool> DataSentToClients = new NetworkVariable<bool>(false);
     public static NetworkVariable<float> WorldSizeOverride;
     private void Awake()
     {
@@ -36,7 +37,7 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
     public void ResetValues()
     {
         StartingPlayerCount.Value = -1;
-        HasSpawnedPlayers.Value = false;
+        HasSpawnedPlayers.Value = DataSentToClients.Value = false;
         SyncedMode.Value = 0;
         if(GenSeed.Value <= 0)
             GenSeed.Value = Random.Range(0, int.MaxValue);

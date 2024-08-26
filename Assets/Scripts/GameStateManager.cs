@@ -45,40 +45,40 @@ public class GameStateManager : MonoBehaviour
     private static bool GamePaused;
     public static bool GameIsOver => GameOver;
     public static bool GameIsPaused => GamePaused;
-    public static bool GameIsPausedOrOver => GameOver || GamePaused || SceneManager.GetActiveScene().name != MultiplayerScene; 
-    private static int m_mode;
+    public static bool GameIsPausedOrOver => GameOver || GamePaused || SceneManager.GetActiveScene().name != MultiplayerScene;
+    public static bool HasReceivedWorldDataFromHost
+    {
+        get
+        {
+            return NetData != null && NetData.DataSentToClients.Value;
+        }
+        set
+        {
+            NetData.DataSentToClients.Value = value;
+        }
+    }
     public static int Mode 
     { 
         get 
         {
-            if(NetHandler.Active)
-                return NetData.SyncedMode.Value;
-            return m_mode;
+            return NetData.SyncedMode.Value;
         } 
         private set
         {
-            if (NetHandler.Active)
-                NetData.SyncedMode.Value = value;
-            m_mode = value;
+            NetData.SyncedMode.Value = value;
         } 
     }
-    private static bool m_hasSpawnedPlayers;
     public static bool HasSpawnedPlayers
     {
         get
         {
-            if (NetHandler.Active)
-                return NetData.HasSpawnedPlayers.Value;
-            return m_hasSpawnedPlayers;
+            return NetData.HasSpawnedPlayers.Value;
         }
         private set
         {
-            if (NetHandler.Active)
-                NetData.HasSpawnedPlayers.Value = value;
-            m_hasSpawnedPlayers = value;
+            NetData.HasSpawnedPlayers.Value = value;
         }
     }
-    private static float m_worldSizeOverride;
     public static void SetWorldDesert(bool desert)
     {
         if (desert)
@@ -101,47 +101,33 @@ public class GameStateManager : MonoBehaviour
     {
         get
         {
-            if (NetHandler.Active && NetData.WorldSizeOverride != null)
-                return NetData.WorldSizeOverride.Value;
-            return m_worldSizeOverride;
+            return NetData.WorldSizeOverride.Value;
         }
         private set
         {
-            if (NetHandler.Active)
-                NetData.WorldSizeOverride.Value = value;
-            m_worldSizeOverride = value;
+            NetData.WorldSizeOverride.Value = value;
         }
     }
-    private static int m_genSeed;
     public static int GenSeed
     {
         get
         {
-            if (NetHandler.Active)
-                return NetData.GenSeed.Value;
-            return m_genSeed;
+            return NetData.GenSeed.Value;
         }
         private set
         {
-            if (NetHandler.Active)
-                NetData.GenSeed.Value = value;
-            m_genSeed = value;
+            NetData.GenSeed.Value = value;
         }
     }
-    private static int m_startingPlayerCount;
     public static int StartingPlayerCount
     {
         get
         {
-            if (NetHandler.Active)
-                return NetData.StartingPlayerCount.Value;
-            return m_startingPlayerCount;
+            return NetData.StartingPlayerCount.Value;
         }
         private set
         {
-            if (NetHandler.Active)
-                NetData.StartingPlayerCount.Value = value;
-            m_startingPlayerCount = value;
+            NetData.StartingPlayerCount.Value = value;
         }
     }
     public static float ParticleMultiplier => ClientData.ParticleMultiplier.Value;
@@ -184,17 +170,19 @@ public class GameStateManager : MonoBehaviour
         {
             NetData.ResetValues();
         }
-        else if (!NetHandler.Active) //Reset these values manually if not on the server
-        {
-            StartingPlayerCount = -1;
-            HasSpawnedPlayers = false;
-            if(Mode <= GameModeID.None)
-                Mode = 0;
-            if (GenSeed <= 0)
-                GenSeed = UnityEngine.Random.Range(0, int.MaxValue);
-            if (WorldSizeOverride <= 0)
-                WorldSizeOverride = World.DefaultChunkRadius;
-        }
+        //
+        // This should no longer be needed, as the game will only take place on a SERVER
+        //else if (!NetHandler.Active) //Reset these values manually if not on the server
+        //{
+        //    StartingPlayerCount = -1;
+        //    HasSpawnedPlayers = false;
+        //    if(Mode <= GameModeID.None)
+        //        Mode = 0;
+        //    if (GenSeed <= 0)
+        //        GenSeed = UnityEngine.Random.Range(0, int.MaxValue);
+        //    if (WorldSizeOverride <= 0)
+        //        WorldSizeOverride = World.DefaultChunkRadius;
+        //}
     }
     public static void SetParticleMultiplier(float mult)
     {
@@ -240,7 +228,7 @@ public class GameStateManager : MonoBehaviour
         {
             LocalMultiplayer = true;
             Mode = mode == GameModeID.LocalMultiplayerApocalypse ? GameModeID.Apocalypse : GameModeID.None;
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(MultiplayerScene);
         }
         else
         {
@@ -344,7 +332,7 @@ public class GameStateManager : MonoBehaviour
             Debug.Log("World Size: " + WorldSizeOverride);
             Debug.Log("Gen Rand: " + GenSeed);
         }*/
-        if (SceneManager.GetActiveScene().name == MultiplayerScene)
+        if (SceneManager.GetActiveScene().name == MultiplayerScene && HasReceivedWorldDataFromHost)
         {
             if (NetworkManager.Singleton.IsServer)
             {

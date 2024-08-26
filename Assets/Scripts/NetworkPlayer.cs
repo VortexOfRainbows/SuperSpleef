@@ -29,7 +29,7 @@ public class NetworkPlayer : NetworkBehaviour //Team members that contributed to
         {
             MyName.Value = GameStateManager.LocalUsername;
         }
-        if (SceneManager.GetActiveScene().name == GameStateManager.MultiplayerScene)
+        if (SceneManager.GetActiveScene().name == GameStateManager.MultiplayerScene && GameStateManager.HasReceivedWorldDataFromHost)
         {
             transform.position = new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2);
         }
