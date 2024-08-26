@@ -28,7 +28,7 @@ public class FallingCube : MonoBehaviour
         MyType = Random.Range(BlockID.Dirt, BlockID.Max);
         SetModelToBlock(MyType);
         rotations = transform.localEulerAngles;
-        rotationSpeed = Utils.randVector3Circular(1, 1, 1, true) * rotationSpeedMultiplier;
+        rotationSpeed = Utils.Random.Vector3Circular(1, 1, 1, true) * rotationSpeedMultiplier;
     }
     public void SetModelToBlock(int BlockID)
     {

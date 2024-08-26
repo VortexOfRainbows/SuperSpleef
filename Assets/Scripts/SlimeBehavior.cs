@@ -59,7 +59,7 @@ public class SlimeBehavior : Entity ///Team members that contributed to this scr
     }
     public void Wander()
     {
-        Vector3 wanderTarget = Utils.randVector3Circular(1, 0.5f, 1f).normalized;
+        Vector3 wanderTarget = Utils.Random.Vector3Circular(1, 0.5f, 1f).normalized;
         rb.velocity += wanderTarget * speed;
     }
     public void Attack()

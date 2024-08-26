@@ -1,10 +1,48 @@
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public static class Utils ///Team members that contributed to this script: Ian Bunnell
 {
+    public static class Random
+    {
+        /// <summary>
+        /// Generates a random oval vector within the boundaries of x, y, and z
+        /// If edge is true, guarantees that the value will fall on the edge. Otherwise, it will fall elsewhere in the circle.
+        /// </summary>
+        public static Vector2 Vector2Circular(float width, float height, bool edge = false)
+        {
+            Vector2 random = UnityEngine.Random.insideUnitCircle;
+            if (edge)
+                random = random.normalized;
+            random.x *= width;
+            random.y *= height;
+            return random;
+        }
+        /// <summary>
+        /// Generates a random oval vector within the boundaries of x, y, and z
+        /// If edge is true, guarantees that the value will fall on the edge. Otherwise, it will fall elsewhere in the circle.
+        /// </summary>
+        public static Vector3 Vector3Circular(float widthX, float height, float widthZ, bool edge = false)
+        {
+            Vector3 random = edge ? UnityEngine.Random.onUnitSphere : UnityEngine.Random.insideUnitSphere;
+            random.x *= widthX;
+            random.y *= height;
+            random.z *= widthZ;
+            return random;
+        }
+        /// <summary>
+        /// Has a 1/n chance to return true. Otherwise, will return false.
+        /// </summary>
+        public static bool Boolean(int n = 2)
+        {
+            if(n < 2)
+            {
+                return true;
+            }
+            return UnityEngine.Random.Range(0, n) == 0;
+        }
+    }
     /// <summary>
     /// A CubeMesh that works for the UV maps of tiles in the tile atlas
     /// </summary>
@@ -135,42 +173,5 @@ public static class Utils ///Team members that contributed to this script: Ian B
         mesh.triangles = triangles.ToArray();
         mesh.RecalculateNormals();
         return mesh;
-    }
-    /// <summary>
-    /// Generates a random oval vector within the boundaries of x, y, and z
-    /// If edge is true, guarantees that the value will fall on the edge. Otherwise, it will fall elsewhere in the circle.
-    /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="edge"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public static Vector2 randVector2Circular(float width, float height, bool edge = false)
-    {
-        Vector2 random = UnityEngine.Random.insideUnitCircle;
-        if (edge)
-        {
-            random = random.normalized;
-        }
-        random.x *= width;
-        random.y *= height;
-        return random;
-    }
-    /// <summary>
-    /// Generates a random oval vector within the boundaries of x, y, and z
-    /// If edge is true, guarantees that the value will fall on the edge. Otherwise, it will fall elsewhere in the circle.
-    /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="edge"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public static Vector3 randVector3Circular(float widthX, float height, float widthZ, bool edge = false)
-    {
-        Vector3 random = edge ? UnityEngine.Random.onUnitSphere : UnityEngine.Random.insideUnitSphere;
-        random.x *= widthX;
-        random.y *= height;
-        random.z *= widthZ;
-        return random;
     }
 }

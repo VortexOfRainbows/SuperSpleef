@@ -16,7 +16,7 @@ public class Shotgun : Weapon ///Team members that contributed to this script: I
         {
             float rotation = -(spread * shots / 2) + i * spread;
             direction.Rotate(0, rotation, 0);
-            Projectile.NewProjectile(ShootType(player), direction.position, direction.rotation, ShootSpeed * direction.forward + 2.5f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
+            Projectile.NewProjectile(ShootType(player), direction.position, direction.rotation, ShootSpeed * direction.forward + 2.5f * Utils.Random.Vector3Circular(1, 1, 1));
             direction.Rotate(0, -rotation, 0);
         }
         return true;
