@@ -16,6 +16,7 @@ Stuff to do:
 2. Shift now slows down the player, instead of causing a sprint. Base move speed/max speed increased 2.0 -> 2.4, 5 -> 5.5
 3. New UI Sprites!
 4. Shift also causes the player to "Safe Walk", allowing them to place blocks without falling off platforms
+5. "Safe Walk" has a crouch animation
 
 8/25/24
 1. First day of logging. Stuff complete before logging can be seen better on GitHub. But includes:

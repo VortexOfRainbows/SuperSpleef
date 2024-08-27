@@ -1,5 +1,7 @@
 using System;
+using System.Net;
 using Unity.Mathematics;
+using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
@@ -24,6 +26,9 @@ public class PlayerAnimator : MonoBehaviour
     private const float ResetRotationJoints = 0.1f;
     private const float ResetRotationBody = 0.07f;
     public bool IsFirstPerson = false;
+    private float crouchFunny = 0;
+    public float crouchPercent = 0;
+    public bool isCrouched = false;
     public void SetActive(bool FirstPerson = true)
     {
         IsFirstPerson = HeldItem.FirstPerson = FirstPerson;
@@ -37,7 +42,7 @@ public class PlayerAnimator : MonoBehaviour
             Body.gameObject.SetActive(false);
             RightArm.gameObject.layer = HeldItem.gameObject.layer = RightArmVisual.layer = 10;
             RightArm.transform.localScale = Vector3.one * 0.45f;
-            RightArm.transform.localPosition = new Vector3(0.15f, 0.51f, 0f);
+            RightArm.transform.localPosition = new Vector3(0.15f, 0.51f + crouchPercent * -0.3125f, 0f);
         }
         else
         {
@@ -65,6 +70,24 @@ public class PlayerAnimator : MonoBehaviour
         float desiredBodyTilt = FacingVector.eulerAngles.y;
         float tiltMultiplier = player.MovingBackward ? -1 : 1;
 
+        isCrouched = false;
+        crouchFunny = 0;
+        if (player is Player p)
+        {
+            if (p.Crouched.Value)
+            {
+                if(!IsFirstPerson)
+                    crouchFunny = 30;
+                isCrouched = true;
+            }
+        }
+        if (isCrouched)
+        {
+            crouchPercent += 0.075f;
+        }
+        else
+            crouchPercent -= 0.075f;
+        crouchPercent = Mathf.Clamp(crouchPercent, 0, 1);
         if (!IsFirstPerson)
         {
             if (player.MovingLeft)
@@ -84,7 +107,8 @@ public class PlayerAnimator : MonoBehaviour
         if (IsFirstPerson)
             changeSpeed = 1;
         currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, desiredBodyTilt, changeSpeed);
-        transform.eulerAngles = new Vector3(0, currentBodyTilt, 0);
+        transform.eulerAngles = new Vector3(crouchFunny, currentBodyTilt, 0);
+        transform.localPosition = new Vector3(0, -0.25f * crouchFunny / 30f, 0);
     }
     private void FixedUpdate()
     {
@@ -122,10 +146,13 @@ public class PlayerAnimator : MonoBehaviour
 
         float sinusoid = Mathf.Sin(moveCounter * Mathf.Deg2Rad);
 
-        LeftLeg.localEulerAngles = new Vector3(sinusoid * DegreesOfJointMovementLegs, LeftLeg.localEulerAngles.y, LeftLeg.localEulerAngles.z);
-        RightLeg.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementLegs, RightLeg.localEulerAngles.y, RightLeg.localEulerAngles.z);
-
-        LeftArm.localEulerAngles = new Vector3(sinusoid * -DegreesOfJointMovementArms, 0, 0);
+        float degrees = DegreesOfJointMovementLegs * (1 - 0.5f * crouchFunny / 30f);
+        LeftLeg.localEulerAngles = new Vector3(sinusoid * degrees - crouchFunny, LeftLeg.localEulerAngles.y, LeftLeg.localEulerAngles.z);
+        RightLeg.localEulerAngles = new Vector3(sinusoid * -degrees - crouchFunny, RightLeg.localEulerAngles.y, RightLeg.localEulerAngles.z);
+        LeftLeg.localPosition = new Vector3(0, -0.25f + 0.125f * crouchFunny / 30f, 0);
+        RightLeg.localPosition = new Vector3(0, -0.25f + 0.125f * crouchFunny / 30f, 0);
+        degrees = DegreesOfJointMovementArms * (1 - 0.5f * crouchFunny / 30f);
+        LeftArm.localEulerAngles = new Vector3(sinusoid * -degrees, 0, 0);
         if (!IsFirstPerson)
             MainArmUpdate();
     }
@@ -169,8 +196,9 @@ public class PlayerAnimator : MonoBehaviour
             }
         }
         float slerpPoint = Mathf.Sin(Mathf.PI * Mathf.Pow(itemUseAnimationPercent, 2));
+        float degrees = DegreesOfJointMovementArms * (1 - 0.5f * crouchFunny / 30f);
         if (itemUseAnimationPercent < 0.7f)
-            RightArm.localEulerAngles = new Vector3(sinusoid * DegreesOfJointMovementArms, 0, 0);
+            RightArm.localEulerAngles = new Vector3(sinusoid * degrees, 0, 0);
         RightArm.rotation = math.slerp(RightArm.rotation, armUseAnimation.ToQuaternion(), slerpPoint);
 
         IdleArmSwaying();

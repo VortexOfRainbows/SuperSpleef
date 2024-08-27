@@ -1,13 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using Unity.Netcode;
-using System;
-using static Unity.Collections.AllocatorManager;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
 using System.Collections.Generic;
-using System.Transactions;
-using static UnityEditor.PlayerSettings;
 
 public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo, Samuel Gines
 {
@@ -128,6 +122,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
 
         //PlayerVisual.GetComponent<PlayerAnimator>().SetSprite();
     }
+    public NetworkVariable<bool> Crouched = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     private NetworkVariable<int> selectedItem = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public int SelectedItem 
     { 
@@ -171,7 +166,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
             bool doNotChangeCamera = ThirdPersonCamera && Input.GetKey(KeyCode.LeftControl);
             FacingVector.transform.rotation = Quaternion.Euler(Direction.x, Direction.y, 0f);
-            FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+            FacingVector.transform.position = transform.position + new Vector3(0, 0.5f, 0) + new Vector3(0, PlayerVisual.GetComponent<PlayerAnimator>().crouchPercent * -0.3125f, 0);
             if (!doNotChangeCamera)
             {
                 CameraTransform.rotation = FacingVector.transform.rotation;
@@ -562,6 +557,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (Control.Shift && IsOwner)
         {
+            Crouched.Value = true;
             HandguardBlock.SetActive(true);
             if (OnTheFloor)
             {
@@ -611,7 +607,11 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
         }
         else
+        {
+            if(IsOwner)
+                Crouched.Value = false;
             HandguardBlock.SetActive(false);
+        }
     }
     public const float DamageFromVoid = 200f;
     private const float maxPlayerHP = 100; // Assigns the Max HP of the player
