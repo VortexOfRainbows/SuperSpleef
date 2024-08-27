@@ -4,6 +4,15 @@ public class BarrierBlock : MonoBehaviour ///Team members that contributed to th
 {
     [SerializeField] private GameObject Top, Bottom, Left, Right, Front, Back;
     public bool IgnoreTop, IgnoreBot; //These need to be public as they are modified when this is initialized in other classes
+    public void TurnAllSides(bool active)
+    {
+        Top.SetActive(false);
+        Bottom.SetActive(false);
+        Left.SetActive(active);
+        Right.SetActive(active);
+        Front.SetActive(active);
+        Back.SetActive(active);
+    }
     public void UpdateCollision()
     {
         Vector3 pos = transform.position + new Vector3(0f, 0.5f, 0f);

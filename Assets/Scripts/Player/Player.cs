@@ -1,6 +1,13 @@
 using System.Linq;
 using UnityEngine;
 using Unity.Netcode;
+using System;
+using static Unity.Collections.AllocatorManager;
+using UnityEngine.UIElements;
+using Unity.VisualScripting;
+using System.Collections.Generic;
+using System.Transactions;
+using static UnityEditor.PlayerSettings;
 
 public class Player : Entity ///Team members that contributed to this script: Ian Bunnell, Sehun Heo, Samuel Gines
 {
@@ -28,7 +35,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     private float jumpForce = 10f;
     private float WalkSpeed = 2.4f;
     private float WalkSpeedMax = 5.5f;
-    private float SprintMult = 0.5f;
+    private float SprintMult = 0.65f;
     private float MoveDeacceleration = 0.65f;
     private float MoveAcceleration = 0.09f;
     private float JumpDrag = 0.95f;
@@ -260,6 +267,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         velo.z = velocityXZ.y;
         perpendicularVelocity = velocityXZ;
         RB.velocity = velo;
+
         if (IsOwner)
             Velocity.Value = velo;
         if (RB.velocity.y > 0)
@@ -272,6 +280,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             RB.maxDepenetrationVelocity = 10;
         }
         PreviousYVelocity = RB.velocity.y;
+
         HeldItemUpdate(); //Item updates should be considered on fixed updated so they update in time with physics
 
         //RB.MovePosition(RB.velocity * Time.fixedDeltaTime);
@@ -404,8 +413,8 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         else
         {
             //For some reason, you need to do a bitshift of the layer mask to get it to work. 
-            //int worldLayerMask = 1 << 3;
-            if (Physics.Raycast(FacingVector.transform.position, FacingVector.transform.forward, out hitInfo, BlockRange * 2, -1, QueryTriggerInteraction.Ignore)) //Twice the block range so we can hit all blocks within the range
+            int worldLayerMask = 1 << 3;
+            if (Physics.Raycast(FacingVector.transform.position, FacingVector.transform.forward, out hitInfo, BlockRange * 2, worldLayerMask, QueryTriggerInteraction.Ignore)) //Twice the block range so we can hit all blocks within the range
             {
                 Vector3 hitPoint = hitInfo.point;
                 Vector3 InsideBlock = hitPoint - hitInfo.normal * 0.1f;
@@ -513,22 +522,32 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
     }
     [SerializeField] private GameObject InBlockColliderTemplate;
-    private GameObject InBlockColliderTop, InBlockColliderBottom;
+    private GameObject InBlockColliderTop, InBlockColliderBottom, HandguardBlock;
     private void InitializeInBlockColliders()
     {
         InBlockColliderBottom = Instantiate(InBlockColliderTemplate, null);
-        InBlockColliderTop = Instantiate(InBlockColliderTemplate, null);
         InBlockColliderBottom.name = "BottomInBlockCollider";
-        InBlockColliderTop.name = "TopInBlockCollider";
         InBlockColliderBottom.GetComponent<BarrierBlock>().IgnoreTop = true;
+
+        InBlockColliderTop = Instantiate(InBlockColliderTemplate, null);
+        InBlockColliderTop.name = "TopInBlockCollider";
         InBlockColliderTop.GetComponent<BarrierBlock>().IgnoreBot = true;
+
+        HandguardBlock = Instantiate(InBlockColliderTemplate, null);
+        HandguardBlock.name = "HandguardBlock";
+        HandguardBlock.transform.localScale = Vector3.one * 2.15f;
+        HandguardBlock.layer = 11;
+        foreach(Transform child in HandguardBlock.GetComponentInChildren<Transform>())
+        {
+            child.gameObject.layer = 11;
+        }
     }
     /// <summary>
     /// Updates the colliders that surround the player to make sure they can't fall out of the world if they clip out of the chunk's mesh
     /// </summary>
     private void BlockCollisionCheck()
     {
-        if(InBlockColliderTop == null && InBlockColliderBottom == null)
+        if(InBlockColliderTop == null || InBlockColliderBottom == null || HandguardBlock == null)
         {
             InitializeInBlockColliders();
         }
@@ -541,6 +560,58 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             ScreenBlocker.UpdateUVS(World.Block(topAsInt));
         }
+        if (Control.Shift && IsOwner)
+        {
+            HandguardBlock.SetActive(true);
+            if (OnTheFloor)
+            {
+                Vector3 blockBelow = transform.position + new Vector3(0, -1.5f, 0);
+                if(World.Block(blockBelow) != BlockID.Air)
+                {
+                    HandguardBlock.GetComponent<BarrierBlock>().TurnAllSides(true);
+                    HandguardBlock.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y + 0.5f) - 1, Mathf.FloorToInt(transform.position.z) + 0.5f);
+                }
+                else
+                {
+                    Vector3? closest = null;
+                    float bestDist = -1;
+                    List<Vector3> possiblePositions = new List<Vector3>() {
+                        World.AsBlockPos(transform.position + new Vector3(-0.45f, -1.25f, 0)),
+                        World.AsBlockPos(transform.position + new Vector3(0.45f, -1.25f, 0)),
+                        World.AsBlockPos(transform.position + new Vector3(0, -1.25f, -0.45f)),
+                        World.AsBlockPos(transform.position + new Vector3(0, -1.25f, 0.45f)),
+                        World.AsBlockPos(transform.position + new Vector3(-0.45f, -1.25f, -0.45f)),
+                        World.AsBlockPos(transform.position + new Vector3(-0.45f, -1.25f, 0.45f)),
+                        World.AsBlockPos(transform.position + new Vector3(0.45f, -1.25f, -0.45f)),
+                        World.AsBlockPos(transform.position + new Vector3(0.45f, -1.25f, 0.45f)),
+                    };
+                    for(int i = 0; i < possiblePositions.Count; i++)
+                    {
+                        Vector3 pos = possiblePositions[i] + Vector3.one * 0.5f;
+                        if(World.Block(pos) != BlockID.Air)
+                        {
+                            float currentDist = (pos - transform.position).sqrMagnitude; //Using sqr magnitude because it is faster and just as accurate in this situation
+                            if (closest == null || bestDist > currentDist)
+                            {
+                                closest = pos;
+                                bestDist = currentDist;
+                            }
+                        }
+                    }
+                    if(closest.HasValue)
+                    {
+                        HandguardBlock.GetComponent<BarrierBlock>().TurnAllSides(true);
+                        HandguardBlock.transform.position = closest.Value;
+                    }
+                }
+            }
+            else
+            {
+                HandguardBlock.GetComponent<BarrierBlock>().TurnAllSides(false);
+            }
+        }
+        else
+            HandguardBlock.SetActive(false);
     }
     public const float DamageFromVoid = 200f;
     private const float maxPlayerHP = 100; // Assigns the Max HP of the player

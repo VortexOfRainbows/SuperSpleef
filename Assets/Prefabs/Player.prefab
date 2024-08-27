@@ -651,14 +651,6 @@ MonoBehaviour:
   JumpHitbox: {fileID: 2651317863319354778}
   PlayerVisual: {fileID: 8500111207061908498}
   ControlManager: {fileID: 5101752403716287785}
-  BlockRange: 4.6
-  jumpForce: 10
-  WalkSpeed: 4
-  WalkSpeedMax: 5
-  SprintMult: 1.75
-  MoveDeacceleration: 0.65
-  MoveAcceleration: 0.09
-  JumpDrag: 0.95
   OnTheFloor: 0
   perpendicularVelocity: {x: 0, y: 0}
   InBlockColliderTemplate: {fileID: 8847359203406491454, guid: 0419566e7de6cbd41bc5eeb4fee2bb51, type: 3}
@@ -731,7 +723,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 0.015, z: 0.5}
+  m_Size: {x: 0.7, y: 0.015, z: 0.7}
   m_Center: {x: 0, y: -1, z: 0}
 --- !u!114 &942549933116168614
 MonoBehaviour:

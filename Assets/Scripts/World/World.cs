@@ -276,6 +276,10 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         return Block(pos.x, pos.y, pos.z);
     }
+    public static Vector3 AsBlockPos(Vector3 pos)
+    {
+        return new Vector3(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z));
+    }
     public static int Block(float x, float y, float z)
     {
         GameObject chunkObj = Instance.BoundingChunk(x, z);
