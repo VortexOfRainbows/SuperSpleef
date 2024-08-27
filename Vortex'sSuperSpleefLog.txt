@@ -11,12 +11,14 @@ Stuff to do:
 6. Ability to open up and manage the inventory (right now, the inventory is inaccessible except for the hotbar).
 
 
-8/26/24
+8/26/24 to 8/27/24
 1. Changed base world size 15 -> 6
 2. Shift now slows down the player, instead of causing a sprint. Base move speed/max speed increased 2.0 -> 2.4, 5 -> 5.5
 3. New UI Sprites!
 4. Shift also causes the player to "Safe Walk", allowing them to place blocks without falling off platforms
 5. "Safe Walk" has a crouch animation
+6. "Safe Walk" syncs in MP
+7. Fix some text sizes, some new randomizeable words for generating Usernames and splash text
 
 8/25/24
 1. First day of logging. Stuff complete before logging can be seen better on GitHub. But includes:

@@ -1,7 +1,5 @@
 using System;
-using System.Net;
 using Unity.Mathematics;
-using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour

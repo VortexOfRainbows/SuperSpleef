@@ -2,30 +2,30 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-///Team members that contributed to this script: Ian Bunnell
 public class TitleScreenUI : MonoBehaviour
 {
     public const int MaxChars = 32;
     public static readonly string[] viableFirstNames = { 
+        "Nature", "Earthen", "Frigid", "Otherworldly", "Tidal", "Evil", "Infernal", "Chaotic", 
         "Defeated", "Dart", "Big", "Suspicious", "Epic", "Smelly", "Nervous", "Verbose", "Humongous", "Abashed", "Tiny", "Star", "Quick", "Slow", "Annoying", "Cheerful", "Goofy", "Lazy", "Hungry", "Sly", "Strong", "Magical", "Blue", "Red", "Scared", 
         "Spooky", "Colorful", "Robo", "Irradiated", "Random", "Sinful", "Holy", "Godly", "Broken", "Damaged", "Demonic", "Lucky", "President", "King", "Plasma", "Energetic", "Dreary", "Hopeful", "Sus", "Truthful", "Gaming", "Shadow", "Running", 
         "Jumping", "Sneaking", "Anime", "Cold", "Hot", "Ugly", "Angry", "Fishy", "Impossible", "Curious", "Smart", "Athletic", "Stunned", "Clear", "Surprised", "Starved", "Super", "Awesome", "Basic", "Extreme", "Murder", "Doctor", "Cooking", 
         "Bagged", "Humid", "Humble", "Double", "Zombie", "Lord", "Lost", "Many", "Beached", "Master", "Professional", "Hospital", "Freedom", "Patriotic", "Legendary", "European", "Mystic", "Messy", "Powerful", "Insightful", "Happy", "Sad", 
-        "Dazzled", "Dead", "Beautiful", "Excited", "Thinking", "Pondering", "Bat"
+        "Dazzled", "Dead", "Beautiful", "Excited", "Thinking", "Pondering", "Bat", "VortexOf"
     };
     public static readonly string[] viableSecondNames = { 
         "Goose", "Mongoose", "Duck", "Swan", "Chicken", "Hen", "Rooster", "Manx", "Cat", "Dog", "Goob", "Night", "Mouse", "Taxi", "Man", "House", "Car", "Door", "Wheel", "Castle", "Floor", "Cup", "Building", "BurjKhalifa", "Knob", "President", 
         "King", "Monkey", "Fort", "Dumpster", "Imposter", "Crewmate", "Innocence", "Shadow", "Hedgehog", "Broccoli", "NewYorker", "Fish", "Hippo", "Queen", "Placemat", "Fork", "Spoon", "Knife", "Prince", "Wallet", "Table", "Comic", "Phone", 
         "Money", "Fur", "Hornet", "Plumber", "Cop", "Fireman", "Clerk", "Doctor", "Villain", "Bear", "Moose", "Beaver", "Block", "Dirt", "Rock", "Medic", "Hero", "Mafia", "Theorist", "Window", "Leg", "Hand", "Face", "Park", "PowerPlant", 
         "Doughnut", "Aluminium", "Pan", "Egg", "Bacon", "Cheese", "Bank", "Robber", "Janitor", "Paper", "Uranium", "Gentleman", "Zombie", "Lord", "Ogre", "Goblin", "Dwarf", "Elf", "Steambath", "Squirrel", "Dragon", "Almond", "School", "Program", 
-        "Tree", "Tank", "Court", "Judge", "Lawyer", "Rainbow", "Vortex"
+        "Tree", "Tank", "Court", "Judge", "Lawyer", "Rainbow", "Vortex", "Spirit"
     };
     public static readonly string[] SplashTextVariants = 
     {
         "like a record baby", "yellow text", "now with splash text", "how many blocks can you click", "names courtesy of zombified bears", "also try Minecraft", "also try Terraria", "also try SOTS tMod", "life level up", "avoid the void", 
         "now with more chunks", "now with geometry", "dancing with slimes and flies", "cloudy with a chance of spheres", "grass to touch here", "sponsored by gamers", "unlimited bacon but no video games\nor unlimited games but no games", 
         "ants in pants", "let bro cook", "we cooked too much", "a shrimp fried this rice", "multiplier", "plays boom sound effect", "among sus", "gremlin activity", "cooked al dente", "now with 20% more",
-        "buy one for the price of two and get one free", "hi hungry im dad", "s tier", "now with lasers", "bear hill roll"
+        "buy one for the price of two and get one free", "hi hungry im dad", "s tier", "now with lasers", "bear hill roll", "ducks vs chickens", "v\ne\nr\nt\ni\nc\na\nl"
     };
 
     [SerializeField] private InputField UsernameField;
