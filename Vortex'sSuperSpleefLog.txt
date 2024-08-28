@@ -19,6 +19,7 @@ Stuff to do:
 5. "Safe Walk" has a crouch animation
 6. "Safe Walk" syncs in MP
 7. Fix some text sizes, some new randomizeable words for generating Usernames and splash text
+8. WIP Worldgen settings UI
 
 8/25/24
 1. First day of logging. Stuff complete before logging can be seen better on GitHub. But includes:
