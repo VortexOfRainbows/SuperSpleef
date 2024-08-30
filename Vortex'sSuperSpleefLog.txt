@@ -9,7 +9,11 @@ Stuff to do:
 4. Better UI for the list of players in Multiplayer game lobby.
 5. Sync Player IDs (Make sure every player has a synced index across clients). This may require special networking logic, or other means of sorting.
 6. Ability to open up and manage the inventory (right now, the inventory is inaccessible except for the hotbar).
+7. Prevent incompatible versions from connecting to each other
+8. Melee Weapon
 
+8/29/24
+1. More work on Worldgen settings UI
 
 8/26/24 to 8/27/24
 1. Changed base world size 15 -> 6
