@@ -10,6 +10,10 @@ public static class ClientData
     public static SaveData<float> SoundVolume;
     public static SaveData<float> MusicVolume;
     public static SaveData<float> ParticleMultiplier;
+
+    //World settings might need to be saveable as Preset in the future, in case people have certain settings they like more than others
+    public static SaveData<float> WorldSize;
+    public static SaveData<int> WorldGenUCI;
     public static void Initialize()
     {
         MouseSensitivity = new SaveData<float>("MouseSens", "Mouse Sensitivity");
@@ -17,6 +21,8 @@ public static class ClientData
         SoundVolume = new SaveData<float>("Sound", "Sound Volume");
         MusicVolume = new SaveData<float>("Music", "Music Volume");
         ParticleMultiplier = new SaveData<float>("ParticleMult", "Particle Multiplier");
+        WorldSize = new SaveData<float>("WorldSize", "World Size (Experimental)");
+        WorldGenUCI = new SaveData<int>("WorldGenUCI", "Generate UCI");
         ReadValues();
 
         Dict = new Dictionary<string, object>
@@ -25,9 +31,14 @@ public static class ClientData
             { ControllerSensitivity.Key, ControllerSensitivity },
             { SoundVolume.Key, SoundVolume },
             { MusicVolume.Key, MusicVolume },
-            { ParticleMultiplier.Key, ParticleMultiplier }
+            { ParticleMultiplier.Key, ParticleMultiplier },
+            { WorldSize.Key, WorldSize },
+            { WorldGenUCI.Key, WorldGenUCI },
         };
     }
+    /// <summary>
+    /// Retrieve save data from player pref keys, that way we can save settings accross play sessions.
+    /// </summary>
     public static void ReadValues()
     {
         MouseSensitivity.ReadValue();
@@ -35,6 +46,8 @@ public static class ClientData
         SoundVolume.ReadValue();
         MusicVolume.ReadValue();
         ParticleMultiplier.ReadValue();
+        WorldSize.ReadValue();
+        WorldGenUCI.ReadValue();
     }
 }
 public class SaveData<T>
@@ -69,15 +82,15 @@ public class SaveData<T>
     {
         if (Value.GetType() == typeof(string))
         {
-            Value = (T)(object)PlayerPrefs.GetString(Key);
+            Value = (T)(object)PlayerPrefs.GetString(Key, "Unnamed");
         }
         else if (Value.GetType() == typeof(int))
         {
-            Value = (T)(object)PlayerPrefs.GetInt(Key);
+            Value = (T)(object)PlayerPrefs.GetInt(Key, 1);
         }
         else if (Value.GetType() == typeof(float))
         {
-            Value = (T)(object)PlayerPrefs.GetFloat(Key);
+            Value = (T)(object)PlayerPrefs.GetFloat(Key, 1);
         }
         else
             throw new NotImplementedException("Cannot retrieve save data that is not a string, float, or int. The current system uses Unity Player Prefs");

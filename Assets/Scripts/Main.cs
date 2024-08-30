@@ -101,11 +101,11 @@ public class Main : MonoBehaviour
     {
         get
         {
-            return NetData.WorldSizeOverride.Value;
+            return NetData.WorldSize.Value;
         }
         private set
         {
-            NetData.WorldSizeOverride.Value = value;
+            NetData.WorldSize.Value = value;
         }
     }
     public static int GenSeed

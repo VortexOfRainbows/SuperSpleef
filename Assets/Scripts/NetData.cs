@@ -7,13 +7,14 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
     /// 
     /// These variables must be public so they can be accessed by GameStateManager, which will distribute them to other classes
     /// 
-    public NetworkVariable<int> WorldType;
     public NetworkVariable<int> SyncedMode;
     public NetworkVariable<int> GenSeed;
     public NetworkVariable<bool> HasSpawnedPlayers;
     public NetworkVariable<int> StartingPlayerCount;
     public NetworkVariable<bool> DataSentToClients = new NetworkVariable<bool>(false);
-    public static NetworkVariable<float> WorldSizeOverride;
+
+    public static NetworkVariable<float> WorldSize;
+    public static NetworkVariable<int> WorldType;
     private void Awake()
     {
         Main.NetData = this;
@@ -22,7 +23,7 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
         SyncedMode = new NetworkVariable<int>(0);
         GenSeed = new NetworkVariable<int>(Random.Range(0, int.MaxValue), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         WorldType = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        WorldSizeOverride = new NetworkVariable<float>(World.DefaultChunkRadius);
+        WorldSize = new NetworkVariable<float>(World.DefaultChunkRadius);
     }
     private void LateUpdate()
     {
@@ -41,8 +42,8 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
         SyncedMode.Value = 0;
         if(GenSeed.Value <= 0)
             GenSeed.Value = Random.Range(0, int.MaxValue);
-        if (WorldSizeOverride.Value <= 0)
-            WorldSizeOverride.Value = World.DefaultChunkRadius;
+        if (WorldSize.Value <= 0)
+            WorldSize.Value = World.DefaultChunkRadius;
     }
     [Rpc(SendTo.SpecifiedInParams)]
     public void SetBlockRpc(float x, float y, float z, int type, float particleMultiplier, bool generateSound, RpcParams rpcParams)

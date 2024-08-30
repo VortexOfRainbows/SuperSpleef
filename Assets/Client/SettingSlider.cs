@@ -8,14 +8,23 @@ public class SettingSlider : MonoBehaviour
     [SerializeField] private InputField DisplayNumber;
     [SerializeField] private Slider Slider;
     [SerializeField] private bool PercentFormat = false;
+    [SerializeField] private bool WholeNumbers = false;
     private SaveData<float> data => (SaveData<float>)ClientData.Dict[Key];
     private void LinkToSetting()
     {
         DisplayName.text = data.DisplayName;
         if (!PercentFormat)
         {
-            string txt = data.Value.ToString(format: "0.00");
-            DisplayNumber.text = txt;
+            if(WholeNumbers)
+            {
+                string txt = data.Value.ToString(format: "0");
+                DisplayNumber.text = txt;
+            }
+            else
+            {
+                string txt = data.Value.ToString(format: "0.00");
+                DisplayNumber.text = txt;
+            }
         }
         else
         {
