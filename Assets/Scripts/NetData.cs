@@ -16,7 +16,7 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
     public static NetworkVariable<float> WorldSizeOverride;
     private void Awake()
     {
-        GameStateManager.NetData = this;
+        Main.NetData = this;
         StartingPlayerCount = new NetworkVariable<int>(-1);
         HasSpawnedPlayers = new NetworkVariable<bool>(false);
         SyncedMode = new NetworkVariable<int>(0);
@@ -26,7 +26,7 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
     }
     private void LateUpdate()
     {
-        if(GameStateManager.NetData != this)
+        if(Main.NetData != this)
         {
             if(IsServer)
             {
@@ -67,7 +67,7 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
     [Rpc(SendTo.NotMe)]
     public void SyncInventoryItemRpc(int playerID, int itemSlot, int count)
     {
-        Player player = GameStateManager.Players[playerID];
+        Player player = Main.Players[playerID];
         Item item = player.Inventory.Get(itemSlot);
         item.SetCount(count);
     }

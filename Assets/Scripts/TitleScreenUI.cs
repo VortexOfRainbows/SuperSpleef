@@ -39,17 +39,17 @@ public class TitleScreenUI : MonoBehaviour
     private float timer;
     public void Start()
     {
-        if(GameStateManager.LocalUsername.Equals(string.Empty))
+        if(Main.LocalUsername.Equals(string.Empty))
         {
             RandomizeUsername();
         }
         IPField.text = NetHandler.IP;
-        UsernameField.text = GameStateManager.LocalUsername;
+        UsernameField.text = Main.LocalUsername;
         SplashText.text = GenerateSplashText();
     }
     public void Update()
     {
-        if(SceneManager.GetActiveScene().name == GameStateManager.TitleScreen)
+        if(SceneManager.GetActiveScene().name == Main.TitleScreen)
         {
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
@@ -83,8 +83,8 @@ public class TitleScreenUI : MonoBehaviour
     }
     public void RandomizeUsername()
     {
-        GameStateManager.LocalUsername = GenerateRandomUsername();
-        UsernameField.text = GameStateManager.LocalUsername;
+        Main.LocalUsername = GenerateRandomUsername();
+        UsernameField.text = Main.LocalUsername;
     }
     public static string GenerateRandomUsername()
     {

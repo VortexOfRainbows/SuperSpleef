@@ -25,7 +25,7 @@ public class ItemSlot : MonoBehaviour ///Team members that contributed to this s
     {
         if(Owner == null)
         {
-            foreach(Player player in GameStateManager.Players)
+            foreach(Player player in Main.Players)
             {
                 if(player.OwnerClientId == NetworkManager.Singleton.LocalClientId)
                 {

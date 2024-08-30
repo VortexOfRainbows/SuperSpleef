@@ -8,18 +8,18 @@ public class ButtonBehaviors : MonoBehaviour ///Team members that contributed to
         if (NetHandler.Active)
             MultiplayerUI.LeaveLobby();
         else
-            GameStateManager.MainMenu(); //Loads the SuperSpleef Title Page
+            Main.MainMenu(); //Loads the SuperSpleef Title Page
     }
     public void ExitGame()
     {
-        GameStateManager.ExitGame(); // Quits the Game
+        Main.ExitGame(); // Quits the Game
     }
     public void StartGame()
     {
-        GameStateManager.StartGame(GameStateManager.Mode); // Loads the Main Scene (Gameplay Scene)
+        Main.StartGame(Main.Mode); // Loads the Main Scene (Gameplay Scene)
     }
     public void RestartGame()
     {
-        GameStateManager.RestartGame();
+        Main.RestartGame();
     }
 }

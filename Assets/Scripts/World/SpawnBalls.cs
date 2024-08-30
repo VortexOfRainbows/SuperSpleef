@@ -26,7 +26,7 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
     private float TotalTimePassed;
     private void FixedUpdate() ///Summoning falling balls is only for the apocalypse game mode
     {
-        if(GameStateManager.Mode != GameModeID.Apocalypse && GameStateManager.Mode != GameModeID.LaserBattleApocalypse)
+        if(Main.Mode != GameModeID.Apocalypse && Main.Mode != GameModeID.LaserBattleApocalypse)
         {
             return;
         }
@@ -37,11 +37,11 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
             scaleMult = MaxDifficultyMultiplier;
         TotalTimePassed += Time.fixedDeltaTime;
         timer += Time.deltaTime * (1 + scaleMult); //Timer goes faster the longer you have been alive
-        int pCount = GameStateManager.Players.Count;
+        int pCount = Main.Players.Count;
         float ballChanceMult = (1 + scaleMult * 2);
         if (timer > SpawnTime && pCount > 0) 
         { 
-            foreach(Player player in GameStateManager.Players)
+            foreach(Player player in Main.Players)
             {
                 for (int i = 0; i < Mathf.Lerp(BallCountMinMax.x, BallCountMinMax.y, scaleMult / MaxDifficultyMultiplier) / pCount; i++)
                 {

@@ -56,11 +56,11 @@ public class ClientManager : MonoBehaviour
     public void Start()
     {
         //Instance = this;
-        if (GameStateManager.LocalMultiplayer || NetHandler.Active)
+        if (Main.LocalMultiplayer || NetHandler.Active)
             BelowTimerText.text = MultiplayerText;
-        else if (GameStateManager.Mode == GameModeID.Apocalypse)
+        else if (Main.Mode == GameModeID.Apocalypse)
             BelowTimerText.text = ApocalypseText;
-        else if(GameStateManager.Mode == GameModeID.Creative)
+        else if(Main.Mode == GameModeID.Creative)
             BelowTimerText.text = CreativeText;
     }
     public void Update()

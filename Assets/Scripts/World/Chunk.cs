@@ -18,7 +18,7 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
     public const int Width = 8;
     public const int Height = 64;
     public const int SeedNoiseModifier = 256;
-    private static int Seed { get { return GameStateManager.GenSeed; } }
+    private static int Seed { get { return Main.GenSeed; } }
     public Vector2Int Index { get; set; }
     public int[,,] blocks = new int[Width, Height, Width];
     private MeshFilter meshFilter;

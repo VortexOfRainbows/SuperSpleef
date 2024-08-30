@@ -64,7 +64,7 @@ public class MultiplayerUI : MonoBehaviour //Team members that contributed to th
                 }
             }
             if(index != -1)
-                GameStateManager.NetData.DespawnNetworkPlayerRpc(index);
+                Main.NetData.DespawnNetworkPlayerRpc(index);
         }
         NetworkManager.Singleton.Shutdown();
     }

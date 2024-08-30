@@ -117,17 +117,17 @@ public abstract class Entity : NetworkBehaviour //A monobehavior class that poss
     {
         Player target = null;
         float minDist = range;
-        for (int i = 0; i < GameStateManager.Players.Count; i++)
+        for (int i = 0; i < Main.Players.Count; i++)
         {
-            if (this is Player && GameStateManager.Players[i] == this)
+            if (this is Player && Main.Players[i] == this)
             {
                 continue; //If I am a player looking for a player, do not report me as the closest player.
             }
-            float distanceToPlayer = Vector3.Distance(transform.position, GameStateManager.Players[i].transform.position);
+            float distanceToPlayer = Vector3.Distance(transform.position, Main.Players[i].transform.position);
             if (distanceToPlayer <= minDist)
             {
                 minDist = distanceToPlayer; //This is a simple way of maing the enemy search for the closest player, in cases such as multiplayer
-                target = GameStateManager.Players[i];
+                target = Main.Players[i];
             }
         }
         return target;

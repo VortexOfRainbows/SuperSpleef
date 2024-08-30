@@ -21,18 +21,18 @@ public class UIManager : MonoBehaviour ///Team members that contributed to this 
     }
     void Update()
     {
-        if(GameStateManager.GameIsOver)
+        if(Main.GameIsOver)
         {
-            ModifyGameOverText(GameStateManager.GameOverText, GameStateManager.GameOverTextColor);
+            ModifyGameOverText(Main.GameOverText, Main.GameOverTextColor);
         }
-        GameOverUI.SetActive(GameStateManager.GameIsOver); // Make the Game Over UI visible
+        GameOverUI.SetActive(Main.GameIsOver); // Make the Game Over UI visible
         //GameplayUI.SetActive(); // Make the Gameplay UI invisible
-        PauseUI_gobj.SetActive(GameStateManager.GameIsPaused); // Enables the Pause UI so that it is visible
+        PauseUI_gobj.SetActive(Main.GameIsPaused); // Enables the Pause UI so that it is visible
         if (Input.GetKeyDown(KeyCode.Escape)) // If the player presses the ESCAPE key...
         {
-            if(!GameStateManager.GameIsOver) //Cannot pause if the game is over
+            if(!Main.GameIsOver) //Cannot pause if the game is over
             {
-                if (!GameStateManager.GameIsPaused) //If the game is not pauseed...
+                if (!Main.GameIsPaused) //If the game is not pauseed...
                 {
                     Pause(); // Pauses the game.
                 }
@@ -45,11 +45,11 @@ public class UIManager : MonoBehaviour ///Team members that contributed to this 
     }
     public void Pause()
     {
-        GameStateManager.Pause();
+        Main.Pause();
     }
     public void Resume()
     {
-        GameStateManager.Unpause();
+        Main.Unpause();
     }
 }
 

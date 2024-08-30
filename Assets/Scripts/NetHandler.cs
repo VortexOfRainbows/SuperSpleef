@@ -80,7 +80,7 @@ public class NetHandler : MonoBehaviour //Team members that contributed to this 
         {
             NetworkManager.Singleton.StartHost();
             InitHost = false;
-            GameStateManager.ResetStates();
+            Main.ResetStates();
         }
         if (InitClient)
         {
@@ -111,7 +111,7 @@ public class NetHandler : MonoBehaviour //Team members that contributed to this 
     }
     private static void NetworkStopped(bool IDontKnowWhatThisValueIs)
     {
-        SceneManager.LoadScene(GameStateManager.TitleScreen);
+        SceneManager.LoadScene(Main.TitleScreen);
         Debug.Log("Server Ended, Returning to Main Menu");
     }
 }

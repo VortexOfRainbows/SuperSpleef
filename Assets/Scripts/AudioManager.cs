@@ -37,12 +37,12 @@ public struct Sound
         source = _source;
         source.clip = clip;
         source.rolloffMode = AudioRolloffMode.Linear;
-        if (GameStateManager.LocalMultiplayer)
+        if (Main.LocalMultiplayer)
             source.spatialBlend = 0f;
         else
             source.spatialBlend = spacialBlend;
         source.maxDistance = maxDistance;
-        source.volume = volume * (music ? GameStateManager.MusicMultiplier : GameStateManager.VolumeMultiplier);
+        source.volume = volume * (music ? Main.MusicMultiplier : Main.VolumeMultiplier);
         source.pitch = pitch;
         source.loop = loop;
     }
@@ -80,9 +80,9 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            MusicPlayer.SetVolume(sounds[CurrentMusicType].GetVolume() * GameStateManager.MusicMultiplier);
+            MusicPlayer.SetVolume(sounds[CurrentMusicType].GetVolume() * Main.MusicMultiplier);
         }
-        if(SceneManager.GetActiveScene().name == GameStateManager.TitleScreen || SceneManager.GetActiveScene().name == GameStateManager.MultiplayerGameLobby)
+        if(SceneManager.GetActiveScene().name == Main.TitleScreen || SceneManager.GetActiveScene().name == Main.MultiplayerGameLobby)
         {
             ///If we are in a menu
             if (CurrentMusicType != SoundID.MenuMusic)

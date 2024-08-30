@@ -83,12 +83,12 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         useTime.OnValueChanged += delegate { itemTime = useTime.Value; };
         useTimeMax.OnValueChanged += delegate { itemTimeMax = useTimeMax.Value; };
         ItemUseTimeMax = Item.DefaultItemFirerate;
-        bool apocalypse = GameStateManager.Mode == GameModeID.Apocalypse || GameStateManager.Mode == GameModeID.LaserBattleApocalypse;
-        bool giveLaser = GameStateManager.LocalMultiplayer || GameStateManager.Mode == GameModeID.LaserBattleApocalypse || GameStateManager.Mode == GameModeID.LaserBattle;
+        bool apocalypse = Main.Mode == GameModeID.Apocalypse || Main.Mode == GameModeID.LaserBattleApocalypse;
+        bool giveLaser = Main.LocalMultiplayer || Main.Mode == GameModeID.LaserBattleApocalypse || Main.Mode == GameModeID.LaserBattle;
         currentPlayerHP = maxPlayerHP;
         Inventory = new Inventory(30);
         int StartingItemCount = 20;
-        if(GameStateManager.Mode == GameModeID.Creative)
+        if(Main.Mode == GameModeID.Creative)
         {
             StartingItemCount = Item.DefaultMaxCount;
         }
@@ -118,7 +118,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
         }
         RB.maxDepenetrationVelocity = 0;
-        transform.position = new Vector3(Chunk.Width * GameStateManager.WorldSizeOverride / 2f, transform.position.y, Chunk.Width * GameStateManager.WorldSizeOverride / 2f); //Centers the player in teh world when they spawn in
+        transform.position = new Vector3(Chunk.Width * Main.WorldSizeOverride / 2f, transform.position.y, Chunk.Width * Main.WorldSizeOverride / 2f); //Centers the player in teh world when they spawn in
 
         //PlayerVisual.GetComponent<PlayerAnimator>().SetSprite();
     }
@@ -145,14 +145,14 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     private bool ThirdPersonCamera = false;
     private void Update()
     {
-        if(!HasBeenAddedToPlayerList && !GameStateManager.Players.Contains(this))
+        if(!HasBeenAddedToPlayerList && !Main.Players.Contains(this))
         {
-            MyID = GameStateManager.Players.Count;
-            GameStateManager.Players.Add(this);
+            MyID = Main.Players.Count;
+            Main.Players.Add(this);
             HasBeenAddedToPlayerList = true;
         }
         ControlManager.OnUpdate();
-        if (!GameStateManager.GameIsPausedOrOver)
+        if (!Main.GameIsPausedOrOver)
         {
             HotbarControls();
             MouseControls(); //Should be updated immediately so players see the effects of their rotation at the same pace as their refresh rate.
@@ -505,7 +505,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                 heldItem.ModifyCount(-1);
                 if(IsOwner)
                 {
-                    GameStateManager.NetData.SyncInventoryItemRpc(MyID, SelectedItem, heldItem.Count);
+                    Main.NetData.SyncInventoryItemRpc(MyID, SelectedItem, heldItem.Count);
                 }
             }
             if (heldItem.Firerate <= 0)
@@ -626,9 +626,9 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             if (Time.timeScale >= 1)
             {
                 //Debug.Log(currentPlayerHP);
-                string DeathText = GameStateManager.DefaultGameOverText;
+                string DeathText = Main.DefaultGameOverText;
                 Color deathColor = Color.white;
-                if (GameStateManager.LocalMultiplayer)
+                if (Main.LocalMultiplayer)
                 {
                     if (ControlManager.UsingGamepad)
                     {
@@ -643,7 +643,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
                         deathColor = Color.blue;
                     }
                 }
-                GameStateManager.EndGame(DeathText, deathColor);
+                Main.EndGame(DeathText, deathColor);
             }
         }
         else
@@ -658,6 +658,6 @@ public class Player : Entity ///Team members that contributed to this script: Ia
     }
     public override void OnDestroy()
     {
-        GameStateManager.Players.Remove(this);
+        Main.Players.Remove(this);
     }
 }

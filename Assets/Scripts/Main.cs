@@ -13,10 +13,10 @@ public static class GameModeID // Assigns an int as a reference to each game mod
     public const int LaserBattle = 4;
     public const int LaserBattleApocalypse = 5;
 }
-public class GameStateManager : MonoBehaviour
+public class Main : MonoBehaviour
 {
     public static NetData NetData;
-    public static GameStateManager Instance;
+    public static Main Instance;
     public static string LocalUsername { get; set; } = "";
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject netData;

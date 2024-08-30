@@ -16,7 +16,7 @@ public abstract class Projectile : NetworkBehaviour ///Team members that contrib
             return pObject;
         }
         if (!NetworkManager.Singleton.IsServer)
-            GameStateManager.NetData.SpawnProjectileRpc(ProjectileType, position, rotation, velocity);
+            Main.NetData.SpawnProjectileRpc(ProjectileType, position, rotation, velocity);
         return null;
     }
     protected MeshRenderer mRenderer;

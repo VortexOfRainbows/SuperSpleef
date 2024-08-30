@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
-    public static int WorldType => GameStateManager.WorldType;
+    public static int WorldType => Main.WorldType;
     private static HashSet<Chunk> ReloadRequired = new HashSet<Chunk>();
     public const float OutOfBounds = -40f;
     public static World Instance { get; private set; }
@@ -16,7 +16,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         get
         {
-            return (int)GameStateManager.WorldSizeOverride;
+            return (int)Main.WorldSizeOverride;
         }
     }
     public const int WorldLayer = 3;
@@ -38,16 +38,16 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         if(NetworkManager.Singleton.IsServer)
         {
-            GameStateManager.NetData.DataSentToClients.Value = true;
+            Main.NetData.DataSentToClients.Value = true;
         }
-        if(!WorldGenFinished && GameStateManager.HasReceivedWorldDataFromHost)
+        if(!WorldGenFinished && Main.HasReceivedWorldDataFromHost)
         {
             GenWorld();
         }
     }
     private void GenWorld()
     {
-        Random.InitState(GameStateManager.GenSeed);
+        Random.InitState(Main.GenSeed);
         MaxTiles = new Vector3Int(ChunkRadius * Chunk.Width, Chunk.Height, ChunkRadius * Chunk.Width);
         chunk = new GameObject[ChunkRadius, ChunkRadius];
         for (int i = 0; i < chunk.GetLength(1); i++)
@@ -61,7 +61,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             }
         }
         GenerateFoliage();
-        if(GameStateManager.settingsDoIGenerateUCI)
+        if(Main.settingsDoIGenerateUCI)
         {
             GenerateUCI();
         }
@@ -303,7 +303,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         BlockMesh mesh = BlockMesh.Get(blockType);
         int totalUniqueFaces = mesh.UniqueFaces.Count;
-        float totalParticles = DefaultBlockParticleCount / totalUniqueFaces * particleMultiplier * GameStateManager.ParticleMultiplier;
+        float totalParticles = DefaultBlockParticleCount / totalUniqueFaces * particleMultiplier * Main.ParticleMultiplier;
         //Debug.Log(totalUniqueFaces);
         for(int i = 0; i < totalUniqueFaces; i++)
         {
@@ -437,7 +437,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                 QueueChunkReload(chunk);
                 if (!DoNotSendPacket)
                 {
-                    GameStateManager.NetData.SetBlockRpc(x, y, z, blockType, particleMultiplier, generateSound, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
+                    Main.NetData.SetBlockRpc(x, y, z, blockType, particleMultiplier, generateSound, Main.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
                 }
                 return true;
             }
@@ -497,7 +497,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
         }
         if(!DoNotSendPacket)
         {
-            GameStateManager.NetData.TileFillRpc(x, y, z, x2, y2, z2, blockID, particleMultiplier, generateSound, GameStateManager.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
+            Main.NetData.TileFillRpc(x, y, z, x2, y2, z2, blockID, particleMultiplier, generateSound, Main.NetData.RpcTarget.Not(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
         }
         return hasFilledOneBlock;
     }

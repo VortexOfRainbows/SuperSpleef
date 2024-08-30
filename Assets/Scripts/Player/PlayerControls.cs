@@ -64,8 +64,8 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
     public void DoKeyboardMouseControls()
     {
         Control.ScrollDelta = Input.mouseScrollDelta.y;
-        Control.XAxis = Input.GetAxisRaw("Mouse X") * GameStateManager.SensitivityMultiplier;
-        Control.YAxis = Input.GetAxisRaw("Mouse Y") * GameStateManager.SensitivityMultiplier;
+        Control.XAxis = Input.GetAxisRaw("Mouse X") * Main.SensitivityMultiplier;
+        Control.YAxis = Input.GetAxisRaw("Mouse Y") * Main.SensitivityMultiplier;
         UpdateKey(Input.GetKey(KeyCode.A), LastControl.Left, ref Control.Left);
         UpdateKey(Input.GetKey(KeyCode.D), LastControl.Right, ref Control.Right);
         UpdateKey(Input.GetKey(KeyCode.W), LastControl.Forward, ref Control.Forward);
@@ -94,7 +94,7 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
     public void OnUpdate()
     {
         //Debug.Log(GameStateManager.GameIsOver);
-        if(GameStateManager.GameIsPausedOrOver) 
+        if(Main.GameIsPausedOrOver) 
         {
             Control = new ControlDown();
             return;
@@ -109,8 +109,8 @@ public class PlayerControls : MonoBehaviour ///Team members that contributed to 
 
             GamepadControls.InputActions pInput = GamepadControls.Input;
             Vector2 direction = pInput.RightJoystick.ReadValue<Vector2>();
-            Control.XAxis = direction.x * GameStateManager.ControllerSensitivityMultiplier;
-            Control.YAxis = direction.y / 2f * GameStateManager.ControllerSensitivityMultiplier;
+            Control.XAxis = direction.x * Main.ControllerSensitivityMultiplier;
+            Control.YAxis = direction.y / 2f * Main.ControllerSensitivityMultiplier;
 
             direction = pInput.LeftJoystick.ReadValue<Vector2>();
             Control.XMove = direction.x;

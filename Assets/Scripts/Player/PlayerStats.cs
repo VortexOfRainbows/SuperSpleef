@@ -48,9 +48,9 @@ public class PlayerStats : MonoBehaviour ///Team members that contributed to thi
         if(Time.timeScale >= 1)
         {
             //Debug.Log(currentPlayerHP);
-            string DeathText = GameStateManager.DefaultGameOverText;
+            string DeathText = Main.DefaultGameOverText;
             Color deathColor = Color.white;
-            if(GameStateManager.LocalMultiplayer)
+            if(Main.LocalMultiplayer)
             {
                 if(player.ControlManager.UsingGamepad)
                 {
@@ -65,7 +65,7 @@ public class PlayerStats : MonoBehaviour ///Team members that contributed to thi
                     deathColor = Color.blue;
                 }
             }
-            GameStateManager.EndGame(DeathText, deathColor);
+            Main.EndGame(DeathText, deathColor);
         }
     }
 }

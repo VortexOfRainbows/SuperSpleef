@@ -27,9 +27,9 @@ public class NetworkPlayer : NetworkBehaviour //Team members that contributed to
     {
         if(IsOwner)
         {
-            MyName.Value = GameStateManager.LocalUsername;
+            MyName.Value = Main.LocalUsername;
         }
-        if (SceneManager.GetActiveScene().name == GameStateManager.MultiplayerScene && GameStateManager.HasReceivedWorldDataFromHost)
+        if (SceneManager.GetActiveScene().name == Main.MultiplayerScene && Main.HasReceivedWorldDataFromHost)
         {
             transform.position = new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2);
         }
@@ -44,10 +44,10 @@ public class NetworkPlayer : NetworkBehaviour //Team members that contributed to
         {
             BlockGameCount.Value = FallingCube.BlocksBrokenInARow;
         }
-        if(SceneManager.GetActiveScene().name == GameStateManager.MultiplayerScene && GameStateManager.StartingPlayerCount > 0)
+        if(SceneManager.GetActiveScene().name == Main.MultiplayerScene && Main.StartingPlayerCount > 0)
         {
             myPlayer = null;
-            foreach (Player player in GameStateManager.Players)
+            foreach (Player player in Main.Players)
             {
                 if (player.OwnerClientId == OwnerClientId)
                 {
@@ -67,21 +67,21 @@ public class NetworkPlayer : NetworkBehaviour //Team members that contributed to
                 {
                     PlayerToWatchID++;
                 }
-                if (Input.GetMouseButtonDown(0) || PlayerToWatchID >= GameStateManager.Players.Count)
+                if (Input.GetMouseButtonDown(0) || PlayerToWatchID >= Main.Players.Count)
                 {
                     PlayerToWatchID = -1;
                 }
                 if (PlayerToWatchID < -1)
                 {
-                    PlayerToWatchID = GameStateManager.Players.Count - 1;
+                    PlayerToWatchID = Main.Players.Count - 1;
                 }
-                if (PlayerToWatchID >= 0 && GameStateManager.Players.Count > 0)
+                if (PlayerToWatchID >= 0 && Main.Players.Count > 0)
                 {
-                    Player toWatch = GameStateManager.Players[PlayerToWatchID];
+                    Player toWatch = Main.Players[PlayerToWatchID];
                     transform.position = toWatch.FacingVector.transform.position;
                     transform.rotation = toWatch.FacingVector.transform.rotation;
                 }
-                if (!GameStateManager.GameIsPausedOrOver)
+                if (!Main.GameIsPausedOrOver)
                 {
                     MouseControls();
                 }
@@ -100,7 +100,7 @@ public class NetworkPlayer : NetworkBehaviour //Team members that contributed to
     [SerializeField] private float MoveAcceleration = 0.125f;
     private void FixedUpdate()
     {
-        if (SceneManager.GetActiveScene().name == GameStateManager.MultiplayerScene && GameStateManager.StartingPlayerCount > 0)
+        if (SceneManager.GetActiveScene().name == Main.MultiplayerScene && Main.StartingPlayerCount > 0)
         {
             if (myPlayer == null) //Usually the update is done in player. Do the update here if we can't find a player.
             {
