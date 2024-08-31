@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -164,7 +165,16 @@ public class Main : MonoBehaviour
     }
     public static void ExitGame()
     {
-        SceneManager.LoadScene("ExitGameScene");
+        try
+        {
+            Resources.UnloadUnusedAssets();
+            GC.Collect();
+        }
+        catch
+        {
+
+        }
+        Application.Quit();
     }
     public static void StartGame(int mode)
     {

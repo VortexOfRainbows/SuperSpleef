@@ -13,10 +13,12 @@ Stuff to do:
 8. Fix Unbreakable Glass glitch when using border mode (make it so it checks position instead of block type)
 9. Normalize more UI positions
 10. Use left-align instead of center-align
+11. Make forest map smaller
 
 8/29/24 to 8/31/24
 1. Worldgen settings UI
 2. Added settings: World Border, Outer Chunks Empty, CHAOS
+3. Attempt fixing issue that prevented quitting after playing a game
 
 8/26/24 to 8/27/24
 1. Changed base world size 15 -> 6
