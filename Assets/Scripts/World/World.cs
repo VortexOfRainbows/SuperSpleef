@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 
 public class World : MonoBehaviour ///Team members that contributed to this script: David Bu, Ian Bunnell
 {
-    public static int WorldType => Main.WorldType;
+    public static int WorldType = 0;
     private static HashSet<Chunk> ReloadRequired = new HashSet<Chunk>();
     public const float OutOfBounds = -40f;
     public static World Instance { get; private set; }
@@ -16,7 +17,10 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         get
         {
-            return (int)Main.WorldSizeOverride;
+            int radius = (int)Main.WorldSize;
+            if (Main.WorldPadded)
+                radius += 2;
+            return radius;
         }
     }
     public const int WorldLayer = 3;
@@ -45,9 +49,42 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             GenWorld();
         }
     }
+    public int ChaosBlockType(int type)
+    {
+        if(Main.WorldChaos && !WorldGenFinished)
+        {
+            return ChaosBlockID[type];
+        }
+        return type;
+    }
+    private Dictionary<int, int> ChaosBlockID = new Dictionary<int, int>();
     private void GenWorld()
     {
         Random.InitState(Main.GenSeed);
+        WorldType = Main.WorldType;
+        if (WorldType == -1)
+        {
+            WorldType = Random.Range(0, 2);
+        }
+        
+        if(Main.WorldChaos)
+        {
+            List<int> AllBlockIDs = new List<int>();
+            for (int i = 1; i < BlockID.Max; i++)
+            {
+                AllBlockIDs.Add(i);
+            }
+            for (int i = 1; i < BlockID.Max; i++)
+            {
+                int c = AllBlockIDs.Count;
+                int rand = Random.Range(0, c);
+                ChaosBlockID[i] = AllBlockIDs[rand];
+                AllBlockIDs[rand] = AllBlockIDs[c - 1];
+                AllBlockIDs.RemoveAt(c - 1);
+            }
+            ChaosBlockID[0] = 0; //Make sure air is always air
+        }
+
         MaxTiles = new Vector3Int(ChunkRadius * Chunk.Width, Chunk.Height, ChunkRadius * Chunk.Width);
         chunk = new GameObject[ChunkRadius, ChunkRadius];
         for (int i = 0; i < chunk.GetLength(1); i++)
@@ -56,14 +93,22 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             {
                 Vector2Int chunkPos = new Vector2Int(i, j);
                 chunk[i, j] = Instantiate(chunkObj, new Vector3(chunkPos.x * Chunk.Width, 0, chunkPos.y * Chunk.Width), Quaternion.identity, transform);
-                chunk[i, j].GetComponent<Chunk>().Index = chunkPos;
+                chunk[i, j].GetComponent<Chunk>().Generate(chunkPos);
                 chunk[i, j].layer = WorldLayer; //set to world layer
             }
         }
         GenerateFoliage();
-        if(Main.settingsDoIGenerateUCI)
+        if(Main.WorldUCI)
         {
             GenerateUCI();
+        }
+        if(Main.WorldBorder)
+        {
+            FillBlock(new Vector3(0, 0, 0), new Vector3(MaxTiles.x - 1, Chunk.Height - 1, 0), BlockID.Glass, 0f, true, false);
+            FillBlock(new Vector3(MaxTiles.x - 1, 0, 0), new Vector3(MaxTiles.x - 1, Chunk.Height - 1, MaxTiles.x - 1), BlockID.Glass, 0f, true, false);
+            FillBlock(new Vector3(0, 0, 0), new Vector3(0, Chunk.Height - 1, MaxTiles.x), BlockID.Glass, 0f, true, false);
+            FillBlock(new Vector3(0, 0, MaxTiles.x - 1), new Vector3(MaxTiles.x - 1, Chunk.Height - 1, MaxTiles.x - 1), BlockID.Glass, 0f, true, false);
+            FillBlock(new Vector3(0, Chunk.Height - 1, 0), new Vector3(MaxTiles.x - 1, Chunk.Height - 1, MaxTiles.x - 1), BlockID.Glass, 0f, true, false);
         }
         for (int i = 0; i < chunk.GetLength(1); i++) //Completes the mesh for the chunk so it is visible and collideable
         {
@@ -97,11 +142,11 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                         int blockType = Block(i, j - 1, k); //If the block below is not air, and is in fact grass, place a tree
                         if (blockType != BlockID.Air)
                         {
-                            if(blockType == BlockID.Grass)
+                            if(blockType == ChaosBlockType(BlockID.Grass))
                             {
                                 GenerateTree(i, j, k);
                             }
-                            if (blockType == BlockID.Sand)
+                            if (blockType == ChaosBlockType(BlockID.Sand))
                             {
                                 GenerateColumn(i, j, k, 0, Random.Range(2, 6), BlockID.Cactus);
                             }
@@ -375,6 +420,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
     {
         if (!NetHandler.Active)
             DoNotSendPacket = true;
+        blockType = Instance.ChaosBlockType(blockType);
         GameObject chunkObj = Instance.BoundingChunk(x, z);
         if (chunkObj != null)
         {
@@ -384,10 +430,10 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             Chunk chunk = chunkObj.GetComponent<Chunk>();
             if (blockY < Chunk.Height && blockY >= 0)
             {
-                if (chunk.blocks[blockX, blockY, blockZ] == blockType)
+                int typeBeforeBreaking = chunk.blocks[blockX, blockY, blockZ];
+                if (typeBeforeBreaking == blockType || (Main.WorldBorder && blockType == BlockID.Air && typeBeforeBreaking == Instance.ChaosBlockType(BlockID.Glass)))
                     return false; //Do not place the same block again
 
-                int typeBeforeBreaking = chunk.blocks[blockX, blockY, blockZ];
                 chunk.blocks[blockX, blockY, blockZ] = blockType;
 
                 if (!WorldGenFinished)

@@ -9,8 +9,6 @@ public class MultiplayerUI : MonoBehaviour //Team members that contributed to th
     public const string Close = "Close Lobby";
     private const string WaitingOnServer = "Waiting on Host";
     private const string IAmServer = "You are the Host";
-    [SerializeField] private GameObject WorldSizeSettings;
-    [SerializeField] private GameObject UCISettings;
     [SerializeField] private GameObject StartButton;
     [SerializeField] private Text WaitingForServerDisplay;
     [SerializeField] private TextMeshProUGUI LoggedDisplay;
@@ -45,9 +43,7 @@ public class MultiplayerUI : MonoBehaviour //Team members that contributed to th
         if (LeaveLobbyText != null)
             LeaveLobbyText.text = NetworkManager.Singleton.IsServer ? Close : Leave;
 
-        UCISettings.SetActive(NetworkManager.Singleton.IsServer);
         StartButton.SetActive(NetworkManager.Singleton.IsServer);
-        WorldSizeSettings.SetActive(NetworkManager.Singleton.IsServer);
     }
     public static void LeaveLobby()
     {

@@ -9,7 +9,7 @@ public class SpawnBalls : MonoBehaviour ///Team members that contributed to this
     [SerializeField] private float SpawnTime = 3;
     [SerializeField] private float SpawnSpread = 5f;
     [SerializeField] private float RandomVelocity = 2f;
-    [SerializeField] private float SpawnHeight = 70f;
+    private float SpawnHeight = 60f;
     [SerializeField] private float SecondsUntilMaxDifficulty = 900;
     [SerializeField] private float FragChance = 0.125f;
     [SerializeField] private float SuperFragChance = 0.025f;

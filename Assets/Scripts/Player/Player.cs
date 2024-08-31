@@ -108,7 +108,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         }
         if (giveLaser) //That is why these if statements are seperate, despite involving the same boolean expression.
         {
-            Inventory.AddItem(new PlaceableBlock(ControlManager.UsingGamepad ? BlockID.BlueBricks : BlockID.YellowBricks, StartingItemCount));
+            Inventory.AddItem(new PlaceableBlock(BlockID.YellowBricks, StartingItemCount));
         }
         else
         {
@@ -118,7 +118,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             }
         }
         RB.maxDepenetrationVelocity = 0;
-        transform.position = new Vector3(Chunk.Width * Main.WorldSizeOverride / 2f, transform.position.y, Chunk.Width * Main.WorldSizeOverride / 2f); //Centers the player in teh world when they spawn in
+        transform.position = new Vector3(Chunk.Width * World.ChunkRadius / 2f, transform.position.y, Chunk.Width * World.ChunkRadius / 2f); //Centers the player in teh world when they spawn in
 
         //PlayerVisual.GetComponent<PlayerAnimator>().SetSprite();
     }

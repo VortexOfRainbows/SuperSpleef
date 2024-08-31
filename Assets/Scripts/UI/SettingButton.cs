@@ -1,27 +1,25 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingToggle : MonoBehaviour
+public class SettingButton : MonoBehaviour
 {
     [SerializeField] private string Key;
-    [SerializeField] private Text DisplayName;
-    [SerializeField] private Toggle Toggle;
+    [SerializeField] private Button button;
     private SaveData<int> data => (SaveData<int>)ClientData.Dict[Key];
-    private void LinkToSetting()
-    {
-        DisplayName.text = data.DisplayName;
-        bool set = data.Value > 0;
-        if (Toggle.isOn != set)
-            Toggle.isOn = set;
-    }
+    //private void LinkToSetting()
+    //{
+    //    //bool set = data.Value > 0;
+    //    //if (Toggle.isOn != set)
+    //    //    Toggle.isOn = set;
+    //}
     private void Start()
     {
-        LinkToSetting();
+        //LinkToSetting();
     }
-    public void SetData(bool IsOn)
+    public void SetData(int value)
     {
-        data.WriteValue(IsOn ? 1 : 0);
-        LinkToSetting();
+        data.WriteValue(value);
+        //LinkToSetting();
     }
     //public void OnChangeValueInput(string input)
     //{

@@ -15,6 +15,10 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
 
     public static NetworkVariable<float> WorldSize;
     public static NetworkVariable<int> WorldType;
+    public static NetworkVariable<bool> WorldChaos;
+    public static NetworkVariable<bool> WorldUCI;
+    public static NetworkVariable<bool> WorldBorder;
+    public static NetworkVariable<bool> WorldPadded;
     private void Awake()
     {
         Main.NetData = this;
@@ -24,6 +28,10 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
         GenSeed = new NetworkVariable<int>(Random.Range(0, int.MaxValue), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         WorldType = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         WorldSize = new NetworkVariable<float>(World.DefaultChunkRadius);
+        WorldChaos = new NetworkVariable<bool>(false);
+        WorldUCI = new NetworkVariable<bool>(false);
+        WorldBorder = new NetworkVariable<bool>(false);
+        WorldPadded = new NetworkVariable<bool>(false);
     }
     private void LateUpdate()
     {
@@ -44,6 +52,21 @@ public class NetData : NetworkBehaviour //Team members that contributed to this 
             GenSeed.Value = Random.Range(0, int.MaxValue);
         if (WorldSize.Value <= 0)
             WorldSize.Value = World.DefaultChunkRadius;
+        ResetWorldgenValues();
+    }
+    private void ResetWorldgenValues()
+    {
+        if(IsServer)
+        {
+            WorldSize.Value = ClientData.WorldSize.Value;
+            WorldType.Value = ClientData.WorldType.Value;
+            WorldChaos.Value = ClientData.WorldGenChaos.Value > 0;
+            WorldUCI.Value = ClientData.WorldGenUCI.Value > 0;
+            WorldBorder.Value = ClientData.WorldGenBorder.Value > 0;
+            WorldPadded.Value = ClientData.WorldGenPadding.Value > 0;
+
+            SyncedMode.Value = ClientData.WorldApoc.Value > 0 ? GameModeID.LaserBattleApocalypse : GameModeID.LaserBattle;
+        }
     }
     [Rpc(SendTo.SpecifiedInParams)]
     public void SetBlockRpc(float x, float y, float z, int type, float particleMultiplier, bool generateSound, RpcParams rpcParams)

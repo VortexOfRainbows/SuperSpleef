@@ -46,28 +46,8 @@ public class Main : MonoBehaviour
     public static bool GameIsOver => GameOver;
     public static bool GameIsPaused => GamePaused;
     public static bool GameIsPausedOrOver => GameOver || GamePaused || SceneManager.GetActiveScene().name != MultiplayerScene;
-    public static bool HasReceivedWorldDataFromHost
-    {
-        get
-        {
-            return NetData != null && NetData.DataSentToClients.Value;
-        }
-        set
-        {
-            NetData.DataSentToClients.Value = value;
-        }
-    }
-    public static int Mode 
-    { 
-        get 
-        {
-            return NetData.SyncedMode.Value;
-        } 
-        private set
-        {
-            NetData.SyncedMode.Value = value;
-        } 
-    }
+    public static bool HasReceivedWorldDataFromHost => NetData != null && NetData.DataSentToClients.Value;
+    public static int Mode => NetData.SyncedMode.Value;
     public static bool HasSpawnedPlayers
     {
         get
@@ -79,35 +59,12 @@ public class Main : MonoBehaviour
             NetData.HasSpawnedPlayers.Value = value;
         }
     }
-    public static void SetWorldDesert(bool desert)
-    {
-        if (desert)
-            WorldType = 1;
-        else
-            WorldType = 0;
-    }
-    public static int WorldType
-    {
-        get
-        {
-            return NetData.WorldType.Value;
-        }
-        private set
-        {
-            NetData.WorldType.Value = value;
-        }
-    }
-    public static float WorldSizeOverride
-    {
-        get
-        {
-            return NetData.WorldSize.Value;
-        }
-        private set
-        {
-            NetData.WorldSize.Value = value;
-        }
-    }
+    public static int WorldType => NetData.WorldType.Value;
+    public static float WorldSize => NetData.WorldSize.Value;
+    public static bool WorldChaos => NetData.WorldChaos.Value;
+    public static bool WorldUCI => NetData.WorldUCI.Value;
+    public static bool WorldBorder => NetData.WorldBorder.Value;
+    public static bool WorldPadded => NetData.WorldPadded.Value;
     public static int GenSeed
     {
         get
@@ -135,7 +92,6 @@ public class Main : MonoBehaviour
     public static float ControllerSensitivityMultiplier => ClientData.ControllerSensitivity.Value;
     public static float VolumeMultiplier => ClientData.SoundVolume.Value;
     public static float MusicMultiplier => ClientData.MusicVolume.Value;
-    public static bool settingsDoIGenerateUCI { get; private set; } = true;
     public static bool LocalMultiplayer { get; private set; }
     public void Awake()
     {
@@ -162,14 +118,12 @@ public class Main : MonoBehaviour
         Unpause();
 
         WaitSomeTimeForAssetsToLoad = NoPlayersLeftTimer = 0;
-        ResetServerSyncedStates();
+        if (NetHandler.Active && NetData != null && NetworkManager.Singleton.IsServer)
+            ResetServerSyncedStates();
     }
     private static void ResetServerSyncedStates()
     {
-        if (NetHandler.Active && NetData != null && NetworkManager.Singleton.IsServer)
-        {
-            NetData.ResetValues();
-        }
+        NetData.ResetValues();
         //
         // This should no longer be needed, as the game will only take place on a SERVER
         //else if (!NetHandler.Active) //Reset these values manually if not on the server
@@ -204,14 +158,6 @@ public class Main : MonoBehaviour
     {
         ClientData.MusicVolume.WriteValue(Mathf.Clamp(volumeMulti, 0f, 1.0f));
     }
-    public static void SetWorldSizeOverride(float size)
-    {
-        WorldSizeOverride = Mathf.Clamp(size, 1, 100); //Lowest size is 1 chunk. Biggest is 100x100 chunks
-    }
-    public static void GenerateUCI(bool doIGenerate)
-    {
-        settingsDoIGenerateUCI = doIGenerate;
-    }
     public static void MainMenu()
     {
         SceneManager.LoadScene(TitleScreen); //Loads the SuperSpleef Title Page
@@ -223,23 +169,23 @@ public class Main : MonoBehaviour
     public static void StartGame(int mode)
     {
         ResetStates();
-        Mode = mode;
-        if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.LocalMultiplayerApocalypse)
-        {
-            LocalMultiplayer = true;
-            Mode = mode == GameModeID.LocalMultiplayerApocalypse ? GameModeID.Apocalypse : GameModeID.None;
-            SceneManager.LoadScene(MultiplayerScene);
-        }
-        else
-        {
-            LocalMultiplayer = false;
-            if(NetHandler.Active)
-            {
-                NetworkManager.Singleton.SceneManager.LoadScene(MultiplayerScene, LoadSceneMode.Single); 
-            }
-            else
-                SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
-        }
+        NetworkManager.Singleton.SceneManager.LoadScene(MultiplayerScene, LoadSceneMode.Single);
+        //Mode = mode;
+        //if (mode == GameModeID.LocalMultiplayer || mode == GameModeID.LocalMultiplayerApocalypse)
+        //{
+        //    LocalMultiplayer = true;
+        //    Mode = mode == GameModeID.LocalMultiplayerApocalypse ? GameModeID.Apocalypse : GameModeID.None;
+        //    SceneManager.LoadScene(MultiplayerScene);
+        //}
+        //else
+        //{
+        //    LocalMultiplayer = false;
+        //    if(NetHandler.Active)
+        //    {
+        //    }
+        //    else
+        //        SceneManager.LoadScene(1); // Loads the Main Scene (Gameplay Scene)
+        //}
     }
     public static void RestartGame()
     {
@@ -347,7 +293,7 @@ public class Main : MonoBehaviour
                         foreach (NetworkPlayer nPlayer in NetHandler.LoggedPlayers)
                         {
                             //Debug.Log(i);
-                            GameObject go = Instantiate(Instance.player, new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height, World.ChunkRadius * Chunk.Width / 2), Quaternion.identity);
+                            GameObject go = Instantiate(Instance.player, new Vector3(World.ChunkRadius * Chunk.Width / 2, Chunk.Height - 3, World.ChunkRadius * Chunk.Width / 2), Quaternion.identity);
                             go.GetComponent<NetworkObject>().SpawnAsPlayerObject(nPlayer.OwnerClientId, true);
                         }
                         HasSpawnedPlayers = true;

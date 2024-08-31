@@ -12,6 +12,7 @@ public class FallingCube : MonoBehaviour
         return 1 + Mathf.Log10(1 + BlocksBrokenInARow);
     }
     public static int BlocksBrokenInARow { get; private set; } = 0;
+    public static int BestBlocksBroken = 0;
     [SerializeField] private MeshFilter meshFilter;
     [SerializeField] private float rotationSpeedMultiplier;
     private Vector3 rotations;
@@ -68,6 +69,7 @@ public class FallingCube : MonoBehaviour
     public void DestroyEffects()
     {
         BlocksBrokenInARow++;
+        BestBlocksBroken = Mathf.Max(BestBlocksBroken, BlocksBrokenInARow);
         World.GenerateBlockBreakingParticles(transform.position, MyType, null);
         World.GenerateBlockBreakSound(transform.position, MyType);
         Destroy(gameObject);

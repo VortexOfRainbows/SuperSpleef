@@ -28,10 +28,27 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
     {
         meshFilter = this.GetComponent<MeshFilter>();
         meshCollider = GetComponent<MeshCollider>();
+    }
+    public void Generate(Vector2Int index)
+    {
+        Index = index;
         GenerateChunk();
     }
     public void GenerateChunk()
     {
+        bool IsAirChunk = false;
+        
+        if(Main.WorldPadded)
+        {
+            if (Index.x == 0 || Index.y == 0 || Index.x == World.ChunkRadius - 1 || Index.y == World.ChunkRadius - 1)
+            {
+                IsAirChunk = true;
+            }
+        }
+
+        if (IsAirChunk)
+            return;
+
         float stoneLayer = StoneLayer;
         float terrainHeightMult = TerrainHeightMultiplier;
         float terrainMin = TerrainMinimum;
@@ -57,22 +74,22 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
                     if (y < (Height + AirBelowMap) * noise && y >= AirBelowMap)
                     {
                         if (y < (Height + AirBelowMap) * stoneLayerNoise)
-                            blocks[x, y, z] = BlockID.Stone;
+                            blocks[x, y, z] = World.Instance.ChaosBlockType(BlockID.Stone);
                         else
                         {
                             if (World.WorldType == 1)
                             {
-                                blocks[x, y, z] = BlockID.Sand;
+                                blocks[x, y, z] = World.Instance.ChaosBlockType(BlockID.Sand);
                             }
                             else
                             {
                                 if (blocks[x, y + 1, z] == BlockID.Air)
                                 {
-                                    blocks[x, y, z] = BlockID.Grass;
+                                    blocks[x, y, z] = World.Instance.ChaosBlockType(BlockID.Grass);
                                 }
                                 else
                                 {
-                                    blocks[x, y, z] = BlockID.Dirt;
+                                    blocks[x, y, z] = World.Instance.ChaosBlockType(BlockID.Dirt);
                                 }
                             }
                         }

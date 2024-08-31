@@ -2,18 +2,21 @@ Log of STUFF! :)
 
 
 Stuff to do:
-1. Special menu for Worldgen settings, instead of just being inside the normal settings menu.
-2. Menu for playable characters.
-3. Sync world upon joining as a spectator, that players that spectate aren't desynced.
+1. Menu for playable characters.
+2. Sync world upon joining as a spectator, that players that spectate aren't desynced.
 	1. If the system is fast, maybe convert worldgen to this system for non-spectators, that way we could allow for modded maps and pre-built maps.
-4. Better UI for the list of players in Multiplayer game lobby.
-5. Sync Player IDs (Make sure every player has a synced index across clients). This may require special networking logic, or other means of sorting.
-6. Ability to open up and manage the inventory (right now, the inventory is inaccessible except for the hotbar).
-7. Prevent incompatible versions from connecting to each other
-8. Melee Weapon
+3. Better UI for the list of players in Multiplayer game lobby.
+4. Sync Player IDs (Make sure every player has a synced index across clients). This may require special networking logic, or other means of sorting.
+5. Ability to open up and manage the inventory (right now, the inventory is inaccessible except for the hotbar).
+6. Prevent incompatible versions from connecting to each other
+7. Melee Weapon
+8. Fix Unbreakable Glass glitch when using border mode (make it so it checks position instead of block type)
+9. Normalize more UI positions
+10. Use left-align instead of center-align
 
-8/29/24
-1. More work on Worldgen settings UI
+8/29/24 to 8/31/24
+1. Worldgen settings UI
+2. Added settings: World Border, Outer Chunks Empty, CHAOS
 
 8/26/24 to 8/27/24
 1. Changed base world size 15 -> 6

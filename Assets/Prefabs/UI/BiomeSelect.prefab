@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 1248202812859022598}
   - component: {fileID: 2445797323153602085}
   - component: {fileID: 1313708197648660007}
+  - component: {fileID: 8400993209231213448}
   m_Layer: 5
   m_Name: BiomeSelect
   m_TagString: Untagged
@@ -101,7 +102,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2492192349356116871}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -136,7 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2924528, g: 0.2754109, b: 0.23865253, a: 0.87058824}
+  m_Color: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.87058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -177,7 +178,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 0.89461917, b: 0.5613208, a: 1}
     m_PressedColor: {r: 0.6792453, g: 0.5138234, b: 0.2787469, a: 1}
-    m_SelectedColor: {r: 1, g: 0.8941177, b: 0.56078434, a: 1}
+    m_SelectedColor: {r: 1, g: 0.77857935, b: 0.5518868, a: 1}
     m_DisabledColor: {r: 0.31928623, g: 0.3301887, b: 0.32879093, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -193,13 +194,13 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 2445797323153602085}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
-        m_MethodName: StartGame
+      - m_Target: {fileID: 8400993209231213448}
+        m_TargetAssemblyTypeName: SettingButton, Assembly-CSharp
+        m_MethodName: SetData
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -209,6 +210,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8400993209231213448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2492192349356116871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb37b6898b113fe4484a0514239c8d3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Key: WorldType
+  button: {fileID: 1313708197648660007}
 --- !u!1 &8859412084266616012
 GameObject:
   m_ObjectHideFlags: 0

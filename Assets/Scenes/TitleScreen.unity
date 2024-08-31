@@ -615,6 +615,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3167217915162448950, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3468058531384818672, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -627,13 +631,13 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 468370844}
-    - target: {fileID: 6145641925843731947, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
-      propertyPath: m_FontData.m_VerticalOverflow
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8399253008769803455, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
       propertyPath: m_Name
       value: Title Screen UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8891720827657816884, guid: 6e901fa82fb264b4aab5a365b4824d94, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
