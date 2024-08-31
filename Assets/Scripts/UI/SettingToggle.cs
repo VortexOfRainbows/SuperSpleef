@@ -13,7 +13,7 @@ public class SettingToggle : MonoBehaviour
         if (Key == ClientData.WorldGenChaos.Key)
         {
             valid = false;
-            if (FallingCube.BestBlocksBroken >= 100)
+            if (FallingCube.BestBlocksBroken >= 50)
             {
                 valid = true;
             }
@@ -42,7 +42,7 @@ public class SettingToggle : MonoBehaviour
         if(Key == ClientData.WorldGenChaos.Key)
         {
             valid = false;
-            if (FallingCube.BestBlocksBroken >= 100)
+            if (FallingCube.BestBlocksBroken >= 50)
             {
                 valid = true;
             }

@@ -431,8 +431,12 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
             if (blockY < Chunk.Height && blockY >= 0)
             {
                 int typeBeforeBreaking = chunk.blocks[blockX, blockY, blockZ];
-                if (typeBeforeBreaking == blockType || (Main.WorldBorder && blockType == BlockID.Air && typeBeforeBreaking == Instance.ChaosBlockType(BlockID.Glass)))
+                if (typeBeforeBreaking == blockType)
                     return false; //Do not place the same block again
+                if (WorldGenFinished && Main.WorldBorder && (Mathf.FloorToInt(x) == 0 || Mathf.FloorToInt(z) == 0 || Mathf.FloorToInt(x) == MaxTiles.x - 1 || Mathf.FloorToInt(z) == MaxTiles.z - 1 || Mathf.FloorToInt(y) == MaxTiles.y - 1))
+                {
+                    return true;
+                }
 
                 chunk.blocks[blockX, blockY, blockZ] = blockType;
 
