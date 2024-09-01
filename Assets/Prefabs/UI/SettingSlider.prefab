@@ -201,6 +201,7 @@ MonoBehaviour:
   DisplayNumber: {fileID: 5927027358060373359}
   Slider: {fileID: 7827102091712117126}
   PercentFormat: 1
+  WholeNumbers: 0
 --- !u!1 &1353174007640538995
 GameObject:
   m_ObjectHideFlags: 0

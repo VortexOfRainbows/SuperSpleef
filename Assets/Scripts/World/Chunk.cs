@@ -49,17 +49,26 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
         if (IsAirChunk)
             return;
 
+        int type = World.WorldType;
+
+        if(Main.WorldChaos)
+        {
+            type = Random.Range(0, 2);
+        }
+
         float stoneLayer = StoneLayer;
         float terrainHeightMult = TerrainHeightMultiplier;
         float terrainMin = TerrainMinimum;
         float noisePosMult = NoisePosMult;
-        if(World.WorldType == 1)
+        if (type == 1)
         {
             stoneLayer = 0.05f;
             terrainMin = 0.2f;
             terrainHeightMult = 0.1f;
             noisePosMult = 0.1f;
         }
+        else
+            terrainHeightMult *= 0.7f;
         float seedMod = Seed % SeedNoiseModifier;
         seedMod /= (float)SeedNoiseModifier;
         for (int x = 0; x < Width; x++)
@@ -77,7 +86,7 @@ public class Chunk : MonoBehaviour ///Team members that contributed to this scri
                             blocks[x, y, z] = World.Instance.ChaosBlockType(BlockID.Stone);
                         else
                         {
-                            if (World.WorldType == 1)
+                            if (type == 1)
                             {
                                 blocks[x, y, z] = World.Instance.ChaosBlockType(BlockID.Sand);
                             }

@@ -142,11 +142,11 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                         int blockType = Block(i, j - 1, k); //If the block below is not air, and is in fact grass, place a tree
                         if (blockType != BlockID.Air)
                         {
-                            if(blockType == ChaosBlockType(BlockID.Grass))
+                            if(blockType == ChaosBlockType(BlockID.Grass) || (Main.WorldChaos && Utils.Random.Boolean(3)))
                             {
                                 GenerateTree(i, j, k);
                             }
-                            if (blockType == ChaosBlockType(BlockID.Sand))
+                            if (blockType == ChaosBlockType(BlockID.Sand) || (Main.WorldChaos && Utils.Random.Boolean(3)))
                             {
                                 GenerateColumn(i, j, k, 0, Random.Range(2, 6), BlockID.Cactus);
                             }
@@ -165,7 +165,7 @@ public class World : MonoBehaviour ///Team members that contributed to this scri
                             int blockType = Block(i, j - 1, k); //If the block below is not air, and is in fact grass, place a tree
                             if (blockType != BlockID.Air)
                             {
-                                if (blockType == BlockID.Grass)
+                                if (blockType == ChaosBlockType(BlockID.Grass) || (Main.WorldChaos && Utils.Random.Boolean(3)))
                                 {
                                     GenerateBush(i, j - 1, k);
                                 }
