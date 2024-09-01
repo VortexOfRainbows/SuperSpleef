@@ -11,10 +11,13 @@ Stuff to do:
 5. Ability to open up and manage the inventory (right now, the inventory is inaccessible except for the hotbar).
 6. Prevent incompatible versions from connecting to each other
 7. Melee Weapon
+8. Unify Item display systems (inventory and held item should use the same system)
 
 
 8/31/24
-1. Added a Drill Item that mines faster (20 -> 7), and also has a 66.67% chance to harvest blocks
+1. Added a Drill Item that mines faster (20 -> 10), and also has a 66.67% chance to harvest blocks
+	1. Temporarily, this drill is a HAMMER
+2. Added a model system for non-block items!
 
 8/29/24 to 8/31/24
 1. Worldgen settings UI

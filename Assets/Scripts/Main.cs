@@ -16,6 +16,9 @@ public static class GameModeID // Assigns an int as a reference to each game mod
 }
 public class Main : MonoBehaviour
 {
+    public static ItemData ItemData => Instance.m_itemData;
+    [SerializeField]
+    private ItemData m_itemData;
     public static NetData NetData;
     public static Main Instance;
     public static string LocalUsername { get; set; } = "";

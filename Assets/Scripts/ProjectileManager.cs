@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class ProjectileManager : MonoBehaviour ///Team members that contributed to this script: Ian Bunnell
+public class ProjectileManager : MonoBehaviour 
 {
     private static ProjectileManager storedInstance;
     public static ProjectileData Data;

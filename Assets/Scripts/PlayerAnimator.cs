@@ -189,8 +189,10 @@ public class PlayerAnimator : MonoBehaviour
                     //Debug.Log(p.ItemUseTime);
                     itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 0.3f, 1);
                 }
-                else if (HeldItem.item is Weapon || HeldItem.item is Drill)
+                else if (HeldItem.item is Weapon)
                     itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 0.8f, 1);
+                else if(HeldItem.item is Drill)
+                    itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 0.4f, 1);
             }
         }
         float slerpPoint = Mathf.Sin(Mathf.PI * Mathf.Pow(itemUseAnimationPercent, 2));
