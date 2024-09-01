@@ -189,7 +189,7 @@ public class PlayerAnimator : MonoBehaviour
                     //Debug.Log(p.ItemUseTime);
                     itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 0.3f, 1);
                 }
-                else if (HeldItem.item is Weapon)
+                else if (HeldItem.item is Weapon || HeldItem.item is Drill)
                     itemUseAnimationPercent = Mathf.Clamp(itemUseAnimationPercent, 0.8f, 1);
             }
         }

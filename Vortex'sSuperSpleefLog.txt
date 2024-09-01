@@ -7,10 +7,14 @@ Stuff to do:
 	1. If the system is fast, maybe convert worldgen to this system for non-spectators, that way we could allow for modded maps and pre-built maps.
 3. Better UI for the list of players in Multiplayer game lobby.
 4. Sync Player IDs (Make sure every player has a synced index across clients). This may require special networking logic, or other means of sorting.
+	1. Right now, items gained from the drill aren't synced visually (held in player hand). If Player IDs can be synced, that issue can also be fixed
 5. Ability to open up and manage the inventory (right now, the inventory is inaccessible except for the hotbar).
 6. Prevent incompatible versions from connecting to each other
 7. Melee Weapon
-8. Add Drill Item
+
+
+8/31/24
+1. Added a Drill Item that mines faster (20 -> 7), and also has a 66.67% chance to harvest blocks
 
 8/29/24 to 8/31/24
 1. Worldgen settings UI

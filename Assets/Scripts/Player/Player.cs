@@ -96,6 +96,7 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             StartingItemCount = 100;
         }
+        Inventory.AddItem(new Drill());
         Inventory.AddItem(new BasicBlaster());
         if (giveLaser) 
         {
@@ -434,8 +435,18 @@ public class Player : Entity ///Team members that contributed to this script: Ia
             bool updateBlockOutline = true;
             if (left) //Destroy a block with left click
             {
+                int priorBlock = -1;
+                if (heldItem is Drill)
+                {
+                    priorBlock = World.Block(TargetPosition);
+                }
                 blocksWereModified = World.SetBlock(TargetPosition, BlockID.Air, generateSound: true);
                 updateBlockOutline = blocksWereModified;
+                if(priorBlock != -1)
+                {
+                    if(!Utils.Random.Boolean(3))
+                        Inventory.AddItem(new PlaceableBlock(priorBlock, 1));
+                }
             } 
             else if (holdingPlaceableBlock && right && World.Block(TargetPosition) == BlockID.Air && blockToPlace != BlockID.Air) //Place a block with right click
             {
@@ -495,7 +506,12 @@ public class Player : Entity ///Team members that contributed to this script: Ia
         {
             if(left)
             {
-                ItemUseTime = ItemUseTimeMax = Item.DefaultItemFirerate;
+                int useTime = Item.DefaultItemFirerate;
+                if (heldItem is Drill drill)
+                {
+                    useTime = drill.Firerate;
+                }
+                ItemUseTime = ItemUseTimeMax = useTime;
             }
         }
         if(itemUsed)
